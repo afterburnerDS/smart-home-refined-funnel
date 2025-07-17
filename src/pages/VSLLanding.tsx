@@ -2,81 +2,61 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ProgressBar } from "@/components/ProgressBar";
 import { Play, Shield, Wifi, Mic, Settings, Zap, Star, ArrowRight } from "lucide-react";
-
 const VSLLanding = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-
-  const features = [
-    {
-      icon: Settings,
-      title: "AI Lead Qualification",
-      description: "Pre-qualify leads by budget, timeline & project scope"
-    },
-    {
-      icon: Wifi,
-      title: "Meta Ads Management",
-      description: "Profitable campaigns that actually convert"
-    },
-    {
-      icon: Mic,
-      title: "AI Appointment Setting",
-      description: "Automated booking that fills your calendar"
-    },
-    {
-      icon: Shield,
-      title: "CRM Integration",
-      description: "Seamless handoff to your sales process"
-    },
-    {
-      icon: Zap,
-      title: "Performance Dashboard",
-      description: "Real-time ROI tracking and optimization"
-    }
-  ];
-
-  const testimonials = [
-    {
-      quote: "WattLeads transformed our lead quality. We went from 200 tire-kickers to 20 serious buyers monthly.",
-      author: "Marcus T., Smart Home Pro",
-      image: "/placeholder-testimonial-1.jpg"
-    },
-    {
-      quote: "Finally, marketing that actually works. $180k revenue from 15 leads last month.",
-      author: "Jennifer K., Automation Expert",
-      image: "/placeholder-testimonial-2.jpg"
-    },
-    {
-      quote: "No more $5k/month agencies with zero results. WattLeads pays for itself 10x over.",
-      author: "David M., Tech Integration Co.",
-      image: "/placeholder-testimonial-3.jpg"
-    },
-    {
-      quote: "The AI qualification is incredible. Every consultation is with someone ready to spend $25k+.",
-      author: "Sarah L., Luxury Installer",
-      image: "/placeholder-testimonial-4.jpg"
-    }
-  ];
-
+  const features = [{
+    icon: Settings,
+    title: "AI Lead Qualification",
+    description: "Pre-qualify leads by budget, timeline & project scope"
+  }, {
+    icon: Wifi,
+    title: "Meta Ads Management",
+    description: "Profitable campaigns that actually convert"
+  }, {
+    icon: Mic,
+    title: "AI Appointment Setting",
+    description: "Automated booking that fills your calendar"
+  }, {
+    icon: Shield,
+    title: "CRM Integration",
+    description: "Seamless handoff to your sales process"
+  }, {
+    icon: Zap,
+    title: "Performance Dashboard",
+    description: "Real-time ROI tracking and optimization"
+  }];
+  const testimonials = [{
+    quote: "WattLeads transformed our lead quality. We went from 200 tire-kickers to 20 serious buyers monthly.",
+    author: "Marcus T., Smart Home Pro",
+    image: "/placeholder-testimonial-1.jpg"
+  }, {
+    quote: "Finally, marketing that actually works. $180k revenue from 15 leads last month.",
+    author: "Jennifer K., Automation Expert",
+    image: "/placeholder-testimonial-2.jpg"
+  }, {
+    quote: "No more $5k/month agencies with zero results. WattLeads pays for itself 10x over.",
+    author: "David M., Tech Integration Co.",
+    image: "/placeholder-testimonial-3.jpg"
+  }, {
+    quote: "The AI qualification is incredible. Every consultation is with someone ready to spend $25k+.",
+    author: "Sarah L., Luxury Installer",
+    image: "/placeholder-testimonial-4.jpg"
+  }];
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
     const elements = document.querySelectorAll('.fade-up');
-    elements.forEach((el) => observer.observe(el));
-
+    elements.forEach(el => observer.observe(el));
     return () => observer.disconnect();
   }, []);
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <ProgressBar currentStep={1} totalSteps={4} stepLabel="Watch Video" />
       
       {/* Hero Section */}
@@ -84,8 +64,8 @@ const VSLLanding = () => {
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="fade-up">
-              <h1 className="text-5xl lg:text-6xl font-heading font-semibold mb-6 leading-tight">
-                73% of Smart Home Consultations Are With People Who Can't Afford $25k+ Systems{" "}
+              <h1 className="lg:text-6xl font-heading font-semibold mb-6 leading-tight text-4xl">
+                Get 40 Pre-Qualified Leads into your calendar in 90 Days or Don't Pay" "}
                 <span className="text-primary italic">Until Now</span>
               </h1>
               <p className="text-xl mb-8 text-gray-300">
@@ -94,23 +74,16 @@ const VSLLanding = () => {
               
               {/* VSL Video */}
               <div className="relative mb-8 rounded-2xl overflow-hidden bg-black/20 aspect-video">
-                {!isVideoPlaying ? (
-                  <div 
-                    className="flex items-center justify-center h-full cursor-pointer group"
-                    onClick={() => setIsVideoPlaying(true)}
-                  >
+                {!isVideoPlaying ? <div className="flex items-center justify-center h-full cursor-pointer group" onClick={() => setIsVideoPlaying(true)}>
                     <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                       <Play className="w-8 h-8 text-white ml-1" fill="currentColor" />
                     </div>
                     <div className="absolute bottom-4 left-4 bg-black/60 px-3 py-1 rounded-full text-sm">
                       4:30 minutes
                     </div>
-                  </div>
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                  </div> : <div className="w-full h-full flex items-center justify-center text-gray-400">
                     [Wistia Video Player - Smart Home Lead Generation Demo - 4:30]
-                  </div>
-                )}
+                  </div>}
               </div>
 
               <Link to="/quiz" className="btn-orange inline-flex items-center gap-2 text-lg">
@@ -123,8 +96,7 @@ const VSLLanding = () => {
               <div className="card-rounded bg-white/10 backdrop-blur-sm border-white/20">
                 <h3 className="text-2xl font-heading mb-4">What You Get</h3>
                 <div className="space-y-4">
-                  {features.map((feature, index) => (
-                    <div key={index} className="flex items-start gap-3">
+                  {features.map((feature, index) => <div key={index} className="flex items-start gap-3">
                       <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
                         <feature.icon className="w-4 h-4 text-white" />
                       </div>
@@ -132,8 +104,7 @@ const VSLLanding = () => {
                         <h4 className="font-semibold">{feature.title}</h4>
                         <p className="text-sm text-gray-300">{feature.description}</p>
                       </div>
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
               </div>
             </div>
@@ -215,12 +186,9 @@ const VSLLanding = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="fade-up card-rounded">
+            {testimonials.map((testimonial, index) => <div key={index} className="fade-up card-rounded">
                 <div className="flex items-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-                  ))}
+                  {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />)}
                 </div>
                 <p className="text-sm mb-4 italic">"{testimonial.quote}"</p>
                 <div className="flex items-center gap-3">
@@ -233,8 +201,7 @@ const VSLLanding = () => {
                     <p className="font-semibold text-sm">{testimonial.author}</p>
                   </div>
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
 
           <div className="fade-up text-center mt-12">
@@ -259,8 +226,6 @@ const VSLLanding = () => {
           </div>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default VSLLanding;
