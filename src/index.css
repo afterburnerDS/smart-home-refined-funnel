@@ -128,7 +128,7 @@ All colors MUST be HSL.
 @layer components {
   /* Fade up animation */
   .fade-up {
-    @apply opacity-0 translate-y-8 transition-all duration-[400ms] ease-out;
+    @apply opacity-0 translate-y-8 transition-all duration-500 ease-out;
   }
 
   .fade-up.in-view {
