@@ -9,50 +9,50 @@ const VSLLanding = () => {
   const features = [
     {
       icon: Settings,
-      title: "Whole-Home Control",
-      description: "Seamless automation across every room"
+      title: "AI Lead Qualification",
+      description: "Pre-qualify leads by budget, timeline & project scope"
     },
     {
       icon: Wifi,
-      title: "Pro Wi-Fi",
-      description: "Enterprise-grade networking that never fails"
+      title: "Meta Ads Management",
+      description: "Profitable campaigns that actually convert"
     },
     {
       icon: Mic,
-      title: "Voice Scenes",
-      description: "Custom lighting & climate with simple commands"
+      title: "AI Appointment Setting",
+      description: "Automated booking that fills your calendar"
     },
     {
       icon: Shield,
-      title: "24/7 Remote Support",
-      description: "Expert monitoring and instant troubleshooting"
+      title: "CRM Integration",
+      description: "Seamless handoff to your sales process"
     },
     {
       icon: Zap,
-      title: "Energy Dashboard",
-      description: "Real-time usage insights and optimization"
+      title: "Performance Dashboard",
+      description: "Real-time ROI tracking and optimization"
     }
   ];
 
   const testimonials = [
     {
-      quote: "The team transformed our home into something from the future. Everything just works perfectly.",
-      author: "Sarah M., Luxury Homeowner",
+      quote: "WattLeads transformed our lead quality. We went from 200 tire-kickers to 20 serious buyers monthly.",
+      author: "Marcus T., Smart Home Pro",
       image: "/placeholder-testimonial-1.jpg"
     },
     {
-      quote: "Best investment we've made. The home theater and automation saved us months of DIY headaches.",
-      author: "Michael T., Tech Executive",
+      quote: "Finally, marketing that actually works. $180k revenue from 15 leads last month.",
+      author: "Jennifer K., Automation Expert",
       image: "/placeholder-testimonial-2.jpg"
     },
     {
-      quote: "Professional installation, zero issues. Our smart home adds real value when selling.",
-      author: "Lisa K., Real Estate Developer",
+      quote: "No more $5k/month agencies with zero results. WattLeads pays for itself 10x over.",
+      author: "David M., Tech Integration Co.",
       image: "/placeholder-testimonial-3.jpg"
     },
     {
-      quote: "The energy management alone pays for itself. Plus everything works with voice commands.",
-      author: "David R., Homeowner",
+      quote: "The AI qualification is incredible. Every consultation is with someone ready to spend $25k+.",
+      author: "Sarah L., Luxury Installer",
       image: "/placeholder-testimonial-4.jpg"
     }
   ];
@@ -85,11 +85,11 @@ const VSLLanding = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="fade-up">
               <h1 className="text-5xl lg:text-6xl font-heading font-semibold mb-6 leading-tight">
-                Ready for a Smart Home that{" "}
-                <span className="text-primary italic">just works?</span>
+                73% of Smart Home Consultations Are With People Who Can't Afford $25k+ Systems{" "}
+                <span className="text-primary italic">Until Now</span>
               </h1>
               <p className="text-xl mb-8 text-gray-300">
-                See how homeowners add $30-70k in tech value—without DIY headaches.
+                See how we help Smart Home companies generate <strong>$100k to $300k</strong> monthly from <strong>just 15-25</strong> qualified leads while other agencies send 200+ tire-kickers who waste your time.
               </p>
               
               {/* VSL Video */}
@@ -103,12 +103,12 @@ const VSLLanding = () => {
                       <Play className="w-8 h-8 text-white ml-1" fill="currentColor" />
                     </div>
                     <div className="absolute bottom-4 left-4 bg-black/60 px-3 py-1 rounded-full text-sm">
-                      3:45 minutes
+                      4:30 minutes
                     </div>
                   </div>
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-gray-400">
-                    [Wistia Video Player Placeholder - 3:45 Smart Home Demo]
+                    [Wistia Video Player - Smart Home Lead Generation Demo - 4:30]
                   </div>
                 )}
               </div>
@@ -146,33 +146,35 @@ const VSLLanding = () => {
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="fade-up text-center mb-16">
             <h2 className="text-4xl font-heading font-semibold mb-6 text-rich-black">
-              Stop Fighting With DIY Smart Gadgets
+              You're Tired of Marketing That Doesn't Work...
             </h2>
             <p className="text-xl text-muted-foreground mb-8">
-              Most homeowners waste thousands on devices that don't talk to each other.
+              If you're a Smart Home company owner, you know the frustration:
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 mb-16">
             <div className="fade-up card-rounded border-red-200 bg-red-50">
-              <h3 className="text-xl font-semibold mb-4 text-red-800">DIY Nightmare</h3>
+              <h3 className="text-xl font-semibold mb-4 text-red-800">Current Marketing Problems</h3>
               <ul className="space-y-3 text-red-700">
-                <li>• Multiple apps for each device</li>
-                <li>• Constant connectivity issues</li>
-                <li>• No professional support</li>
-                <li>• Devices stop working after updates</li>
-                <li>• Security vulnerabilities</li>
+                <li>❌ Paying $3,000-$5,000/month to agencies with no guaranteed results</li>
+                <li>❌ Chasing unqualified leads who ghost you after seeing $25k+ prices</li>
+                <li>❌ Wasting 45 minutes per consultation educating tire-kickers who never buy</li>
+                <li>❌ Competing on price because leads are shopping around</li>
+                <li>❌ Empty appointment slots while competitors stay booked solid</li>
+                <li>❌ Marketing agencies that disappear when results don't materialize</li>
               </ul>
             </div>
 
             <div className="fade-up card-rounded border-green-200 bg-green-50">
-              <h3 className="text-xl font-semibold mb-4 text-green-800">Professional Integration</h3>
+              <h3 className="text-xl font-semibold mb-4 text-green-800">WattLeads Solution</h3>
               <ul className="space-y-3 text-green-700">
-                <li>• Single control system</li>
-                <li>• Enterprise-grade reliability</li>
-                <li>• 24/7 monitoring & support</li>
-                <li>• Future-proof technology</li>
-                <li>• Bank-level security</li>
+                <li>✅ Every lead is budget-qualified by AI ($25k+ projects only)</li>
+                <li>✅ Pre-educated prospects who understand smart home value</li>
+                <li>✅ Leads come pre-scheduled and ready to buy</li>
+                <li>✅ Stop competing on price, start selling premium value</li>
+                <li>✅ Consistent 15-25 qualified leads monthly</li>
+                <li>✅ 90-day ROI guarantee or money back</li>
               </ul>
             </div>
           </div>
@@ -191,10 +193,10 @@ const VSLLanding = () => {
         <div className="container mx-auto px-4 text-center">
           <div className="fade-up">
             <h3 className="text-2xl font-heading font-semibold text-white mb-2">
-              30-Day "We-Fix-It-Free" Workmanship Guarantee
+              90-Day ROI Guarantee
             </h3>
             <p className="text-primary-foreground/90">
-              If anything doesn't work perfectly, we fix it at no charge.
+              If we don't generate qualified leads that pay for our service within 90 days, we'll refund every penny.
             </p>
           </div>
         </div>
@@ -205,10 +207,10 @@ const VSLLanding = () => {
         <div className="container mx-auto px-4">
           <div className="fade-up text-center mb-12">
             <h2 className="text-3xl font-heading font-semibold mb-4 text-rich-black">
-              What Homeowners Are Saying
+              What Smart Home Companies Are Saying
             </h2>
             <p className="text-xl text-muted-foreground">
-              Real results from real luxury smart home installations
+              Real results from real smart home businesses
             </p>
           </div>
 

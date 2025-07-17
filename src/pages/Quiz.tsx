@@ -5,9 +5,9 @@ import { ArrowRight, ArrowLeft, Check } from "lucide-react";
 
 interface QuizData {
   services: string[];
-  homeSize: string;
-  timeline: string;
-  budget: string;
+  monthlyProjects: string;
+  avgProjectValue: string;
+  marketingSpend: string;
   name: string;
   email: string;
   phone: string;
@@ -18,9 +18,9 @@ const Quiz = () => {
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [quizData, setQuizData] = useState<QuizData>({
     services: [],
-    homeSize: "",
-    timeline: "",
-    budget: "",
+    monthlyProjects: "",
+    avgProjectValue: "",
+    marketingSpend: "",
     name: "",
     email: "",
     phone: ""
@@ -29,7 +29,7 @@ const Quiz = () => {
   const questions = [
     {
       id: 1,
-      title: "Which smart home services interest you?",
+      title: "What type of smart home company are you?",
       subtitle: "Select all that apply",
       type: "multiselect",
       options: [
@@ -42,21 +42,21 @@ const Quiz = () => {
     },
     {
       id: 2,
-      title: "What's the size of your home?",
+      title: "How many projects do you typically complete per month?",
       type: "single",
-      options: ["Under 2,000 sq ft", "2,000-4,000 sq ft", "4,000-6,000 sq ft", "Over 6,000 sq ft"]
+      options: ["1-5 projects", "6-15 projects", "16-30 projects", "30+ projects"]
     },
     {
       id: 3,
-      title: "When are you looking to start?",
+      title: "What's your average project value?",
       type: "single",
-      options: ["Immediately", "Within 30 days", "Within 3 months", "Just exploring"]
+      options: ["Under $10k", "$10k-$25k", "$25k-$50k", "$50k+"]
     },
     {
       id: 4,
-      title: "What's your budget range?",
+      title: "How much are you currently spending on marketing per month?",
       type: "single",
-      options: ["Under $10k", "$10k-$25k", "$25k-$50k", "$50k+"]
+      options: ["Under $2k", "$2k-$5k", "$5k-$10k", "$10k+"]
     }
   ];
 
@@ -67,11 +67,11 @@ const Quiz = () => {
         : [...quizData.services, option];
       setQuizData({ ...quizData, services: newServices });
     } else if (questionId === 2) {
-      setQuizData({ ...quizData, homeSize: option });
+      setQuizData({ ...quizData, monthlyProjects: option });
     } else if (questionId === 3) {
-      setQuizData({ ...quizData, timeline: option });
+      setQuizData({ ...quizData, avgProjectValue: option });
     } else if (questionId === 4) {
-      setQuizData({ ...quizData, budget: option });
+      setQuizData({ ...quizData, marketingSpend: option });
     }
   };
 
@@ -81,9 +81,9 @@ const Quiz = () => {
 
   const canProceed = () => {
     if (currentQuestion === 1) return quizData.services.length > 0;
-    if (currentQuestion === 2) return quizData.homeSize !== "";
-    if (currentQuestion === 3) return quizData.timeline !== "";
-    if (currentQuestion === 4) return quizData.budget !== "";
+    if (currentQuestion === 2) return quizData.monthlyProjects !== "";
+    if (currentQuestion === 3) return quizData.avgProjectValue !== "";
+    if (currentQuestion === 4) return quizData.marketingSpend !== "";
     if (currentQuestion === 5) return quizData.name && quizData.email && quizData.phone;
     return false;
   };
@@ -95,9 +95,9 @@ const Quiz = () => {
       // Store quiz data and navigate to results
       const params = new URLSearchParams({
         services: quizData.services.join(','),
-        homeSize: quizData.homeSize,
-        timeline: quizData.timeline,
-        budget: quizData.budget,
+        monthlyProjects: quizData.monthlyProjects,
+        avgProjectValue: quizData.avgProjectValue,
+        marketingSpend: quizData.marketingSpend,
         name: quizData.name,
         email: quizData.email,
         phone: quizData.phone
@@ -137,9 +137,9 @@ const Quiz = () => {
                 {currentQ.options.map((option, index) => {
                   const isSelected = currentQuestion === 1 
                     ? quizData.services.includes(option)
-                    : (currentQuestion === 2 && quizData.homeSize === option) ||
-                      (currentQuestion === 3 && quizData.timeline === option) ||
-                      (currentQuestion === 4 && quizData.budget === option);
+                    : (currentQuestion === 2 && quizData.monthlyProjects === option) ||
+                      (currentQuestion === 3 && quizData.avgProjectValue === option) ||
+                      (currentQuestion === 4 && quizData.marketingSpend === option);
 
                   return (
                     <button

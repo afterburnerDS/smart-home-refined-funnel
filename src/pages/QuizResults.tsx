@@ -10,48 +10,49 @@ const QuizResults = () => {
 
   useEffect(() => {
     const services = searchParams.get('services')?.split(',') || [];
-    const budget = searchParams.get('budget') || '';
-    const timeline = searchParams.get('timeline') || '';
+    const avgProjectValue = searchParams.get('avgProjectValue') || '';
+    const marketingSpend = searchParams.get('marketingSpend') || '';
 
     setSelectedServices(services);
 
-    // Qualification logic: Budget >= $25k AND Timeline = Immediate
-    const qualifies = (budget === '$25k-$50k' || budget === '$50k+') && timeline === 'Immediately';
+    // Qualification logic: Avg Project Value >= $25k AND Marketing Spend >= $2k
+    const qualifies = (avgProjectValue === '$25k-$50k' || avgProjectValue === '$50k+') && 
+                     (marketingSpend === '$2k-$5k' || marketingSpend === '$5k-$10k' || marketingSpend === '$10k+');
     setIsQualified(qualifies);
   }, [searchParams]);
 
   const servicesBenefits = {
     "Whole-Home Automation & Voice Control": [
-      "Control lights, climate, and entertainment with voice commands",
-      "Create custom scenes like 'Movie Night' or 'Good Morning'",
-      "Automated schedules that learn your routine"
+      "Target high-end clients who invest $30k+ in automation systems",
+      "Position yourself as premium installer in luxury market",
+      "Higher profit margins on complex integration projects"
     ],
     "Lighting & Shading Scenes": [
-      "Circadian rhythm lighting for better sleep",
-      "Automated shades that adjust to sun position",
-      "Energy savings up to 30% on utility bills"
+      "Upsell opportunities with architectural lighting design",
+      "Recurring revenue from scene customization services", 
+      "Differentiate from basic smart switch installers"
     ],
     "Security & Cameras": [
-      "AI-powered threat detection and alerts",
-      "Professional monitoring integration",
-      "Smart locks with biometric access"
+      "High-ticket commercial and residential security projects",
+      "Monthly monitoring revenue streams",
+      "Integration with luxury home automation systems"
     ],
     "Home Cinema / Media Room": [
-      "Theater-quality audio and video",
-      "One-touch entertainment experiences",
-      "Immersive lighting that syncs with content"
+      "Premium theater installations starting at $50k+",
+      "Celebrity and executive clientele referrals",
+      "Showcase projects that attract media attention"
     ],
     "Enterprise-Grade Networking": [
-      "Blazing fast WiFi in every corner",
-      "Dedicated IoT network for security",
-      "99.9% uptime guarantee"
+      "Commercial building contracts worth $100k+",
+      "Ongoing support and maintenance revenue",
+      "Foundation for all other smart building systems"
     ]
   };
 
   const name = searchParams.get('name') || '';
-  const homeSize = searchParams.get('homeSize') || '';
-  const budget = searchParams.get('budget') || '';
-  const timeline = searchParams.get('timeline') || '';
+  const monthlyProjects = searchParams.get('monthlyProjects') || '';
+  const avgProjectValue = searchParams.get('avgProjectValue') || '';
+  const marketingSpend = searchParams.get('marketingSpend') || '';
 
   const bookingParams = new URLSearchParams(searchParams);
 
@@ -81,8 +82,8 @@ const QuizResults = () => {
           </h1>
           <p className="text-xl text-muted-foreground mb-8">
             {isQualified 
-              ? "Your home is perfect for our luxury smart integration package. Let's get you set up with a discovery call."
-              : "We can definitely help transform your home. Here's what we recommend based on your preferences."
+              ? "Your company is perfect for our premium lead generation system. Let's get you set up with qualified $25k+ prospects immediately."
+              : "We can definitely help grow your smart home business. Here's what our lead generation system can do for your company."
             }
           </p>
         </div>
@@ -90,24 +91,24 @@ const QuizResults = () => {
         {/* Summary Card */}
         <div className="card-rounded mb-8 bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
           <h2 className="text-2xl font-heading font-semibold mb-6 text-rich-black">
-            Your Smart Home Profile
+            Your Business Profile
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <p className="text-sm text-muted-foreground mb-1">Home Size</p>
-              <p className="font-semibold">{homeSize}</p>
+              <p className="text-sm text-muted-foreground mb-1">Monthly Projects</p>
+              <p className="font-semibold">{monthlyProjects}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground mb-1">Timeline</p>
-              <p className="font-semibold">{timeline}</p>
+              <p className="text-sm text-muted-foreground mb-1">Avg Project Value</p>
+              <p className="font-semibold">{avgProjectValue}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground mb-1">Budget Range</p>
-              <p className="font-semibold">{budget}</p>
+              <p className="text-sm text-muted-foreground mb-1">Marketing Spend</p>
+              <p className="font-semibold">{marketingSpend}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground mb-1">Selected Services</p>
-              <p className="font-semibold">{selectedServices.length} services</p>
+              <p className="text-sm text-muted-foreground mb-1">Service Categories</p>
+              <p className="font-semibold">{selectedServices.length} specialties</p>
             </div>
           </div>
         </div>
@@ -115,7 +116,7 @@ const QuizResults = () => {
         {/* Selected Services Benefits */}
         <div className="space-y-6 mb-12">
           <h2 className="text-3xl font-heading font-semibold text-rich-black">
-            What You'll Get
+            How WattLeads Helps Your Business
           </h2>
           
           {selectedServices.map((service, index) => {
@@ -123,7 +124,7 @@ const QuizResults = () => {
             return (
               <div key={index} className="card-rounded">
                 <h3 className="text-xl font-semibold mb-4 text-rich-black">
-                  {service}
+                  {service} Lead Generation
                 </h3>
                 <div className="space-y-3">
                   {benefits.map((benefit, i) => (
@@ -141,10 +142,10 @@ const QuizResults = () => {
         {/* CTA Section */}
         <div className="card-rounded bg-rich-black text-white text-center">
           <h2 className="text-3xl font-heading font-semibold mb-4">
-            Ready to Transform Your Home?
+            Ready to Scale Your Smart Home Business?
           </h2>
           <p className="text-xl mb-8 text-gray-300">
-            Book your free discovery call and get a custom smart home blueprint designed for your space.
+            Book your free strategy call and get a custom lead generation plan designed for your company.
           </p>
           
           <div className="flex justify-center">
@@ -152,7 +153,7 @@ const QuizResults = () => {
               to={`/booking?${bookingParams.toString()}`}
               className="btn-orange inline-flex items-center gap-2 text-lg"
             >
-              Book Your Free Discovery Call
+              Book Your Free Strategy Call
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -160,7 +161,7 @@ const QuizResults = () => {
           <div className="mt-6 flex justify-center gap-8 text-sm text-gray-400">
             <span>✓ No obligation</span>
             <span>✓ 30-minute consultation</span>
-            <span>✓ Custom recommendations</span>
+            <span>✓ Custom growth plan</span>
           </div>
         </div>
       </div>

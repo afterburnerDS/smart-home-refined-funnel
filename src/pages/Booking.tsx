@@ -8,12 +8,12 @@ const Booking = () => {
 
   const testimonials = [
     {
-      quote: "The consultation was incredibly thorough. They understood exactly what we wanted.",
-      author: "Jennifer M."
+      quote: "WattLeads' strategy call changed everything. We went from 5 leads/month to 25 qualified prospects.",
+      author: "Marcus T., Smart Home Pro"
     },
     {
-      quote: "Professional team that delivered beyond our expectations. Highly recommend!",
-      author: "Robert K."
+      quote: "The ROI projections were spot-on. We're now booking $150k+ monthly from their lead system.",
+      author: "Jennifer K., Automation Expert"
     }
   ];
 
@@ -27,10 +27,10 @@ const Booking = () => {
           <div className="space-y-8">
             <div>
               <h1 className="text-4xl font-heading font-semibold mb-6 text-rich-black">
-                Book Your Free Discovery Call
+                Book Your Free Strategy Call
               </h1>
               <p className="text-xl text-muted-foreground mb-8">
-                Get a custom smart home blueprint designed specifically for your space and lifestyle.
+                Get a custom lead generation blueprint designed specifically for your smart home company and growth goals.
               </p>
             </div>
 
@@ -41,8 +41,8 @@ const Booking = () => {
                   <CheckCircle className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Custom Home Assessment</h3>
-                  <p className="text-muted-foreground">We'll analyze your home's layout, existing infrastructure, and your specific needs to create a tailored smart home plan.</p>
+                  <h3 className="font-semibold text-lg mb-2">Business Assessment & Growth Plan</h3>
+                  <p className="text-muted-foreground">We'll analyze your current marketing, identify gaps, and create a custom lead generation strategy that fits your business model and growth targets.</p>
                 </div>
               </div>
 
@@ -51,8 +51,8 @@ const Booking = () => {
                   <CheckCircle className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Technology Roadmap</h3>
-                  <p className="text-muted-foreground">Get a clear plan of which systems to implement first and how they'll work together for maximum impact and value.</p>
+                  <h3 className="font-semibold text-lg mb-2">Meta Ads Strategy & Budget Optimization</h3>
+                  <p className="text-muted-foreground">Get a clear roadmap for profitable Meta ads campaigns, including audience targeting, budget allocation, and conversion optimization specifically for smart home companies.</p>
                 </div>
               </div>
 
@@ -61,8 +61,8 @@ const Booking = () => {
                   <CheckCircle className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Investment & ROI Analysis</h3>
-                  <p className="text-muted-foreground">Understand the true cost and return on investment, including energy savings and increased home value.</p>
+                  <h3 className="font-semibold text-lg mb-2">ROI Projections & Implementation Timeline</h3>
+                  <p className="text-muted-foreground">Understand exactly what results to expect, when to expect them, and how our AI qualification system will transform your sales process.</p>
                 </div>
               </div>
             </div>
@@ -81,15 +81,15 @@ const Booking = () => {
             <div className="flex gap-6 items-center">
               <div className="text-center">
                 <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center mb-2">
-                  <span className="font-bold text-sm">CEDIA</span>
+                  <span className="font-bold text-sm">Meta</span>
                 </div>
                 <p className="text-xs text-muted-foreground">Certified</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center mb-2">
-                  <span className="font-bold text-sm">HTA</span>
+                  <span className="font-bold text-sm">AI</span>
                 </div>
-                <p className="text-xs text-muted-foreground">Member</p>
+                <p className="text-xs text-muted-foreground">Expert</p>
               </div>
             </div>
           </div>
