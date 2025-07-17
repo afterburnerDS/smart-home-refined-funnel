@@ -65,8 +65,8 @@ const VSLLanding = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="fade-up">
               <h1 className="lg:text-6xl font-heading font-semibold mb-6 leading-tight text-4xl">
-                Get 40 Pre-Qualified Leads into your calendar in 90 Days or Don't Pay" "}
-                <span className="text-primary italic">Until Now</span>
+                Get 40 Pre-Qualified Leads into your calendar in 90 Days or Don't Pay
+              
               </h1>
               <p className="text-xl mb-8 text-gray-300">
                 See how we help Smart Home companies generate <strong>$100k to $300k</strong> monthly from <strong>just 15-25</strong> qualified leads while other agencies send 200+ tire-kickers who waste your time.
