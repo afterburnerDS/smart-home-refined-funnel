@@ -118,7 +118,18 @@ const Quiz = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <ProgressBar currentStep={2} totalSteps={4} stepLabel="Smart Home Quiz" />
+      <ProgressBar 
+        currentStep={currentQuestion} 
+        totalSteps={5} 
+        stepLabel={
+          currentQuestion === 1 ? "Company Type" :
+          currentQuestion === 2 ? "Monthly Projects" :
+          currentQuestion === 3 ? "Avg Project Value" :
+          currentQuestion === 4 ? "Marketing Spend" :
+          currentQuestion === 5 ? "Contact Info" :
+          "Smart Home Quiz"
+        }
+      />
       
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <div className="card-rounded">

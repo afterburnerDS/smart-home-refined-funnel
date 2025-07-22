@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ProgressBar } from "@/components/ProgressBar";
-import { Badge, CheckCircle, Star, ArrowRight } from "lucide-react";
+import { Badge, CheckCircle, Star, ArrowRight, Calendar, Clock, Mail } from "lucide-react";
 
 const QuizResults = () => {
   const [searchParams] = useSearchParams();
@@ -139,29 +139,99 @@ const QuizResults = () => {
           })}
         </div>
 
-        {/* CTA Section */}
-        <div className="card-rounded bg-rich-black text-white text-center">
-          <h2 className="text-3xl font-heading font-semibold mb-4">
-            Ready to Scale Your Smart Home Business?
-          </h2>
-          <p className="text-xl mb-8 text-gray-300">
-            Book your free strategy call and get a custom lead generation plan designed for your company.
-          </p>
-          
-          <div className="flex justify-center">
-            <Link 
-              to={`/booking?${bookingParams.toString()}`}
-              className="btn-orange inline-flex items-center gap-2 text-lg"
-            >
+        {/* Booking Section (from Booking page) */}
+        <div className="space-y-8">
+          <div>
+            <h1 className="text-4xl font-heading font-semibold mb-6 text-rich-black">
               Book Your Free Strategy Call
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+            </h1>
+            <p className="text-xl text-muted-foreground mb-8">
+              Get a custom lead generation blueprint designed specifically for your smart home company and growth goals.
+            </p>
           </div>
-
-          <div className="mt-6 flex justify-center gap-8 text-sm text-gray-400">
-            <span>✓ No obligation</span>
-            <span>✓ 30-minute consultation</span>
-            <span>✓ Custom growth plan</span>
+          
+          {/* Calendar Embed */}
+          <div className="card-rounded">
+            <h2 className="text-2xl font-heading font-semibold mb-6 text-center">
+              Choose Your Preferred Time
+            </h2>
+            {/* Calendly Embed */}
+            <div className="min-h-[600px]">
+              <iframe
+                src="https://calendly.com/sagebyte/15minphone"
+                width="100%"
+                height="600"
+                frameBorder="0"
+                title="Schedule a meeting"
+              />
+            </div>
+          </div>
+          
+          {/* Help Text */}
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+              <Mail className="w-4 h-4" />
+              <span>Need another time? Email hello@wattleads.com</span>
+            </div>
+          </div>
+          
+          {/* Call Value Points */}
+          <div className="space-y-6">
+            <div className="flex items-start gap-4">
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                <CheckCircle className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg mb-2">Business Assessment & Growth Plan</h3>
+                <p className="text-muted-foreground">We'll analyze your current marketing, identify gaps, and create a custom lead generation strategy that fits your business model and growth targets.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                <CheckCircle className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg mb-2">Meta Ads Strategy & Budget Optimization</h3>
+                <p className="text-muted-foreground">Get a clear roadmap for profitable Meta ads campaigns, including audience targeting, budget allocation, and conversion optimization specifically for smart home companies.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                <CheckCircle className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg mb-2">ROI Projections & Implementation Timeline</h3>
+                <p className="text-muted-foreground">Understand exactly what results to expect, when to expect them, and how our AI qualification system will transform your sales process.</p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Mini Testimonials */}
+          <div className="space-y-4">
+            <div className="card-rounded bg-muted/30">
+              <p className="text-sm italic mb-3">"WattLeads' strategy call changed everything. We went from 5 leads/month to 25 qualified prospects."</p>
+              <p className="font-semibold text-sm">— Marcus T., Smart Home Pro</p>
+            </div>
+            <div className="card-rounded bg-muted/30">
+              <p className="text-sm italic mb-3">"The ROI projections were spot-on. We're now booking $150k+ monthly from their lead system."</p>
+              <p className="font-semibold text-sm">— Jennifer K., Automation Expert</p>
+            </div>
+          </div>
+          
+          {/* Badges */}
+          <div className="flex gap-6 items-center justify-center">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center mb-2">
+                <span className="font-bold text-sm">Meta</span>
+              </div>
+              <p className="text-xs text-muted-foreground">Certified</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center mb-2">
+                <span className="font-bold text-sm">AI</span>
+              </div>
+              <p className="text-xs text-muted-foreground">Expert</p>
+            </div>
           </div>
         </div>
       </div>
