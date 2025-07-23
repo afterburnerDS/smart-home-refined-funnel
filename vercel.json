@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "https://humble-posterity-757556.framer.app/"
+      "destination": "/index.html"
     },
     {
       "source": "/vsl",
