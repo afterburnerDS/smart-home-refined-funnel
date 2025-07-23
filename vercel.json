@@ -1,7 +1,9 @@
 {
+  "redirects": [
+    { "source": "/", "destination": "https://humble-posterity-757556.framer.app/", "permanent": false }
+  ],
   "rewrites": [
-    { "source": "/vsl", "destination": "/" },
     { "source": "/vsl/:path*", "destination": "/:path*" },
-    { "source": "/:path*", "destination": "https://humble-posterity-757556.framer.app/:path*" }
+    { "source": "/vsl", "destination": "/" }
   ]
 } 
