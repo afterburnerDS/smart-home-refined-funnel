@@ -218,7 +218,7 @@ const VSLLanding = () => {
         {/* 1. WattLeads Logo */}
         <div className="fade-up text-center mb-3 md:mb-6">
           <div className="inline-block">
-            <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
+            <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent">
               WattLeads
             </h1>
           </div>
@@ -247,7 +247,7 @@ const VSLLanding = () => {
           <div className="relative bg-black rounded-lg overflow-hidden shadow-2xl">
             <div className="aspect-video bg-gray-900 flex items-center justify-center">
               <div className="text-center">
-                <div className="w-12 h-12 md:w-20 md:h-20 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-2 md:mb-4 hover:bg-orange-600 transition-colors cursor-pointer">
+                <div className="w-12 h-12 md:w-20 md:h-20 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-2 md:mb-4 hover:bg-red-600 transition-colors cursor-pointer">
                   <Play className="w-5 h-5 md:w-8 md:h-8 text-white ml-1" />
                 </div>
                 <p className="text-white text-sm md:text-lg font-semibold">Watch the Video</p>
@@ -265,7 +265,7 @@ const VSLLanding = () => {
           
           <button 
             onClick={handleStartQuiz}
-            className="btn-orange inline-flex items-center gap-2 text-lg md:text-xl px-6 py-3 md:px-8 md:py-4 shadow-lg"
+            className="btn-red inline-flex items-center gap-2 text-lg md:text-xl px-6 py-3 md:px-8 md:py-4 shadow-lg"
           >
             👉 START YOUR 30-DAY TEST DRIVE!
             <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
@@ -341,7 +341,7 @@ const VSLLanding = () => {
           <div className="text-center mb-8">
             <button 
               onClick={handleStartQuiz}
-              className="btn-orange inline-flex items-center gap-2 text-xl px-8 py-4"
+              className="btn-red inline-flex items-center gap-2 text-xl px-8 py-4"
             >
               👉 START YOUR 30-DAY TEST DRIVE!
               <ArrowRight className="w-5 h-5" />
@@ -428,7 +428,7 @@ const VSLLanding = () => {
           <div className="text-center mb-8">
             <button 
               onClick={handleStartQuiz}
-              className="btn-orange inline-flex items-center gap-2 text-xl px-8 py-4"
+              className="btn-red inline-flex items-center gap-2 text-xl px-8 py-4"
             >
               👉 START YOUR 30-DAY TEST DRIVE!
               <ArrowRight className="w-5 h-5" />
@@ -515,7 +515,7 @@ const VSLLanding = () => {
           <div className="text-center mb-8">
             <button 
               onClick={handleStartQuiz}
-              className="btn-orange inline-flex items-center gap-2 text-xl px-8 py-4"
+              className="btn-red inline-flex items-center gap-2 text-xl px-8 py-4"
             >
               👉 START YOUR 30-DAY TEST DRIVE!
               <ArrowRight className="w-5 h-5" />
@@ -635,7 +635,7 @@ const VSLLanding = () => {
                   disabled={!canProceed()}
                   className={`inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold transition-all duration-300 ${
                     canProceed()
-                      ? 'btn-orange'
+                      ? 'btn-red'
                       : 'bg-muted text-muted-foreground cursor-not-allowed'
                   }`}
                 >

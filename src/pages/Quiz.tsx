@@ -237,7 +237,7 @@ const Quiz = () => {
               disabled={!canProceed()}
               className={`inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold transition-all duration-300 ${
                 canProceed()
-                  ? 'btn-orange'
+                  ? 'btn-red'
                   : 'bg-muted text-muted-foreground cursor-not-allowed'
               }`}
             >
