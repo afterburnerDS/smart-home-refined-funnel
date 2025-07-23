@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { ProgressBar } from "@/components/ProgressBar";
 import { Badge, CheckCircle, Star, ArrowRight, Calendar, Clock, Mail } from "lucide-react";
 
 const QuizResults = () => {
@@ -58,8 +57,6 @@ const QuizResults = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <ProgressBar currentStep={2} totalSteps={4} stepLabel="Your Results" />
-      
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Results Header */}
         <div className="text-center mb-12">
