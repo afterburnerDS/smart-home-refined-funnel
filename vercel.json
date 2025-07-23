@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "https://humble-posterity-757556.framer.app/"
+    },
+    {
+      "source": "/vsl/:path*",
+      "destination": "/vsl.html"
+    }
+  ]
+} 
