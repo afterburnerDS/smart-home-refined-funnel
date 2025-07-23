@@ -247,7 +247,7 @@ const VSLLanding = () => {
           <div className="relative bg-black rounded-lg overflow-hidden shadow-2xl">
             <div className="aspect-video bg-gray-900 flex items-center justify-center">
               <div className="text-center">
-                <div className="w-12 h-12 md:w-20 md:h-20 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-2 md:mb-4 hover:bg-red-600 transition-colors cursor-pointer">
+                <div className="w-12 h-12 md:w-20 md:h-20 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-2 md:mb-4 hover:bg-orange-600 transition-colors cursor-pointer">
                   <Play className="w-5 h-5 md:w-8 md:h-8 text-white ml-1" />
                 </div>
                 <p className="text-white text-sm md:text-lg font-semibold">Watch the Video</p>
