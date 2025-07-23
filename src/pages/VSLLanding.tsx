@@ -218,26 +218,40 @@ const VSLLanding = () => {
         {/* 1. WattLeads Logo */}
         <div className="fade-up text-center mb-3 md:mb-6">
           <div className="inline-block">
-            <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
               WattLeads
             </h1>
           </div>
         </div>
 
+        {/* Stars Rating */}
+        <div className="fade-up text-center mb-6 md:mb-8">
+          <div className="flex items-center justify-center gap-1 mb-2">
+            <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
+            <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
+            <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
+            <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
+            <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
+          </div>
+          <p className="text-white text-sm md:text-base font-medium">
+            Rated 4.8/5 by 100+ Clients
+          </p>
+        </div>
+
         {/* 2. Main Headline */}
         <div className="fade-up text-center mb-4 md:mb-8">
-          <h2 className="text-3xl md:text-6xl font-heading font-bold text-white">
+          <h2 className="text-2xl md:text-5xl font-heading font-bold text-white text-center">
             <span className="text-red-500">US Electrical and Smart Home Companies</span>
           </h2>
         </div>
 
         {/* 3. Subheadline */}
         <div className="fade-up text-center mb-6 md:mb-12">
-          <h3 className="text-xl md:text-4xl font-heading font-bold mb-3 md:mb-6 text-white">
+          <h3 className="text-lg md:text-3xl font-heading font-bold mb-3 md:mb-6 text-white">
             <span className="text-primary">Get 40 Pre-Qualified Leads in 90 Days or Don't Pay!</span>
           </h3>
           
-          <p className="text-base md:text-2xl text-muted-foreground">
+          <p className="text-base md:text-2xl text-white">
             Start with a 30-day test drive today and start receiving <span className="font-semibold text-primary">pre-qualified, high income leads</span> within 72 hours...
           </p>
         </div>
@@ -251,15 +265,39 @@ const VSLLanding = () => {
                   <Play className="w-5 h-5 md:w-8 md:h-8 text-white ml-1" />
                 </div>
                 <p className="text-white text-sm md:text-lg font-semibold">Watch the Video</p>
-                <p className="text-gray-400 text-xs md:text-sm mt-1 md:mt-2">Learn how we generate 40+ qualified leads</p>
+                <p className="text-white text-xs md:text-sm mt-1 md:mt-2">Learn how we generate 40+ qualified leads</p>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Benefits Bar */}
+        <div className="fade-up mb-8 md:mb-12">
+          <div className="flex flex-row items-center justify-center gap-2 md:gap-8 text-center">
+            <div className="flex items-center gap-1 md:gap-2">
+              <div className="w-4 h-4 md:w-6 md:h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                <CheckCircle className="w-2.5 h-2.5 md:w-4 md:h-4 text-white" />
+              </div>
+              <span className="text-white font-bold text-[10px] md:text-base whitespace-nowrap">Qualified leads only</span>
+            </div>
+            <div className="flex items-center gap-1 md:gap-2">
+              <div className="w-4 h-4 md:w-6 md:h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                <CheckCircle className="w-2.5 h-2.5 md:w-4 md:h-4 text-white" />
+              </div>
+              <span className="text-white font-bold text-[10px] md:text-base whitespace-nowrap">Zero setup fees</span>
+            </div>
+            <div className="flex items-center gap-1 md:gap-2">
+              <div className="w-4 h-4 md:w-6 md:h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                <CheckCircle className="w-2.5 h-2.5 md:w-4 md:h-4 text-white" />
+              </div>
+              <span className="text-white font-bold text-[10px] md:text-base whitespace-nowrap">30 day test drive</span>
             </div>
           </div>
         </div>
 
         {/* 5. Call-to-Action Button */}
         <div className="fade-up text-center mb-8 md:mb-16">
-          <p className="text-gray-300 mb-3 md:mb-6 italic text-sm md:text-base">
+          <p className="text-white mb-3 md:mb-6 italic text-sm md:text-base">
             Get started in 30 seconds...
           </p>
           
@@ -271,39 +309,41 @@ const VSLLanding = () => {
             <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
           </button>
           
-          <p className="text-gray-300 mt-3 md:mt-4 text-sm md:text-base">
+          <p className="text-white mt-3 md:mt-4 text-sm md:text-base">
             Receive 20+ test leads before you commit...
+          </p>
+          
+          <p className="text-white mt-2 md:mt-3 text-xs md:text-sm italic">
+            (We have generated over 10,000 qualified leads to electrical companies in the last 12 months)
           </p>
         </div>
 
-
-
         {/* Value Proposition */}
         <div className="fade-up mb-16">
-          <p className="text-xl text-muted-foreground mb-8 text-center">
+          <p className="text-xl text-white mb-8 text-center">
             Add an <span className="font-semibold text-primary">extra $50-100,000</span> per month to your electrical or smart home business by targeting <span className="font-semibold text-primary">high-end luxury clients</span>...
           </p>
           
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-white mb-8">
             Most electrical and smart home companies struggle with cash flow, low margins & difficult clients because they focus TOO much on basic installations.
           </p>
           
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-white mb-8">
             Here at WattLeads we target luxury homeowners within your area, with targeted META ads, and proven offers.
           </p>
           
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-white mb-8">
             We also pre-qualify every lead before it lands in your in-box, so that you aren't wasting time trying to call and schedule leads who never answer the phone.
           </p>
           
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-white mb-8">
             Oh! And you can also try risk free for 30 days...
           </p>
         </div>
 
         {/* Benefits List */}
         <div className="fade-up mb-16">
-          <ul className="space-y-4 text-lg text-muted-foreground mb-8">
+          <ul className="space-y-4 text-lg text-white mb-8">
             <li className="flex items-start gap-3">
               <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
               <span>Leads within 72-hours</span>
@@ -330,11 +370,11 @@ const VSLLanding = () => {
             </li>
           </ul>
           
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-white mb-8">
             All you need to do to get started, is schedule in a FREE 15-minute intro call with us today.
           </p>
           
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-white mb-8">
             It's 100% free, no strings attached, book in by clicking the link below...
           </p>
           
@@ -348,49 +388,49 @@ const VSLLanding = () => {
             </button>
           </div>
           
-          <p className="text-lg text-muted-foreground text-center">
+          <p className="text-lg text-white text-center">
             Receive 20+ test leads before you commit...
           </p>
         </div>
 
         {/* Value Proposition Repeat */}
         <div className="fade-up mb-16">
-          <p className="text-xl text-muted-foreground mb-8 text-center">
+          <p className="text-xl text-white mb-8 text-center">
             Add an <span className="font-semibold text-primary">extra $50-100,000 per month</span> to your electrical or smart home business by targeting <span className="font-semibold text-primary">high-end luxury clients</span>...
           </p>
           
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-white mb-8">
             Most electrical and smart home companies struggle with cash flow, low margins & difficult clients because they focus TOO much on basic installations.
           </p>
           
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-white mb-8">
             Here at WattLeads we target luxury homeowners within your area, with targeted META ads, and proven offers.
           </p>
           
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-white mb-8">
             We also pre-qualify every lead before it lands in your in-box, so that you aren't wasting time trying to call and schedule leads who never answer the phone.
           </p>
           
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-white mb-8">
             Oh! And you can also try risk free for 30 days...
           </p>
         </div>
 
         {/* What You Get Section */}
         <div className="fade-up mb-16">
-          <h3 className="text-2xl font-heading font-bold mb-6 text-center text-white">
+          <h3 className="text-2xl font-heading font-black mb-6 text-center text-white">
             What do you get with our 30-day test drive?
           </h3>
           
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-white mb-8">
             In the next 30 days we will launch your campaign, implement PROVEN strategies & funnels, and guarantee a minimum number of qualified, luxury smart home projects or you DON'T PAY.
           </p>
           
-          <p className="text-lg text-muted-foreground mb-6">
+          <p className="text-lg text-white mb-6">
             Here's what you're guaranteed...
           </p>
           
-          <ul className="space-y-4 text-lg text-muted-foreground mb-8">
+          <ul className="space-y-4 text-lg text-white mb-8">
             <li className="flex items-start gap-3">
               <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
               <span>Leads within 72-hours</span>
@@ -417,11 +457,11 @@ const VSLLanding = () => {
             </li>
           </ul>
           
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-white mb-8">
             All you need to do to get started, is schedule in a FREE 15-minute intro call with us today.
           </p>
           
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-white mb-8">
             It's 100% free, no strings attached, book in by clicking the link below...
           </p>
           
@@ -435,33 +475,33 @@ const VSLLanding = () => {
             </button>
           </div>
           
-          <p className="text-lg text-muted-foreground text-center">
+          <p className="text-lg text-white text-center">
             Receive 20+ test leads before you commit...
           </p>
         </div>
 
         {/* Comparison Section */}
         <div className="fade-up mb-16">
-          <h3 className="text-3xl font-heading font-bold mb-8 text-center text-white">
+          <h3 className="text-3xl font-heading font-black mb-8 text-center text-white">
             Why switch to WattLeads?
           </h3>
           
-          <h4 className="text-2xl font-heading font-bold mb-6 text-center text-white">
+          <h4 className="text-2xl font-heading font-extrabold mb-6 text-center text-white">
             Us vs Other Marketing Agencies...
           </h4>
           
           <div className="grid md:grid-cols-2 gap-8 mb-8">
             <div className="card-rounded border-gray-600 bg-gray-800/50 p-6">
-              <h5 className="text-xl font-semibold mb-4 text-gray-300">Most agencies</h5>
-              <ul className="space-y-3 text-gray-400">
-                <li>• 6 month contracts</li>
-                <li>• Zero guarantees</li>
-                <li>• Up front fees</li>
-                <li>• Poor quality leads</li>
-                <li>• 14-30 day setup</li>
-                <li>• Non-responsive leads</li>
-                <li>• Zero lead qualification</li>
-              </ul>
+              <h5 className="text-xl font-bold mb-4 text-white">Most agencies</h5>
+                              <ul className="space-y-3 text-white">
+                  <li>• 6 month contracts</li>
+                  <li>• Zero guarantees</li>
+                  <li>• Up front fees</li>
+                  <li>• Poor quality leads</li>
+                  <li>• 14-30 day setup</li>
+                  <li>• Non-responsive leads</li>
+                  <li>• Zero lead qualification</li>
+                </ul>
             </div>
             
             <div className="card-rounded border-primary/30 bg-primary/10 p-6">
@@ -481,11 +521,11 @@ const VSLLanding = () => {
 
         {/* How We Work Section */}
         <div className="fade-up mb-16">
-          <h3 className="text-2xl font-heading font-bold mb-6 text-center text-white">
+          <h3 className="text-2xl font-heading font-black mb-6 text-center text-white">
             How we are able to HYPER TARGET the best luxury deals for your electrical or smart home company...
           </h3>
           
-          <ul className="space-y-4 text-lg text-muted-foreground mb-8">
+          <ul className="space-y-4 text-lg text-white mb-8">
             <li className="flex items-start gap-3">
               <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
               <span>We use proven META strategies to target <strong>luxury homeowners</strong> within your <strong>target radius</strong>.</span>
@@ -522,7 +562,7 @@ const VSLLanding = () => {
             </button>
           </div>
           
-          <p className="text-lg text-muted-foreground text-center">
+          <p className="text-lg text-white text-center">
             Receive 20+ test leads before you commit...
           </p>
         </div>
@@ -538,7 +578,7 @@ const VSLLanding = () => {
                       {currentQ.title}
                     </h2>
                     {currentQ.subtitle && (
-                      <p className="text-muted-foreground">{currentQ.subtitle}</p>
+                      <p className="text-gray-600">{currentQ.subtitle}</p>
                     )}
                   </div>
 
@@ -579,7 +619,7 @@ const VSLLanding = () => {
                     <h2 className="text-3xl font-heading font-semibold mb-2 text-rich-black">
                       Let's Get Your Results
                     </h2>
-                    <p className="text-muted-foreground">
+                    <p className="text-gray-600">
                       Enter your details to see your personalized smart home plan
                     </p>
                   </div>
@@ -831,7 +871,7 @@ const VSLLanding = () => {
         {/* Footer */}
         <div className="fade-up text-center py-8 border-t border-border">
           <p className="text-lg font-semibold text-white mb-2">WattLeads © 2024</p>
-          <div className="flex justify-center gap-4 text-sm text-muted-foreground">
+          <div className="flex justify-center gap-4 text-sm text-white">
             <a href="#" className="hover:text-primary">Privacy Policy</a>
             <span>|</span>
             <a href="#" className="hover:text-primary">Terms & Conditions</a>
