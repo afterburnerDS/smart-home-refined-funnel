@@ -12,12 +12,15 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// Determine if we're running under /vsl path
+const basename = window.location.pathname.startsWith('/vsl') ? '/vsl' : '';
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <Routes>
           <Route path="/" element={<VSLLanding />} />
           <Route path="/quiz" element={<Quiz />} />

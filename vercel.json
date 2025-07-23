@@ -2,7 +2,10 @@
   "buildCommand": "npm run build && mv dist/index.html dist/vsl.html",
   "rewrites": [
     { "source": "/vsl", "destination": "/vsl.html" },
-    { "source": "/vsl/(.*)", "destination": "/vsl.html" },
+    { "source": "/vsl/quiz", "destination": "/vsl.html" },
+    { "source": "/vsl/results", "destination": "/vsl.html" },
+    { "source": "/vsl/booking", "destination": "/vsl.html" },
+    { "source": "/vsl/confirmation", "destination": "/vsl.html" },
     { "source": "/", "destination": "https://humble-posterity-757556.framer.app/" },
     { "source": "/:path*", "destination": "https://humble-posterity-757556.framer.app/:path*" }
   ]
