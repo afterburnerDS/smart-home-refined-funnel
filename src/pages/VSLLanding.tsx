@@ -303,7 +303,7 @@ const VSLLanding = () => {
           
           <button 
             onClick={handleStartQuiz}
-            className="btn-red inline-flex items-center gap-2 text-lg md:text-xl px-6 py-3 md:px-8 md:py-4 shadow-lg"
+            className="btn-red inline-flex items-center gap-2 text-sm md:text-xl px-6 py-3 md:px-8 md:py-4 shadow-lg whitespace-nowrap"
           >
             👉 START YOUR 30-DAY TEST DRIVE!
             <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
@@ -381,7 +381,7 @@ const VSLLanding = () => {
           <div className="text-center mb-8">
             <button 
               onClick={handleStartQuiz}
-              className="btn-red inline-flex items-center gap-2 text-xl px-8 py-4"
+              className="btn-red inline-flex items-center gap-2 text-sm md:text-xl px-8 py-4 whitespace-nowrap"
             >
               👉 START YOUR 30-DAY TEST DRIVE!
               <ArrowRight className="w-5 h-5" />
@@ -468,7 +468,7 @@ const VSLLanding = () => {
           <div className="text-center mb-8">
             <button 
               onClick={handleStartQuiz}
-              className="btn-red inline-flex items-center gap-2 text-xl px-8 py-4"
+              className="btn-red inline-flex items-center gap-2 text-sm md:text-xl px-8 py-4 whitespace-nowrap"
             >
               👉 START YOUR 30-DAY TEST DRIVE!
               <ArrowRight className="w-5 h-5" />
@@ -555,7 +555,7 @@ const VSLLanding = () => {
           <div className="text-center mb-8">
             <button 
               onClick={handleStartQuiz}
-              className="btn-red inline-flex items-center gap-2 text-xl px-8 py-4"
+              className="btn-red inline-flex items-center gap-2 text-sm md:text-xl px-8 py-4 whitespace-nowrap"
             >
               👉 START YOUR 30-DAY TEST DRIVE!
               <ArrowRight className="w-5 h-5" />
