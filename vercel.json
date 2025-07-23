@@ -2,6 +2,6 @@
   "rewrites": [
     { "source": "/vsl", "destination": "/index.html" },
     { "source": "/vsl/(.*)", "destination": "/index.html" },
-    { "source": "/", "destination": "/framer-proxy.html" }
+    { "source": "/(.*)", "destination": "/framer-proxy.html" }
   ]
 } 
