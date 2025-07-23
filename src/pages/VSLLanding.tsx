@@ -218,7 +218,7 @@ const VSLLanding = () => {
         {/* 1. WattLeads Logo */}
         <div className="fade-up text-center mb-3 md:mb-6">
           <div className="inline-block">
-            <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent">
+            <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
               WattLeads
             </h1>
           </div>
@@ -227,7 +227,7 @@ const VSLLanding = () => {
         {/* 2. Main Headline */}
         <div className="fade-up text-center mb-4 md:mb-8">
           <h2 className="text-3xl md:text-6xl font-heading font-bold text-white">
-            <span className="text-primary">US Electrical and Smart Home Companies</span>
+            <span className="text-red-500">US Electrical and Smart Home Companies</span>
           </h2>
         </div>
 
