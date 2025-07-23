@@ -1,7 +1,8 @@
 {
+  "buildCommand": "npm run build && mv dist/index.html dist/vsl.html",
   "rewrites": [
     { "source": "/vsl", "destination": "/vsl.html" },
-    { "source": "/vsl23", "destination": "/vsl23.html" },
+    { "source": "/vsl/(.*)", "destination": "/vsl.html" },
     { "source": "/", "destination": "https://humble-posterity-757556.framer.app/" },
     { "source": "/:path*", "destination": "https://humble-posterity-757556.framer.app/:path*" }
   ]
