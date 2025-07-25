@@ -30,12 +30,12 @@ const Confirmation = () => {
             Thanks! Your call is confirmed!
           </h2>
           
-          <div className="bg-white rounded-lg p-4 mb-4 max-w-2xl mx-auto">
-            <h3 className="text-lg md:text-xl font-heading font-black mb-3 text-rich-black">
+          <div className="mb-4 max-w-2xl mx-auto">
+            <h3 className="text-lg md:text-xl font-heading font-black mb-3 text-white">
               Last Step! ✅ Confirm the meeting!
             </h3>
             
-            <div className="space-y-3 text-sm md:text-base text-rich-black">
+            <div className="space-y-3 text-sm md:text-base text-white">
               <p className="font-semibold">
                 We've blocked out the time you selected, and we will be calling on the number you provided!
               </p>
@@ -82,7 +82,7 @@ const Confirmation = () => {
               You will be talking with me: <span className="text-primary">Daniel Silva</span>
             </h4>
             
-            <div className="bg-white rounded-lg p-6 grid md:grid-cols-2 gap-6 items-center">
+            <div className="grid md:grid-cols-2 gap-6 items-center">
               {/* Daniel's Photo */}
               <div className="order-2 md:order-1">
                 <div className="relative aspect-square max-w-xs mx-auto">
@@ -92,7 +92,7 @@ const Confirmation = () => {
                     className="w-full h-full object-cover rounded-lg shadow-lg"
                     onError={(e) => {
                       e.currentTarget.src = "/placeholder.svg";
-                      e.currentTarget.className = "w-full h-full object-contain rounded-lg shadow-lg bg-gray-100 p-8";
+                      e.currentTarget.className = "w-full h-full object-contain rounded-lg shadow-lg bg-gray-800 p-8";
                     }}
                   />
                   <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center">
@@ -103,11 +103,11 @@ const Confirmation = () => {
               
               {/* Description */}
               <div className="order-1 md:order-2 text-left">
-                <p className="text-gray-700 mb-4 leading-relaxed">
+                <p className="text-white mb-4 leading-relaxed">
                   As an <strong>electrical engineer</strong> turned digital marketer, I've developed a proprietary system that consistently <strong>generates high-quality leads</strong> without cold calling, networking, or SEO.
                 </p>
                 
-                <p className="text-gray-700 leading-relaxed">
+                <p className="text-white leading-relaxed">
                   Let me walk you through how we can transform your business <strong>with predictable, qualified leads.</strong>
                 </p>
               </div>
@@ -127,39 +127,39 @@ const Confirmation = () => {
         </div>
 
         {/* What We Do Section */}
-        <div className="bg-white rounded-lg p-8 mb-12">
-          <h3 className="text-2xl font-heading font-black mb-6 text-center text-rich-black">
+        <div className="mb-12">
+          <h3 className="text-2xl font-heading font-black mb-6 text-center text-white">
             How WattLeads Will Transform Your Electrical Business
           </h3>
           
-          <div className="space-y-4 text-lg text-rich-black">
+          <div className="space-y-4 text-lg text-white">
             <div className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
               <span>We use proven META strategies to target <strong>luxury homeowners</strong> within your <strong>target radius</strong>.</span>
             </div>
             
             <div className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
               <span>We implement <strong>consultation offers</strong> that guarantees your first meeting with these clients.</span>
             </div>
             
             <div className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
               <span>We use our <strong>pre-trained A.I. assistant</strong> to ensure that EVERY SINGLE lead that gets in touch is <strong>immediately followed up with</strong> and has all their questions answered.</span>
             </div>
             
             <div className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
               <span>We <strong>schedule phone appointments</strong> with potential clients, so that you know when and what time you will be speaking to them (no time wasted).</span>
             </div>
             
             <div className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
               <span>We deliver a <strong>guaranteed volume of leads</strong> which will at a MINIMUM cover initial investment</span>
             </div>
             
             <div className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
               <span>We offer a <strong>30 day test drive</strong> so that you can try it for yourself without committing long term.</span>
             </div>
           </div>
