@@ -1,165 +1,216 @@
 import { useEffect } from "react";
-import { CheckCircle, Play, FileText, Camera, Wifi, Mail } from "lucide-react";
+import { CheckCircle, Phone, Clock, Mail, MessageSquare, Play } from "lucide-react";
 
 const Confirmation = () => {
   useEffect(() => {
-    // Fire conversion event
+    // Track Schedule event when user lands on confirmation page
     if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'lead_complete');
+      (window as any).fbq('track', 'Schedule');
     }
     
     // Custom event for analytics
-    window.dispatchEvent(new CustomEvent('lead_complete', {
+    window.dispatchEvent(new CustomEvent('schedule_complete', {
       detail: { page: 'confirmation', timestamp: Date.now() }
     }));
   }, []);
 
-  const checklist = [
-    {
-      icon: FileText,
-      title: "Floor Plan PDF",
-      description: "Upload or sketch your home's layout for accurate planning"
-    },
-    {
-      icon: Camera,
-      title: "Inspiration Photos",
-      description: "Screenshots of smart home setups you love"
-    },
-    {
-      icon: Wifi,
-      title: "Speed Test Screenshot",
-      description: "Run a speed test and save the results (speedtest.net)"
-    }
-  ];
-
-  const handleShareEmail = () => {
-    const subject = "Our Smart Home Discovery Call is Scheduled";
-    const body = `Hi there!
-
-I've scheduled a discovery call with WattLeads to explore smart home integration for our house. 
-
-The call will help us understand:
-• What's possible with our current home
-• Which smart systems would add the most value
-• Investment requirements and timeline
-
-Thought you'd want to know about this exciting next step!
-
-Best regards`;
-
-    const emailUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = emailUrl;
-  };
-
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
-        {/* Success Header */}
-        <div className="text-center mb-12">
-          <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-12 h-12 text-green-600" />
-          </div>
-          
-          <h1 className="text-4xl font-heading font-semibold mb-4 text-rich-black">
-            You're Booked!
+    <div className="min-h-screen bg-rich-black">
+      <div className="container mx-auto px-4 py-6 max-w-4xl">
+        {/* WattLeads Logo - Compact */}
+        <div className="text-center mb-4">
+          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
+            WattLeads
           </h1>
-          <p className="text-xl text-muted-foreground mb-8">
-            Check your email for calendar details and meeting preparation info.
-          </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Prep Video */}
-          <div className="space-y-6">
-            <div>
-              <h2 className="text-2xl font-heading font-semibold mb-4 text-rich-black">
-                Quick Prep Video
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                Watch this 90-second video to get the most out of your discovery call.
+        {/* Main Confirmation Message - Compact */}
+        <div className="text-center mb-6">
+          <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-4 italic">
+            Thanks! Your call is confirmed!
+          </h2>
+          
+          <div className="bg-white rounded-lg p-4 mb-4 max-w-2xl mx-auto">
+            <h3 className="text-lg md:text-xl font-heading font-black mb-3 text-rich-black">
+              Last Step! ✅ Confirm the meeting!
+            </h3>
+            
+            <div className="space-y-3 text-sm md:text-base text-rich-black">
+              <p className="font-semibold">
+                We've blocked out the time you selected, and we will be calling on the number you provided!
+              </p>
+              
+              <p>
+                All you need to do now is confirm the meeting (check your email shortly)!
+              </p>
+              
+              <p>
+                Just try to be in a quiet spot, phone in hand ready to go at the time and date you selected!
               </p>
             </div>
+          </div>
 
-            <div className="relative aspect-video bg-rich-black rounded-2xl overflow-hidden">
+          {/* Video Section - Compact Above the Fold */}
+          <div className="mb-4 max-w-2xl mx-auto">
+            <div className="mb-3">
+              <h4 className="text-lg md:text-xl font-heading font-semibold text-white mb-1">
+                Watch This Quick Video
+              </h4>
+              <p className="text-sm text-gray-300">
+                See how we've helped electrical companies scale with qualified leads
+              </p>
+            </div>
+            
+            <div className="relative aspect-video bg-gray-900 rounded-lg overflow-hidden shadow-xl">
               <div className="flex items-center justify-center h-full cursor-pointer group">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                   <Play className="w-6 h-6 text-white ml-1" fill="currentColor" />
                 </div>
-                <div className="absolute bottom-4 left-4 bg-black/60 px-3 py-1 rounded-full text-sm text-white">
-                  1:30 prep guide
+                <div className="absolute bottom-2 left-2 bg-black/70 px-2 py-1 rounded text-xs text-white">
+                  2:30 success stories
+                </div>
+                <div className="absolute top-2 right-2 bg-primary/20 px-2 py-1 rounded text-xs text-white border border-primary/30">
+                  🔥 Case Studies
                 </div>
               </div>
             </div>
+          </div>
 
-            <div className="card-rounded bg-blue-50 border-blue-200">
-              <h3 className="font-semibold text-blue-900 mb-2">What We'll Cover</h3>
-              <ul className="space-y-1 text-sm text-blue-800">
-                <li>• Your home's smart potential assessment</li>
-                <li>• Technology recommendations for your lifestyle</li>
-                <li>• Timeline and investment discussion</li>
-                <li>• Next steps if it's a good fit</li>
-              </ul>
+          {/* You will be talking with me section */}
+          <div className="mb-6 max-w-3xl mx-auto">
+            <h4 className="text-xl md:text-2xl font-heading font-semibold text-white mb-6 text-center">
+              You will be talking with me: <span className="text-primary">Daniel Silva</span>
+            </h4>
+            
+            <div className="bg-white rounded-lg p-6 grid md:grid-cols-2 gap-6 items-center">
+              {/* Daniel's Photo */}
+              <div className="order-2 md:order-1">
+                <div className="relative aspect-square max-w-xs mx-auto">
+                  <img 
+                    src="/daniel-silva.jpg" 
+                    alt="Daniel Silva - WattLeads Founder"
+                    className="w-full h-full object-cover rounded-lg shadow-lg"
+                    onError={(e) => {
+                      e.currentTarget.src = "/placeholder.svg";
+                      e.currentTarget.className = "w-full h-full object-contain rounded-lg shadow-lg bg-gray-100 p-8";
+                    }}
+                  />
+                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                    <Play className="w-4 h-4 text-white" fill="currentColor" />
+                  </div>
+                </div>
+              </div>
+              
+              {/* Description */}
+              <div className="order-1 md:order-2 text-left">
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  As an <strong>electrical engineer</strong> turned digital marketer, I've developed a proprietary system that consistently <strong>generates high-quality leads</strong> without cold calling, networking, or SEO.
+                </p>
+                
+                <p className="text-gray-700 leading-relaxed">
+                  Let me walk you through how we can transform your business <strong>with predictable, qualified leads.</strong>
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Preparation Checklist */}
-          <div className="space-y-6">
-            <div>
-              <h2 className="text-2xl font-heading font-semibold mb-4 text-rich-black">
-                How to Prepare
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                Having these items ready will help us give you the most accurate recommendations.
-              </p>
+          {/* Additional Instructions - Compact */}
+          <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 mb-8 max-w-2xl mx-auto">
+            <div className="flex items-center gap-2 mb-2">
+              <MessageSquare className="w-5 h-5 text-primary" />
+              <h4 className="text-lg font-semibold text-white">Need to Reschedule?</h4>
             </div>
+            <p className="text-sm text-white">
+              If you need to reschedule, or you think you may have provided the wrong phone number, just reply to the text we've just sent you!
+            </p>
+          </div>
+        </div>
 
-            <div className="space-y-4">
-              {checklist.map((item, index) => (
-                <div key={index} className="card-rounded hover:shadow-md transition-shadow">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <item.icon className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-2">{item.title}</h3>
-                      <p className="text-sm text-muted-foreground">{item.description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+        {/* What We Do Section */}
+        <div className="bg-white rounded-lg p-8 mb-12">
+          <h3 className="text-2xl font-heading font-black mb-6 text-center text-rich-black">
+            How WattLeads Will Transform Your Electrical Business
+          </h3>
+          
+          <div className="space-y-4 text-lg text-rich-black">
+            <div className="flex items-start gap-3">
+              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <span>We use proven META strategies to target <strong>luxury homeowners</strong> within your <strong>target radius</strong>.</span>
             </div>
-
-            {/* Share with Spouse */}
-            <div className="card-rounded bg-primary/5 border-primary/20">
-              <h3 className="font-semibold mb-3">Keep Your Partner in the Loop</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Smart home decisions affect the whole family. Share the details with your spouse or partner.
-              </p>
-              
-              <button
-                onClick={handleShareEmail}
-                className="btn-outline inline-flex items-center gap-2 text-sm"
-              >
-                <Mail className="w-4 h-4" />
-                Share via Email
-              </button>
+            
+            <div className="flex items-start gap-3">
+              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <span>We implement <strong>consultation offers</strong> that guarantees your first meeting with these clients.</span>
+            </div>
+            
+            <div className="flex items-start gap-3">
+              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <span>We use our <strong>pre-trained A.I. assistant</strong> to ensure that EVERY SINGLE lead that gets in touch is <strong>immediately followed up with</strong> and has all their questions answered.</span>
+            </div>
+            
+            <div className="flex items-start gap-3">
+              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <span>We <strong>schedule phone appointments</strong> with potential clients, so that you know when and what time you will be speaking to them (no time wasted).</span>
+            </div>
+            
+            <div className="flex items-start gap-3">
+              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <span>We deliver a <strong>guaranteed volume of leads</strong> which will at a MINIMUM cover initial investment</span>
+            </div>
+            
+            <div className="flex items-start gap-3">
+              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <span>We offer a <strong>30 day test drive</strong> so that you can try it for yourself without committing long term.</span>
             </div>
           </div>
         </div>
 
-        {/* Thank You Message */}
-        <div className="text-center mt-16 card-rounded bg-rich-black text-white">
-          <h2 className="text-2xl font-heading font-semibold mb-4">
-            Thank You for Choosing WattLeads
-          </h2>
-          <p className="text-gray-300 mb-6">
-            We're excited to help you create the smart home of your dreams. Our team will review your quiz answers before the call to provide the most relevant recommendations.
-          </p>
+        {/* Call Preparation */}
+        <div className="grid md:grid-cols-2 gap-8 mb-12">
+          <div className="bg-primary/10 border border-primary/20 rounded-lg p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <Phone className="w-6 h-6 text-primary" />
+              <h4 className="text-xl font-semibold text-white">During Your Call</h4>
+            </div>
+            <ul className="space-y-2 text-white">
+              <li>• Business assessment & growth planning</li>
+              <li>• Meta ads strategy discussion</li>
+              <li>• ROI projections for your market</li>
+              <li>• Custom lead generation blueprint</li>
+            </ul>
+          </div>
           
-          <div className="flex justify-center gap-8 text-sm text-gray-400">
-            <span>✓ CEDIA Certified Integrators</span>
-            <span>✓ 50+ Homes Transformed</span>
-            <span>✓ 30-Day Guarantee</span>
+          <div className="bg-primary/10 border border-primary/20 rounded-lg p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <Clock className="w-6 h-6 text-primary" />
+              <h4 className="text-xl font-semibold text-white">What to Expect</h4>
+            </div>
+            <ul className="space-y-2 text-white">
+              <li>• 15-30 minute strategy session</li>
+              <li>• No pressure, just valuable insights</li>
+              <li>• Clear next steps if it's a fit</li>
+              <li>• Immediate action items you can implement</li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Final Thank You */}
+        <div className="text-center">
+          <h3 className="text-3xl font-heading font-bold text-white mb-4 italic">
+            Thanks! Your call is confirmed!
+          </h3>
+          <p className="text-lg text-gray-300 mb-8">
+            We're excited to help you scale your electrical business with qualified $25k+ leads!
+          </p>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center py-8 border-t border-gray-700">
+          <p className="text-lg font-semibold text-white mb-2">WattLeads © 2024</p>
+          <div className="flex justify-center gap-4 text-sm text-gray-400">
+            <a href="#" className="hover:text-primary">Privacy Policy</a>
+            <span>|</span>
+            <a href="#" className="hover:text-primary">Terms & Conditions</a>
           </div>
         </div>
       </div>

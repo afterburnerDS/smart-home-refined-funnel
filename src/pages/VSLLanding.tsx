@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Star, ArrowRight, Calendar, Clock, Mail, CheckCircle, Play, ArrowLeft, Check, Badge } from "lucide-react";
 import { ProgressBar } from "@/components/ProgressBar";
 
@@ -14,10 +14,9 @@ interface QuizData {
 }
 
 const VSLLanding = () => {
+  const navigate = useNavigate();
   const [showQuiz, setShowQuiz] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(1);
-  const [showResults, setShowResults] = useState(false);
-  const [isQualified, setIsQualified] = useState(false);
   const [quizData, setQuizData] = useState<QuizData>({
     services: [],
     monthlyProjects: "",
@@ -65,53 +64,10 @@ const VSLLanding = () => {
     }
   ];
 
-  const servicesBenefits = {
-    "Residential Electrical Services": [
-      "Target high-value whole home rewiring and panel upgrades",
-      "Premium electrical repairs and installations for luxury homes",
-      "Recurring maintenance contracts with affluent homeowners"
-    ],
-    "Commercial Electrical Contracting": [
-      "Large-scale commercial building projects worth $50k-$500k+",
-      "Ongoing maintenance contracts with commercial properties",
-      "Industrial facility electrical system upgrades"
-    ],
-    "Industrial Electrical & Maintenance": [
-      "High-ticket industrial equipment installations",
-      "Emergency electrical service contracts with premium pricing",
-      "Specialized technical expertise commanding higher rates"
-    ],
-    "Whole-Home Automation & Voice Control": [
-      "Target high-end clients who invest $30k+ in automation systems",
-      "Position yourself as premium installer in luxury market",
-      "Higher profit margins on complex integration projects"
-    ],
-    "Lighting & Shading Scenes": [
-      "Upsell opportunities with architectural lighting design",
-      "Recurring revenue from scene customization services", 
-      "Differentiate from basic smart switch installers"
-    ],
-    "Security & Cameras": [
-      "High-ticket commercial and residential security projects",
-      "Monthly monitoring revenue streams",
-      "Integration with luxury home automation systems"
-    ],
-    "Home Cinema / Media Room": [
-      "Premium theater installations starting at $50k+",
-      "Celebrity and executive clientele referrals",
-      "Showcase projects that attract media attention"
-    ],
-    "Enterprise-Grade Networking": [
-      "Commercial building contracts worth $100k+",
-      "Ongoing support and maintenance revenue",
-      "Foundation for all other smart building systems"
-    ]
-  };
-
   const handleStartQuiz = () => {
     setShowQuiz(true);
     setCurrentQuestion(1);
-    setShowResults(false);
+    
     // Smooth scroll to quiz section
     setTimeout(() => {
       const quizElement = document.getElementById('quiz-section');
@@ -153,21 +109,22 @@ const VSLLanding = () => {
     if (currentQuestion < 5) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      // Show results instead of navigating
-      setShowResults(true);
+      // Track Lead event when user completes quiz with contact info
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'Lead');
+      }
       
-      // Qualification logic: Avg Project Value >= $25k AND Marketing Spend >= $2k
-      const qualifies = (quizData.avgProjectValue === '$25k-$50k' || quizData.avgProjectValue === '$50k+') && 
-                       (quizData.marketingSpend === '$2k-$5k' || quizData.marketingSpend === '$5k-$10k' || quizData.marketingSpend === '$10k+');
-      setIsQualified(qualifies);
-      
-      // Scroll to results
-      setTimeout(() => {
-        const resultsElement = document.getElementById('results-section');
-        if (resultsElement) {
-          resultsElement.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
+      // Navigate to results page with quiz data
+      const params = new URLSearchParams({
+        services: quizData.services.join(','),
+        monthlyProjects: quizData.monthlyProjects,
+        avgProjectValue: quizData.avgProjectValue,
+        marketingSpend: quizData.marketingSpend,
+        name: quizData.name,
+        email: quizData.email,
+        phone: quizData.phone
+      });
+      navigate(`/results?${params.toString()}`);
     }
   };
 
@@ -199,7 +156,7 @@ const VSLLanding = () => {
   return (
     <div className="min-h-screen bg-rich-black">
       {/* Progress Bar - only show during quiz */}
-      {showQuiz && !showResults && (
+      {showQuiz && (
         <ProgressBar 
           currentStep={currentQuestion} 
           totalSteps={5} 
@@ -393,93 +350,6 @@ const VSLLanding = () => {
           </p>
         </div>
 
-        {/* Value Proposition Repeat */}
-        <div className="fade-up mb-16">
-          <p className="text-xl text-white mb-8 text-center">
-            Add an <span className="font-semibold text-primary">extra $50-100,000 per month</span> to your electrical or smart home business by targeting <span className="font-semibold text-primary">high-end luxury clients</span>...
-          </p>
-          
-          <p className="text-lg text-white mb-8">
-            Most electrical and smart home companies struggle with cash flow, low margins & difficult clients because they focus TOO much on basic installations.
-          </p>
-          
-          <p className="text-lg text-white mb-8">
-            Here at WattLeads we target luxury homeowners within your area, with targeted META ads, and proven offers.
-          </p>
-          
-          <p className="text-lg text-white mb-8">
-            We also pre-qualify every lead before it lands in your in-box, so that you aren't wasting time trying to call and schedule leads who never answer the phone.
-          </p>
-          
-          <p className="text-lg text-white mb-8">
-            Oh! And you can also try risk free for 30 days...
-          </p>
-        </div>
-
-        {/* What You Get Section */}
-        <div className="fade-up mb-16">
-          <h3 className="text-2xl font-heading font-black mb-6 text-center text-white">
-            What do you get with our 30-day test drive?
-          </h3>
-          
-          <p className="text-lg text-white mb-8">
-            In the next 30 days we will launch your campaign, implement PROVEN strategies & funnels, and guarantee a minimum number of qualified, luxury smart home projects or you DON'T PAY.
-          </p>
-          
-          <p className="text-lg text-white mb-6">
-            Here's what you're guaranteed...
-          </p>
-          
-          <ul className="space-y-4 text-lg text-white mb-8">
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>Leads within 72-hours</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>No long-term commitment.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>Everything full custom branded.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>Trained A.I. assistant custom to your company.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>Easy to use lead tracker.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>+ much more!</span>
-            </li>
-          </ul>
-          
-          <p className="text-lg text-white mb-8">
-            All you need to do to get started, is schedule in a FREE 15-minute intro call with us today.
-          </p>
-          
-          <p className="text-lg text-white mb-8">
-            It's 100% free, no strings attached, book in by clicking the link below...
-          </p>
-          
-          <div className="text-center mb-8">
-            <button 
-              onClick={handleStartQuiz}
-              className="btn-red inline-flex items-center gap-2 text-sm md:text-xl px-8 py-4 whitespace-nowrap"
-            >
-              👉 START YOUR 30-DAY TEST DRIVE!
-              <ArrowRight className="w-5 h-5" />
-            </button>
-          </div>
-          
-          <p className="text-lg text-white text-center">
-            Receive 20+ test leads before you commit...
-          </p>
-        </div>
-
         {/* Comparison Section */}
         <div className="fade-up mb-16">
           <h3 className="text-3xl font-heading font-black mb-8 text-center text-white">
@@ -493,15 +363,15 @@ const VSLLanding = () => {
           <div className="grid md:grid-cols-2 gap-8 mb-8">
             <div className="card-rounded border-gray-600 bg-gray-800/50 p-6">
               <h5 className="text-xl font-bold mb-4 text-white">Most agencies</h5>
-                              <ul className="space-y-3 text-white">
-                  <li>• 6 month contracts</li>
-                  <li>• Zero guarantees</li>
-                  <li>• Up front fees</li>
-                  <li>• Poor quality leads</li>
-                  <li>• 14-30 day setup</li>
-                  <li>• Non-responsive leads</li>
-                  <li>• Zero lead qualification</li>
-                </ul>
+              <ul className="space-y-3 text-white">
+                <li>• 6 month contracts</li>
+                <li>• Zero guarantees</li>
+                <li>• Up front fees</li>
+                <li>• Poor quality leads</li>
+                <li>• 14-30 day setup</li>
+                <li>• Non-responsive leads</li>
+                <li>• Zero lead qualification</li>
+              </ul>
             </div>
             
             <div className="card-rounded border-primary/30 bg-primary/10 p-6">
@@ -568,7 +438,7 @@ const VSLLanding = () => {
         </div>
 
         {/* Quiz Section */}
-        {showQuiz && !showResults && (
+        {showQuiz && (
           <div id="quiz-section" className="mb-16">
             <div className="bg-white rounded-lg p-8 shadow-2xl max-w-2xl mx-auto">
               {currentQuestion <= 4 && currentQ && (
@@ -682,187 +552,6 @@ const VSLLanding = () => {
                   {currentQuestion === 5 ? 'Get My Results' : 'Next'}
                   <ArrowRight className="w-4 h-4" />
                 </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Results Section */}
-        {showResults && (
-          <div id="results-section" className="mb-16">
-            <div className="bg-white rounded-lg p-8 shadow-2xl">
-              {/* Results Header */}
-              <div className="text-center mb-12">
-                <div className="flex justify-center mb-6">
-                  {isQualified ? (
-                    <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-6 py-3 rounded-full">
-                      <Badge className="w-5 h-5" />
-                      <span className="font-semibold">Perfect Fit</span>
-                    </div>
-                  ) : (
-                    <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-6 py-3 rounded-full">
-                      <Star className="w-5 h-5" />
-                      <span className="font-semibold">Good Candidate</span>
-                    </div>
-                  )}
-                </div>
-
-                <h1 className="text-4xl font-heading font-semibold mb-4 text-rich-black">
-                  Great News, {quizData.name}!
-                </h1>
-                <p className="text-xl text-muted-foreground mb-8">
-                  {isQualified 
-                    ? "Your company is perfect for our premium lead generation system. Let's get you set up with qualified $25k+ prospects immediately."
-                    : "We can definitely help grow your electrical or smart home business. Here's what our lead generation system can do for your company."
-                  }
-                </p>
-              </div>
-
-              {/* Summary Card */}
-              <div className="mb-8 bg-gradient-to-r from-primary/5 to-accent/5 border border-primary/20 rounded-lg p-6">
-                <h2 className="text-2xl font-heading font-semibold mb-6 text-rich-black">
-                  Your Business Profile
-                </h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Monthly Projects</p>
-                    <p className="font-semibold">{quizData.monthlyProjects}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Avg Project Value</p>
-                    <p className="font-semibold">{quizData.avgProjectValue}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Marketing Spend</p>
-                    <p className="font-semibold">{quizData.marketingSpend}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Service Categories</p>
-                    <p className="font-semibold">{quizData.services.length} specialties</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Selected Services Benefits */}
-              <div className="space-y-6 mb-12">
-                <h2 className="text-3xl font-heading font-semibold text-rich-black">
-                  How WattLeads Helps Your Business
-                </h2>
-                
-                {quizData.services.map((service, index) => {
-                  const benefits = servicesBenefits[service as keyof typeof servicesBenefits] || [];
-                  return (
-                    <div key={index} className="border border-border rounded-lg p-6">
-                      <h3 className="text-xl font-semibold mb-4 text-rich-black">
-                        {service} Lead Generation
-                      </h3>
-                      <div className="space-y-3">
-                        {benefits.map((benefit, i) => (
-                          <div key={i} className="flex items-start gap-3">
-                            <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                            <p className="text-muted-foreground">{benefit}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Booking Section */}
-              <div className="space-y-8">
-                <div>
-                  <h1 className="text-4xl font-heading font-semibold mb-6 text-rich-black">
-                    Book Your Free Strategy Call
-                  </h1>
-                  <p className="text-xl text-muted-foreground mb-8">
-                    Get a custom lead generation blueprint designed specifically for your electrical or smart home company and growth goals.
-                  </p>
-                </div>
-                
-                {/* Calendar Embed */}
-                <div className="border border-border rounded-lg p-6">
-                  <h2 className="text-2xl font-heading font-semibold mb-6 text-center">
-                    Choose Your Preferred Time
-                  </h2>
-                  {/* Calendly Embed */}
-                  <div className="min-h-[600px]">
-                    <iframe
-                      src="https://calendly.com/sagebyte/15minphone"
-                      width="100%"
-                      height="600"
-                      frameBorder="0"
-                      title="Schedule a meeting"
-                    />
-                  </div>
-                </div>
-                
-                {/* Help Text */}
-                <div className="text-center">
-                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                    <Mail className="w-4 h-4" />
-                    <span>Need another time? Email hello@wattleads.com</span>
-                  </div>
-                </div>
-                
-                {/* Call Value Points */}
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
-                      <CheckCircle className="w-4 h-4 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-lg mb-2">Business Assessment & Growth Plan</h3>
-                      <p className="text-muted-foreground">We'll analyze your current marketing, identify gaps, and create a custom lead generation strategy that fits your business model and growth targets.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
-                      <CheckCircle className="w-4 h-4 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-lg mb-2">Meta Ads Strategy & Budget Optimization</h3>
-                      <p className="text-muted-foreground">Get a clear roadmap for profitable Meta ads campaigns, including audience targeting, budget allocation, and conversion optimization specifically for electrical and smart home companies.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
-                      <CheckCircle className="w-4 h-4 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-lg mb-2">ROI Projections & Implementation Timeline</h3>
-                      <p className="text-muted-foreground">Understand exactly what results to expect, when to expect them, and how our AI qualification system will transform your sales process.</p>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Mini Testimonials */}
-                <div className="space-y-4">
-                  <div className="border border-border rounded-lg p-4 bg-muted/30">
-                    <p className="text-sm italic mb-3">"WattLeads' strategy call changed everything. We went from 5 leads/month to 25 qualified prospects."</p>
-                    <p className="font-semibold text-sm">— Marcus T., Smart Home Pro</p>
-                  </div>
-                  <div className="border border-border rounded-lg p-4 bg-muted/30">
-                    <p className="text-sm italic mb-3">"The ROI projections were spot-on. We're now booking $150k+ monthly from their lead system."</p>
-                    <p className="font-semibold text-sm">— Jennifer K., Automation Expert</p>
-                  </div>
-                </div>
-                
-                {/* Badges */}
-                <div className="flex gap-6 items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center mb-2">
-                      <span className="font-bold text-sm">Meta</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">Certified</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center mb-2">
-                      <span className="font-bold text-sm">AI</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">Expert</p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
