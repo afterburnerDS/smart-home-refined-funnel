@@ -23,6 +23,9 @@ const QuizResults = () => {
     if (typeof window !== 'undefined' && (window as any).fbq) {
       (window as any).fbq('track', 'Lead');
     }
+
+    // Scroll to top of page when component mounts
+    window.scrollTo(0, 0);
   }, [searchParams]);
 
   const servicesBenefits = {
