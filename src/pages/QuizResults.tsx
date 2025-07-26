@@ -20,9 +20,18 @@ const QuizResults = () => {
     setIsQualified(qualifies);
 
     // Track Lead event when user lands on results page
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'Lead');
-    }
+    const trackLeadEvent = () => {
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        console.log('Firing Lead event on results page...');
+        (window as any).fbq('track', 'Lead');
+        console.log('Lead event fired on results page');
+      } else {
+        console.log('Meta Pixel not found on results page');
+      }
+    };
+
+    // Small delay to ensure Meta Pixel is loaded
+    setTimeout(trackLeadEvent, 100);
 
     // Scroll to top of page when component mounts
     window.scrollTo(0, 0);
