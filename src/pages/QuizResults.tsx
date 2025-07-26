@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Badge, CheckCircle, Star, Calendar, Clock, Mail } from "lucide-react";
 
@@ -6,6 +6,7 @@ const QuizResults = () => {
   const [searchParams] = useSearchParams();
   const [isQualified, setIsQualified] = useState(false);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const hasFired = useRef(false);
 
   useEffect(() => {
     const services = searchParams.get('services')?.split(',') || [];
@@ -19,19 +20,17 @@ const QuizResults = () => {
                      (marketingSpend === '$2k-$5k' || marketingSpend === '$5k-$10k' || marketingSpend === '$10k+');
     setIsQualified(qualifies);
 
-    // Track Lead event when user lands on results page
-    const trackLeadEvent = () => {
-      if (typeof window !== 'undefined' && (window as any).fbq) {
-        console.log('Firing Lead event on results page...');
-        (window as any).fbq('track', 'Lead');
-        console.log('Lead event fired on results page');
-      } else {
-        console.log('Meta Pixel not found on results page');
-      }
-    };
-
-    // Small delay to ensure Meta Pixel is loaded
-    setTimeout(trackLeadEvent, 100);
+    // Track Lead event only once when user lands on results page
+    if (!hasFired.current && typeof window !== 'undefined' && (window as any).fbq) {
+      console.log('Firing Lead event on results page...');
+      (window as any).fbq('track', 'Lead', {
+        content_name: 'Quiz Results',
+        content_category: 'Lead Generation',
+        value: 1
+      });
+      console.log('Lead event fired on results page');
+      hasFired.current = true;
+    }
 
     // Scroll to top of page when component mounts
     window.scrollTo(0, 0);

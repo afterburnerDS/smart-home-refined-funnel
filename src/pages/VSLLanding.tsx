@@ -112,7 +112,11 @@ const VSLLanding = () => {
       // Track Lead event when user completes quiz with contact info
       if (typeof window !== 'undefined' && (window as any).fbq) {
         console.log('Firing Lead event on quiz completion...');
-        (window as any).fbq('track', 'Lead');
+        (window as any).fbq('track', 'Lead', {
+          content_name: 'Quiz Completion',
+          content_category: 'Lead Generation',
+          value: 1
+        });
         console.log('Lead event fired on quiz completion');
       } else {
         console.log('Meta Pixel not found on quiz completion');
