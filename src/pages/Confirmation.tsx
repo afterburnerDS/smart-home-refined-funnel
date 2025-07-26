@@ -9,12 +9,35 @@ const Confirmation = () => {
         console.log('Firing Schedule event...');
         (window as any).fbq('track', 'Schedule');
         console.log('Schedule event fired');
+        
+        // Also try with a slight delay as backup
+        setTimeout(() => {
+          console.log('Firing Schedule event (backup)...');
+          (window as any).fbq('track', 'Schedule');
+          console.log('Schedule event fired (backup)');
+        }, 500);
+        
+        // Try with additional parameters
+        setTimeout(() => {
+          console.log('Firing Schedule event with parameters...');
+          (window as any).fbq('track', 'Schedule', {
+            content_name: 'Call Confirmation',
+            content_category: 'Lead Generation',
+            value: 1
+          });
+          console.log('Schedule event with parameters fired');
+        }, 1000);
       } else {
         console.log('Meta Pixel not found or window not available');
+        console.log('Window object:', typeof window);
+        console.log('fbq function:', typeof (window as any).fbq);
       }
     };
 
-    // Small delay to ensure Meta Pixel is loaded
+    // Try immediate firing first
+    trackScheduleEvent();
+    
+    // Also try with delay to ensure Meta Pixel is loaded
     setTimeout(trackScheduleEvent, 100);
     
     // Custom event for analytics
