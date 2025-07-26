@@ -4,9 +4,18 @@ import { CheckCircle, Phone, Clock, Mail, MessageSquare, Play } from "lucide-rea
 const Confirmation = () => {
   useEffect(() => {
     // Track Schedule event when user lands on confirmation page
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'Schedule');
-    }
+    const trackScheduleEvent = () => {
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        console.log('Firing Schedule event...');
+        (window as any).fbq('track', 'Schedule');
+        console.log('Schedule event fired');
+      } else {
+        console.log('Meta Pixel not found or window not available');
+      }
+    };
+
+    // Small delay to ensure Meta Pixel is loaded
+    setTimeout(trackScheduleEvent, 100);
     
     // Custom event for analytics
     window.dispatchEvent(new CustomEvent('schedule_complete', {
