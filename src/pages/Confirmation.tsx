@@ -71,17 +71,12 @@ const Confirmation = () => {
             </div>
             
             <div className="relative aspect-video bg-gray-900 rounded-lg overflow-hidden shadow-xl">
-              <div className="flex items-center justify-center h-full cursor-pointer group">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                  <Play className="w-6 h-6 text-white ml-1" fill="currentColor" />
-                </div>
-                <div className="absolute bottom-2 left-2 bg-black/70 px-2 py-1 rounded text-xs text-white">
-                  2:30 success stories
-                </div>
-                <div className="absolute top-2 right-2 bg-primary/20 px-2 py-1 rounded text-xs text-white border border-primary/30">
-                  🔥 Case Studies
-                </div>
-              </div>
+              <div
+                className="w-full h-full"
+                dangerouslySetInnerHTML={{
+                  __html: `<wistia-player media-id="njfzewsb1s" aspect="1.7777777777777777" style="display: block; width: 100%; height: 100%"></wistia-player>`
+                }}
+              />
             </div>
           </div>
 

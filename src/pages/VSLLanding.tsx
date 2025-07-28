@@ -213,7 +213,7 @@ const VSLLanding = () => {
         {/* 3. Subheadline */}
         <div className="fade-up text-center mb-6 md:mb-12">
           <h3 className="text-lg md:text-3xl font-heading font-bold mb-3 md:mb-6 text-white">
-            <span className="text-primary">Get 40 Pre-Qualified Leads in 90 Days or Don't Pay!</span>
+            <span className="text-primary">Get 45 Pre-Qualified Leads in 90 Days or Don't Pay!</span>
           </h3>
           
           <p className="text-base md:text-2xl text-white">
@@ -223,16 +223,13 @@ const VSLLanding = () => {
 
         {/* 4. VSL Video */}
         <div className="fade-up mb-6 md:mb-12">
-          <div className="relative bg-black rounded-lg overflow-hidden shadow-2xl">
-            <div className="aspect-video bg-gray-900 flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-12 h-12 md:w-20 md:h-20 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-2 md:mb-4 hover:bg-orange-600 transition-colors cursor-pointer">
-                  <Play className="w-5 h-5 md:w-8 md:h-8 text-white ml-1" />
-                </div>
-                <p className="text-white text-sm md:text-lg font-semibold">Watch the Video</p>
-                <p className="text-white text-xs md:text-sm mt-1 md:mt-2">Learn how we generate 40+ qualified leads</p>
-              </div>
-            </div>
+          <div className="relative bg-black rounded-lg overflow-hidden shadow-2xl max-w-4xl mx-auto">
+            <div
+              className="aspect-video w-full h-full"
+              dangerouslySetInnerHTML={{
+                __html: `<wistia-player media-id="jejvjuy9v9" aspect="1.7777777777777777" style="display: block; width: 100%; height: 100%"></wistia-player>`
+              }}
+            />
           </div>
         </div>
 
