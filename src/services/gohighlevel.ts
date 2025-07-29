@@ -14,12 +14,13 @@ interface LeadData {
 }
 
 interface GoHighLevelConfig {
-  locationId: string;
-  apiKey: string;
-  baseUrl?: string;
   // Private Integration settings
   usePrivateIntegration?: boolean;
   privateIntegrationKey?: string;
+  // Direct API settings (fallback)
+  locationId?: string;
+  apiKey?: string;
+  baseUrl?: string;
 }
 
 class GoHighLevelService {
@@ -29,13 +30,23 @@ class GoHighLevelService {
   constructor(config: GoHighLevelConfig) {
     this.config = config;
     this.baseUrl = config.baseUrl || 'https://rest.gohighlevel.com/v1';
+    console.log('GoHighLevel Service initialized with config:', {
+      usePrivateIntegration: config.usePrivateIntegration,
+      hasPrivateKey: !!config.privateIntegrationKey,
+      hasLocationId: !!config.locationId,
+      hasApiKey: !!config.apiKey
+    });
   }
 
   async submitLead(leadData: LeadData): Promise<{ success: boolean; contactId?: string; error?: string }> {
+    console.log('Submitting lead to GoHighLevel:', leadData);
+    
     try {
       if (this.config.usePrivateIntegration && this.config.privateIntegrationKey) {
+        console.log('Using Private Integration method');
         return await this.submitViaPrivateIntegration(leadData);
       } else {
+        console.log('Using Direct API method');
         return await this.submitViaDirectAPI(leadData);
       }
     } catch (error) {
@@ -49,37 +60,45 @@ class GoHighLevelService {
 
   private async submitViaPrivateIntegration(leadData: LeadData): Promise<{ success: boolean; contactId?: string; error?: string }> {
     try {
+      console.log('Attempting Private Integration submission...');
       const formattedPhone = this.formatPhoneNumber(leadData.phone);
       
-      // Use GoHighLevel's Private Integration endpoint
+      const payload = {
+        email: leadData.email,
+        firstName: this.getFirstName(leadData.name),
+        lastName: this.getLastName(leadData.name),
+        phone: formattedPhone,
+        customField: {
+          c_services: leadData.services.join(', '),
+          c_monthly_projects: leadData.monthlyProjects,
+          c_avg_project_value: leadData.avgProjectValue,
+          c_marketing_spend: leadData.marketingSpend,
+          c_source: leadData.source || 'WattLeads Funnel',
+          c_utm_source: leadData.utm_source || '',
+          c_utm_medium: leadData.utm_medium || '',
+          c_utm_campaign: leadData.utm_campaign || '',
+          c_lead_qualification: this.calculateLeadScore(leadData),
+          c_company_type: 'Smart Home / Electrical',
+          c_funnel_stage: 'Quiz Completed'
+        },
+        source: 'WattLeads Funnel',
+        tags: ['Smart Home Lead', 'Quiz Completed', 'WattLeads']
+      };
+
+      console.log('Private Integration payload:', payload);
+      console.log('Using Private Integration key:', this.config.privateIntegrationKey);
+
       const response = await fetch(`${this.baseUrl}/contacts/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${this.config.privateIntegrationKey}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          email: leadData.email,
-          firstName: this.getFirstName(leadData.name),
-          lastName: this.getLastName(leadData.name),
-          phone: formattedPhone,
-          customField: {
-            c_services: leadData.services.join(', '),
-            c_monthly_projects: leadData.monthlyProjects,
-            c_avg_project_value: leadData.avgProjectValue,
-            c_marketing_spend: leadData.marketingSpend,
-            c_source: leadData.source || 'WattLeads Funnel',
-            c_utm_source: leadData.utm_source || '',
-            c_utm_medium: leadData.utm_medium || '',
-            c_utm_campaign: leadData.utm_campaign || '',
-            c_lead_qualification: this.calculateLeadScore(leadData),
-            c_company_type: 'Smart Home / Electrical',
-            c_funnel_stage: 'Quiz Completed'
-          },
-          source: 'WattLeads Funnel',
-          tags: ['Smart Home Lead', 'Quiz Completed', 'WattLeads']
-        })
+        body: JSON.stringify(payload)
       });
+
+      console.log('Private Integration response status:', response.status);
+      console.log('Private Integration response headers:', Object.fromEntries(response.headers.entries()));
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -91,6 +110,7 @@ class GoHighLevelService {
       }
 
       const result = await response.json();
+      console.log('Private Integration success result:', result);
       
       // Create opportunity if contact was created successfully
       if (result.id) {
@@ -113,6 +133,7 @@ class GoHighLevelService {
 
   private async submitViaDirectAPI(leadData: LeadData): Promise<{ success: boolean; contactId?: string; error?: string }> {
     try {
+      console.log('Attempting Direct API submission...');
       const formattedPhone = this.formatPhoneNumber(leadData.phone);
       
       const contactData = {
@@ -138,6 +159,8 @@ class GoHighLevelService {
         tags: ['Smart Home Lead', 'Quiz Completed', 'WattLeads']
       };
 
+      console.log('Direct API payload:', contactData);
+
       const response = await fetch(`${this.baseUrl}/contacts/`, {
         method: 'POST',
         headers: {
@@ -146,6 +169,8 @@ class GoHighLevelService {
         },
         body: JSON.stringify(contactData)
       });
+
+      console.log('Direct API response status:', response.status);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -157,6 +182,7 @@ class GoHighLevelService {
       }
 
       const result = await response.json();
+      console.log('Direct API success result:', result);
       
       if (result.id) {
         await this.createOpportunity(result.id, leadData);
@@ -178,6 +204,7 @@ class GoHighLevelService {
 
   private async createOpportunity(contactId: string, leadData: LeadData): Promise<void> {
     try {
+      console.log('Creating opportunity for contact:', contactId);
       const opportunityData = {
         contactId: contactId,
         name: `${leadData.name} - Smart Home Lead Generation`,
@@ -199,7 +226,7 @@ Lead Score: ${this.calculateLeadScore(leadData)}/100`,
         ? `Bearer ${this.config.privateIntegrationKey}`
         : `Bearer ${this.config.apiKey}`;
 
-      await fetch(`${this.baseUrl}/opportunities/`, {
+      const response = await fetch(`${this.baseUrl}/opportunities/`, {
         method: 'POST',
         headers: {
           'Authorization': authHeader,
@@ -207,6 +234,8 @@ Lead Score: ${this.calculateLeadScore(leadData)}/100`,
         },
         body: JSON.stringify(opportunityData)
       });
+
+      console.log('Opportunity creation response status:', response.status);
 
     } catch (error) {
       console.error('Error creating opportunity:', error);
@@ -293,12 +322,13 @@ Lead Score: ${this.calculateLeadScore(leadData)}/100`,
 
 // Initialize with environment variables
 const goHighLevelService = new GoHighLevelService({
-  locationId: import.meta.env.VITE_GHL_LOCATION_ID || '',
-  apiKey: import.meta.env.VITE_GHL_API_KEY || '',
-  baseUrl: import.meta.env.VITE_GHL_BASE_URL,
   // Private Integration settings
   usePrivateIntegration: import.meta.env.VITE_GHL_USE_PRIVATE_INTEGRATION === 'true',
-  privateIntegrationKey: import.meta.env.VITE_GHL_PRIVATE_INTEGRATION_KEY
+  privateIntegrationKey: import.meta.env.VITE_GHL_PRIVATE_INTEGRATION_KEY,
+  // Direct API settings (fallback)
+  locationId: import.meta.env.VITE_GHL_LOCATION_ID,
+  apiKey: import.meta.env.VITE_GHL_API_KEY,
+  baseUrl: import.meta.env.VITE_GHL_BASE_URL
 });
 
 export default goHighLevelService;
