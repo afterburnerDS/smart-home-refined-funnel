@@ -564,11 +564,11 @@ const VSLLanding = () => {
 
         {/* Footer */}
         <div className="fade-up text-center py-8 border-t border-border">
-          <p className="text-lg font-semibold text-white mb-2">WattLeads © 2024</p>
+          <p className="text-lg font-semibold text-white mb-2">WattLeads © 2025</p>
           <div className="flex justify-center gap-4 text-sm text-white">
-            <a href="#" className="hover:text-primary">Privacy Policy</a>
+            <a href="/privacy-policy" className="hover:text-primary">Privacy Policy</a>
             <span>|</span>
-            <a href="#" className="hover:text-primary">Terms & Conditions</a>
+            <a href="/terms-conditions" className="hover:text-primary">Terms & Conditions</a>
           </div>
         </div>
       </div>
