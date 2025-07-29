@@ -216,7 +216,7 @@ const TermsConditions = () => {
               </p>
               <div className="mt-4 p-4 bg-gray-800 rounded-lg">
                 <p className="text-gray-300">
-                  <strong>Email:</strong> legal@wattleads.com<br />
+                  <strong>Email:</strong> info@wattleads.com<br />
                   <strong>Address:</strong> WattLeads, [Your Business Address]<br />
                   <strong>Phone:</strong> [Your Phone Number]
                 </p>
