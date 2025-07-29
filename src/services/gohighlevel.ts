@@ -17,9 +17,8 @@ interface GoHighLevelConfig {
   locationId: string;
   apiKey: string;
   baseUrl?: string;
-  // New Private Integration settings
+  // Private Integration settings
   usePrivateIntegration?: boolean;
-  privateIntegrationUrl?: string;
   privateIntegrationKey?: string;
 }
 
@@ -34,7 +33,7 @@ class GoHighLevelService {
 
   async submitLead(leadData: LeadData): Promise<{ success: boolean; contactId?: string; error?: string }> {
     try {
-      if (this.config.usePrivateIntegration && this.config.privateIntegrationUrl) {
+      if (this.config.usePrivateIntegration && this.config.privateIntegrationKey) {
         return await this.submitViaPrivateIntegration(leadData);
       } else {
         return await this.submitViaDirectAPI(leadData);
@@ -52,55 +51,34 @@ class GoHighLevelService {
     try {
       const formattedPhone = this.formatPhoneNumber(leadData.phone);
       
-      const payload = {
-        event: 'lead_submitted',
-        data: {
-          contact: {
-            email: leadData.email,
-            firstName: this.getFirstName(leadData.name),
-            lastName: this.getLastName(leadData.name),
-            phone: formattedPhone,
-            customField: {
-              c_services: leadData.services.join(', '),
-              c_monthly_projects: leadData.monthlyProjects,
-              c_avg_project_value: leadData.avgProjectValue,
-              c_marketing_spend: leadData.marketingSpend,
-              c_source: leadData.source || 'WattLeads Funnel',
-              c_utm_source: leadData.utm_source || '',
-              c_utm_medium: leadData.utm_medium || '',
-              c_utm_campaign: leadData.utm_campaign || '',
-              c_lead_qualification: this.calculateLeadScore(leadData),
-              c_company_type: 'Smart Home / Electrical',
-              c_funnel_stage: 'Quiz Completed'
-            },
-            tags: ['Smart Home Lead', 'Quiz Completed', 'WattLeads']
-          },
-          opportunity: {
-            name: `${leadData.name} - Smart Home Lead Generation`,
-            status: 'Lead In',
-            value: this.calculateOpportunityValue(leadData.avgProjectValue),
-            source: 'WattLeads Funnel',
-            description: `Smart Home Lead Generation Opportunity
-            
-Services: ${leadData.services.join(', ')}
-Monthly Projects: ${leadData.monthlyProjects}
-Average Project Value: ${leadData.avgProjectValue}
-Marketing Spend: ${leadData.marketingSpend}
-
-Lead Score: ${this.calculateLeadScore(leadData)}/100`
-          }
-        },
-        timestamp: new Date().toISOString(),
-        integrationKey: this.config.privateIntegrationKey
-      };
-
-      const response = await fetch(this.config.privateIntegrationUrl!, {
+      // Use GoHighLevel's Private Integration endpoint
+      const response = await fetch(`${this.baseUrl}/contacts/`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.config.privateIntegrationKey}`,
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          email: leadData.email,
+          firstName: this.getFirstName(leadData.name),
+          lastName: this.getLastName(leadData.name),
+          phone: formattedPhone,
+          customField: {
+            c_services: leadData.services.join(', '),
+            c_monthly_projects: leadData.monthlyProjects,
+            c_avg_project_value: leadData.avgProjectValue,
+            c_marketing_spend: leadData.marketingSpend,
+            c_source: leadData.source || 'WattLeads Funnel',
+            c_utm_source: leadData.utm_source || '',
+            c_utm_medium: leadData.utm_medium || '',
+            c_utm_campaign: leadData.utm_campaign || '',
+            c_lead_qualification: this.calculateLeadScore(leadData),
+            c_company_type: 'Smart Home / Electrical',
+            c_funnel_stage: 'Quiz Completed'
+          },
+          source: 'WattLeads Funnel',
+          tags: ['Smart Home Lead', 'Quiz Completed', 'WattLeads']
+        })
       });
 
       if (!response.ok) {
@@ -114,9 +92,14 @@ Lead Score: ${this.calculateLeadScore(leadData)}/100`
 
       const result = await response.json();
       
+      // Create opportunity if contact was created successfully
+      if (result.id) {
+        await this.createOpportunity(result.id, leadData);
+      }
+
       return {
         success: true,
-        contactId: result.contactId || result.id
+        contactId: result.id
       };
 
     } catch (error) {
@@ -197,7 +180,6 @@ Lead Score: ${this.calculateLeadScore(leadData)}/100`
     try {
       const opportunityData = {
         contactId: contactId,
-        locationId: this.config.locationId,
         name: `${leadData.name} - Smart Home Lead Generation`,
         status: 'Lead In',
         value: this.calculateOpportunityValue(leadData.avgProjectValue),
@@ -213,10 +195,14 @@ Lead Score: ${this.calculateLeadScore(leadData)}/100`,
         tags: ['Smart Home', 'Lead Generation', 'WattLeads']
       };
 
+      const authHeader = this.config.usePrivateIntegration 
+        ? `Bearer ${this.config.privateIntegrationKey}`
+        : `Bearer ${this.config.apiKey}`;
+
       await fetch(`${this.baseUrl}/opportunities/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.config.apiKey}`,
+          'Authorization': authHeader,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(opportunityData)
@@ -312,7 +298,6 @@ const goHighLevelService = new GoHighLevelService({
   baseUrl: import.meta.env.VITE_GHL_BASE_URL,
   // Private Integration settings
   usePrivateIntegration: import.meta.env.VITE_GHL_USE_PRIVATE_INTEGRATION === 'true',
-  privateIntegrationUrl: import.meta.env.VITE_GHL_PRIVATE_INTEGRATION_URL,
   privateIntegrationKey: import.meta.env.VITE_GHL_PRIVATE_INTEGRATION_KEY
 });
 
