@@ -1,3 +1,4 @@
+import goHighLevelService from "./services/gohighlevel";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Star, ArrowRight, Calendar, Clock, Mail, CheckCircle, Play, ArrowLeft, Check, Badge } from "lucide-react";
@@ -105,26 +106,53 @@ const VSLLanding = () => {
     return false;
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentQuestion < 5) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
+      // Submit to GoHighLevel CRM
+      try {
+        const utmParams = goHighLevelService.getUTMParams();
+        
+        const leadData = {
+          name: quizData.name,
+          email: quizData.email,
+          phone: quizData.phone,
+          services: quizData.services,
+          monthlyProjects: quizData.monthlyProjects,
+          avgProjectValue: quizData.avgProjectValue,
+          marketingSpend: quizData.marketingSpend,
+          source: "WattLeads Smart Home Funnel",
+          ...utmParams
+        };
+        
+        const result = await goHighLevelService.submitLead(leadData);
+        
+        if (result.success) {
+          console.log("Lead submitted to GoHighLevel successfully:", result.contactId);
+        } else {
+          console.error("Failed to submit lead to GoHighLevel:", result.error);
+        }
+      } catch (error) {
+        console.error("Error submitting to GoHighLevel:", error);
+      }
+      
       // Track Lead event when user completes quiz with contact info
-      if (typeof window !== 'undefined' && (window as any).fbq) {
-        console.log('Firing Lead event on quiz completion...');
-        (window as any).fbq('track', 'Lead', {
-          content_name: 'Quiz Completion',
-          content_category: 'Lead Generation',
+      if (typeof window !== "undefined" && (window as any).fbq) {
+        console.log("Firing Lead event on quiz completion...");
+        (window as any).fbq("track", "Lead", {
+          content_name: "Quiz Completion",
+          content_category: "Lead Generation",
           value: 1
         });
-        console.log('Lead event fired on quiz completion');
+        console.log("Lead event fired on quiz completion");
       } else {
-        console.log('Meta Pixel not found on quiz completion');
+        console.log("Meta Pixel not found on quiz completion");
       }
       
       // Navigate to results page with quiz data
       const params = new URLSearchParams({
-        services: quizData.services.join(','),
+        services: quizData.services.join(","),
         monthlyProjects: quizData.monthlyProjects,
         avgProjectValue: quizData.avgProjectValue,
         marketingSpend: quizData.marketingSpend,

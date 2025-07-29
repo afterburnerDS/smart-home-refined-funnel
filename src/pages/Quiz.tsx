@@ -1,3 +1,4 @@
+import goHighLevelService from "./services/gohighlevel";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProgressBar } from "@/components/ProgressBar";
@@ -88,13 +89,40 @@ const Quiz = () => {
     return false;
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentQuestion < 5) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
+      // Submit to GoHighLevel CRM
+      try {
+        const utmParams = goHighLevelService.getUTMParams();
+        
+        const leadData = {
+          name: quizData.name,
+          email: quizData.email,
+          phone: quizData.phone,
+          services: quizData.services,
+          monthlyProjects: quizData.monthlyProjects,
+          avgProjectValue: quizData.avgProjectValue,
+          marketingSpend: quizData.marketingSpend,
+          source: "WattLeads Smart Home Funnel",
+          ...utmParams
+        };
+        
+        const result = await goHighLevelService.submitLead(leadData);
+        
+        if (result.success) {
+          console.log("Lead submitted to GoHighLevel successfully:", result.contactId);
+        } else {
+          console.error("Failed to submit lead to GoHighLevel:", result.error);
+        }
+      } catch (error) {
+        console.error("Error submitting to GoHighLevel:", error);
+      }
+      
       // Store quiz data and navigate to results
       const params = new URLSearchParams({
-        services: quizData.services.join(','),
+        services: quizData.services.join(","),
         monthlyProjects: quizData.monthlyProjects,
         avgProjectValue: quizData.avgProjectValue,
         marketingSpend: quizData.marketingSpend,

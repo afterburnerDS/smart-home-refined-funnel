@@ -1,8 +1,59 @@
-import { useSearchParams } from "react-router-dom";
+import goHighLevelService from "./services/gohighlevel";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { ProgressBar } from "@/components/ProgressBar";
 import { CheckCircle, Calendar, Clock, Mail } from "lucide-react";
 
 const Booking = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const name = searchParams.get("name") || "";
+  const email = searchParams.get("email") || "";
+  const phone = searchParams.get("phone") || "";
+  
+  const handleBookingComplete = async (bookingData: any) => {
+    try {
+      // Update lead in GoHighLevel with booking information
+      const utmParams = goHighLevelService.getUTMParams();
+      
+      const leadData = {
+        name: name,
+        email: email,
+        phone: phone,
+        services: searchParams.get("services")?.split(",") || [],
+        monthlyProjects: searchParams.get("monthlyProjects") || "",
+        avgProjectValue: searchParams.get("avgProjectValue") || "",
+        marketingSpend: searchParams.get("marketingSpend") || "",
+        source: "WattLeads Smart Home Funnel",
+        ...utmParams
+      };
+      
+      const result = await goHighLevelService.submitLead(leadData);
+      
+      if (result.success) {
+        console.log("Booking submitted to GoHighLevel successfully:", result.contactId);
+        
+        // Track booking event
+        if (typeof window !== "undefined" && (window as any).fbq) {
+          (window as any).fbq("track", "Purchase", {
+            content_name: "Strategy Call Booking",
+            content_category: "Lead Generation",
+            value: 1
+          });
+        }
+        
+        // Navigate to confirmation
+        navigate("/confirmation");
+      } else {
+        console.error("Failed to submit booking to GoHighLevel:", result.error);
+        // Still navigate to confirmation even if CRM submission fails
+        navigate("/confirmation");
+      }
+    } catch (error) {
+      console.error("Error submitting booking to GoHighLevel:", error);
+      // Still navigate to confirmation even if CRM submission fails
+      navigate("/confirmation");
+    }
+  };
   const [searchParams] = useSearchParams();
   const name = searchParams.get('name') || '';
 
