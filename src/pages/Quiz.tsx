@@ -1,4 +1,4 @@
-import goHighLevelService from "./services/gohighlevel";
+import goHighLevelService from "../services/gohighlevel";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProgressBar } from "@/components/ProgressBar";

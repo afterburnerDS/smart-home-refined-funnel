@@ -1,4 +1,4 @@
-import goHighLevelService from "./services/gohighlevel";
+import goHighLevelService from "../services/gohighlevel";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Star, ArrowRight, Calendar, Clock, Mail, CheckCircle, Play, ArrowLeft, Check, Badge } from "lucide-react";

@@ -1,7 +1,7 @@
-import goHighLevelService from "./services/gohighlevel";
+import goHighLevelService from "../services/gohighlevel";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { ProgressBar } from "@/components/ProgressBar";
-import { CheckCircle, Calendar, Clock, Mail } from "lucide-react";
+import { CheckCircle, Mail } from "lucide-react";
 
 const Booking = () => {
   const [searchParams] = useSearchParams();
@@ -9,6 +9,91 @@ const Booking = () => {
   const name = searchParams.get("name") || "";
   const email = searchParams.get("email") || "";
   const phone = searchParams.get("phone") || "";
+  
+  // Split name into first and last name
+  const nameParts = name.split(' ');
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.slice(1).join(' ') || '';
+
+  // Create pre-filled booking widget URL
+  const createBookingUrl = () => {
+    const baseUrl = 'https://link.wattleads.com/widget/booking/ZvHsKSU1VayvObZkyBHA';
+    const params = new URLSearchParams();
+    
+    // Try multiple parameter name variations to ensure compatibility
+    if (firstName) {
+      params.append('first_name', firstName);
+      params.append('firstName', firstName);
+      params.append('fname', firstName);
+      params.append('contact_first_name', firstName);
+    }
+    if (lastName) {
+      params.append('last_name', lastName);
+      params.append('lastName', lastName);
+      params.append('lname', lastName);
+      params.append('contact_last_name', lastName);
+    }
+    if (email) {
+      params.append('email', email);
+      params.append('email_address', email);
+      params.append('contact_email', email);
+      params.append('emailAddress', email);
+    }
+    if (phone) {
+      // Format phone number properly (remove any existing formatting)
+      const cleanPhone = phone.replace(/\D/g, '');
+      const formattedPhone = cleanPhone.length === 10 ? `+1${cleanPhone}` : cleanPhone.length === 11 ? `+${cleanPhone}` : phone;
+      
+      // Try many phone parameter variations
+      params.append('phone', phone);
+      params.append('phone_number', phone);
+      params.append('contact_phone', phone);
+      params.append('phoneNumber', phone);
+      params.append('mobile', phone);
+      params.append('cell', phone);
+      params.append('telephone', phone);
+      
+      // Also try formatted versions
+      params.append('phone_formatted', formattedPhone);
+      params.append('contact_phone_formatted', formattedPhone);
+      
+      // Try clean version
+      params.append('phone_clean', cleanPhone);
+      params.append('contact_phone_clean', cleanPhone);
+    }
+    
+    // Add the full name as well
+    if (name) {
+      params.append('name', name);
+      params.append('full_name', name);
+      params.append('contact_name', name);
+      params.append('fullName', name);
+    }
+    
+    // Add quiz data as additional info
+    const services = searchParams.get('services') || '';
+    const monthlyProjects = searchParams.get('monthlyProjects') || '';
+    const avgProjectValue = searchParams.get('avgProjectValue') || '';
+    
+    if (services || monthlyProjects || avgProjectValue) {
+      const additionalInfo = `Quiz Results: Services: ${services.replace(/,/g, ', ')}, Monthly Projects: ${monthlyProjects}, Avg Project Value: ${avgProjectValue}`;
+      params.append('additional_info', additionalInfo);
+      params.append('notes', additionalInfo);
+      params.append('message', additionalInfo);
+      params.append('comments', additionalInfo);
+    }
+    
+    const finalUrl = params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl;
+    console.log('📅 Pre-filled booking URL:', finalUrl);
+    console.log('📋 User data:', { firstName, lastName, email, phone, name });
+    console.log('📞 Phone formatting attempts:', { 
+      original: phone, 
+      clean: phone.replace(/\D/g, ''), 
+      formatted: phone.replace(/\D/g, '').length === 10 ? `+1${phone.replace(/\D/g, '')}` : phone 
+    });
+    
+    return finalUrl;
+  };
   
   const handleBookingComplete = async (bookingData: any) => {
     try {
@@ -54,8 +139,9 @@ const Booking = () => {
       navigate("/confirmation");
     }
   };
-  const [searchParams] = useSearchParams();
-  const name = searchParams.get('name') || '';
+  // Remove duplicate declarations - these are already declared above
+  // const [searchParams] = useSearchParams();
+  // const name = searchParams.get('name') || '';
 
   const testimonials = [
     {
@@ -145,37 +231,24 @@ const Booking = () => {
             </div>
           </div>
 
-          {/* Right Column - Calendly Embed */}
+          {/* Right Column - GoHighLevel Booking Widget */}
           <div className="space-y-6">
             <div className="card-rounded">
               <h2 className="text-2xl font-heading font-semibold mb-6 text-center">
                 Choose Your Preferred Time
               </h2>
               
-              {/* Calendly Placeholder */}
-              <div className="bg-muted/30 rounded-lg p-8 text-center min-h-[500px] flex flex-col justify-center">
-                <Calendar className="w-16 h-16 text-primary mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-4">Calendly Integration</h3>
-                <p className="text-muted-foreground mb-6">
-                  Interactive calendar with 15 & 30-minute slots will appear here
-                </p>
-                
-                <div className="space-y-3 max-w-xs mx-auto">
-                  <div className="flex items-center gap-3 text-sm">
-                    <Clock className="w-4 h-4 text-primary" />
-                    <span>15-min Quick Consultation</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-sm">
-                    <Clock className="w-4 h-4 text-primary" />
-                    <span>30-min In-Depth Discovery</span>
-                  </div>
-                </div>
-                
-                <div className="mt-8 p-4 bg-primary/10 rounded-lg">
-                  <p className="text-sm text-primary font-medium">
-                    🕐 Automatically detects your local timezone
-                  </p>
-                </div>
+              {/* GoHighLevel Booking Widget */}
+              <div className="min-h-[600px] w-full">
+                <iframe
+                  src={createBookingUrl()}
+                  width="100%"
+                  height="600"
+                  frameBorder="0"
+                  title="Schedule a meeting"
+                  className="rounded-lg w-full"
+                  style={{ minHeight: '600px' }}
+                />
               </div>
             </div>
 

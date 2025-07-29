@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Luxury Smart-Home Consultation | WattLeads</title>
     <meta name="description" content="Transform your home with professional smart home integration. Get $30-70k in tech value with enterprise-grade automation, lighting, security & more." />
@@ -30,7 +31,7 @@
       t.src=v;s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', 'YOUR_PIXEL_ID_HERE');
+      fbq('init', '%VITE_META_PIXEL_ID%');
       fbq('track', 'PageView');
     </script>
     <!-- End Meta Pixel Code -->
@@ -39,7 +40,7 @@
   <body>
     <!-- Meta Pixel Noscript -->
     <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID_HERE&ev=PageView&noscript=1"
+      src="https://www.facebook.com/tr?id=%VITE_META_PIXEL_ID%&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Noscript -->
     <div id="root"></div>

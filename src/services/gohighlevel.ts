@@ -21,6 +21,9 @@ interface GoHighLevelConfig {
   locationId?: string;
   apiKey?: string;
   baseUrl?: string;
+  // Pipeline settings
+  pipelineId?: string;
+  stageId?: string;
 }
 
 class GoHighLevelService {
@@ -29,12 +32,18 @@ class GoHighLevelService {
 
   constructor(config: GoHighLevelConfig) {
     this.config = config;
-    this.baseUrl = config.baseUrl || 'https://rest.gohighlevel.com/v1';
+    // Use proxy in development to avoid CORS issues
+    this.baseUrl = import.meta.env.DEV 
+      ? '/api/ghl' 
+      : config.baseUrl || 'https://services.leadconnectorhq.com';
     console.log('GoHighLevel Service initialized with config:', {
       usePrivateIntegration: config.usePrivateIntegration,
       hasPrivateKey: !!config.privateIntegrationKey,
       hasLocationId: !!config.locationId,
-      hasApiKey: !!config.apiKey
+      hasApiKey: !!config.apiKey,
+      hasPipelineId: !!config.pipelineId,
+      hasStageId: !!config.stageId,
+      baseUrl: this.baseUrl
     });
   }
 
@@ -68,19 +77,7 @@ class GoHighLevelService {
         firstName: this.getFirstName(leadData.name),
         lastName: this.getLastName(leadData.name),
         phone: formattedPhone,
-        customField: {
-          c_services: leadData.services.join(', '),
-          c_monthly_projects: leadData.monthlyProjects,
-          c_avg_project_value: leadData.avgProjectValue,
-          c_marketing_spend: leadData.marketingSpend,
-          c_source: leadData.source || 'WattLeads Funnel',
-          c_utm_source: leadData.utm_source || '',
-          c_utm_medium: leadData.utm_medium || '',
-          c_utm_campaign: leadData.utm_campaign || '',
-          c_lead_qualification: this.calculateLeadScore(leadData),
-          c_company_type: 'Smart Home / Electrical',
-          c_funnel_stage: 'Quiz Completed'
-        },
+        locationId: this.config.locationId,
         source: 'WattLeads Funnel',
         tags: ['Smart Home Lead', 'Quiz Completed', 'WattLeads']
       };
@@ -88,12 +85,19 @@ class GoHighLevelService {
       console.log('Private Integration payload:', payload);
       console.log('Using Private Integration key:', this.config.privateIntegrationKey);
 
+      const headers: Record<string, string> = {
+        'Authorization': `Bearer ${this.config.privateIntegrationKey}`,
+        'Content-Type': 'application/json'
+      };
+
+      // Only add Version header when not using proxy (proxy adds it automatically)
+      if (!import.meta.env.DEV) {
+        headers['Version'] = '2021-07-28';
+      }
+
       const response = await fetch(`${this.baseUrl}/contacts/`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.config.privateIntegrationKey}`,
-          'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify(payload)
       });
 
@@ -112,14 +116,28 @@ class GoHighLevelService {
       const result = await response.json();
       console.log('Private Integration success result:', result);
       
+      // Extract contact ID from the response (it might be nested in a contact object)
+      const contactId = result.id || result.contact?.id || result.contactId;
+      console.log('Extracted contact ID:', contactId);
+      
       // Create opportunity if contact was created successfully
-      if (result.id) {
-        await this.createOpportunity(result.id, leadData);
+      if (contactId) {
+        console.log('✅ Contact created successfully, now creating opportunity...');
+        try {
+          await this.createOpportunity(contactId, leadData);
+          console.log('✅ Opportunity creation completed');
+        } catch (opportunityError) {
+          console.error('❌ Failed to create opportunity:', opportunityError);
+          // Still return success for contact creation, but log the opportunity error
+        }
+      } else {
+        console.log('❌ No contact ID returned, skipping opportunity creation');
+        console.log('Full result object:', result);
       }
 
       return {
         success: true,
-        contactId: result.id
+        contactId: contactId
       };
 
     } catch (error) {
@@ -161,12 +179,19 @@ class GoHighLevelService {
 
       console.log('Direct API payload:', contactData);
 
+      const headers: Record<string, string> = {
+        'Authorization': `Bearer ${this.config.apiKey}`,
+        'Content-Type': 'application/json'
+      };
+
+      // Only add Version header when not using proxy (proxy adds it automatically)
+      if (!import.meta.env.DEV) {
+        headers['Version'] = '2021-07-28';
+      }
+
       const response = await fetch(`${this.baseUrl}/contacts/`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.config.apiKey}`,
-          'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify(contactData)
       });
 
@@ -184,13 +209,27 @@ class GoHighLevelService {
       const result = await response.json();
       console.log('Direct API success result:', result);
       
-      if (result.id) {
-        await this.createOpportunity(result.id, leadData);
+      // Extract contact ID from the response (it might be nested in a contact object)
+      const contactId = result.id || result.contact?.id || result.contactId;
+      console.log('Extracted contact ID:', contactId);
+      
+      if (contactId) {
+        console.log('✅ Contact created successfully, now creating opportunity...');
+        try {
+          await this.createOpportunity(contactId, leadData);
+          console.log('✅ Opportunity creation completed');
+        } catch (opportunityError) {
+          console.error('❌ Failed to create opportunity:', opportunityError);
+          // Still return success for contact creation, but log the opportunity error
+        }
+      } else {
+        console.log('❌ No contact ID returned, skipping opportunity creation');
+        console.log('Full result object:', result);
       }
 
       return {
         success: true,
-        contactId: result.id
+        contactId: contactId
       };
 
     } catch (error) {
@@ -205,40 +244,238 @@ class GoHighLevelService {
   private async createOpportunity(contactId: string, leadData: LeadData): Promise<void> {
     try {
       console.log('Creating opportunity for contact:', contactId);
+      console.log('Pipeline ID:', this.config.pipelineId);
+      console.log('Stage ID:', this.config.stageId);
+      
+      if (!this.config.pipelineId || !this.config.stageId) {
+        console.error('Missing pipeline or stage ID for opportunity creation');
+        return;
+      }
+
       const opportunityData = {
+        locationId: this.config.locationId,
+        pipelineId: this.config.pipelineId,
         contactId: contactId,
         name: `${leadData.name} - Smart Home Lead Generation`,
-        status: 'Lead In',
-        value: this.calculateOpportunityValue(leadData.avgProjectValue),
-        source: 'WattLeads Funnel',
-        description: `Smart Home Lead Generation Opportunity
-        
-Services: ${leadData.services.join(', ')}
-Monthly Projects: ${leadData.monthlyProjects}
-Average Project Value: ${leadData.avgProjectValue}
-Marketing Spend: ${leadData.marketingSpend}
-
-Lead Score: ${this.calculateLeadScore(leadData)}/100`,
-        tags: ['Smart Home', 'Lead Generation', 'WattLeads']
+        status: 'open'
       };
 
       const authHeader = this.config.usePrivateIntegration 
         ? `Bearer ${this.config.privateIntegrationKey}`
         : `Bearer ${this.config.apiKey}`;
 
-      const response = await fetch(`${this.baseUrl}/opportunities/`, {
+      console.log('Opportunity creation payload:', opportunityData);
+      console.log('Using endpoint:', `${this.baseUrl}/deals/`);
+
+      const headers: Record<string, string> = {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json'
+      };
+
+      // Only add Version header when not using proxy (proxy adds it automatically)
+      if (!import.meta.env.DEV) {
+        headers['Version'] = '2021-07-28';
+      }
+
+      // Try the deals endpoint first (most GoHighLevel instances use deals)
+      let response = await fetch(`${this.baseUrl}/deals/`, {
         method: 'POST',
-        headers: {
-          'Authorization': authHeader,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(opportunityData)
+        headers,
+        body: JSON.stringify({
+          locationId: this.config.locationId,
+          pipelineId: this.config.pipelineId,
+          contactId: contactId,
+          title: `${leadData.name} - Smart Home Lead Generation`,
+          status: 'open'
+        })
       });
 
+      // If deals endpoint fails, try opportunities endpoint as fallback
+      if (!response.ok) {
+        console.log('Deals endpoint failed, trying opportunities endpoint...');
+        response = await fetch(`${this.baseUrl}/opportunities/`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(opportunityData)
+        });
+      }
+
       console.log('Opportunity creation response status:', response.status);
+      console.log('Opportunity creation response headers:', Object.fromEntries(response.headers.entries()));
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Opportunity creation error:', errorData);
+        console.error('Full error response:', response);
+        console.error('Error details:', JSON.stringify(errorData, null, 2));
+        throw new Error(`Opportunity creation failed: ${response.status} - ${errorData.message || 'Unknown error'}`);
+      }
+
+      const result = await response.json();
+      console.log('Opportunity created successfully:', result);
+      console.log('Full opportunity response structure:', JSON.stringify(result, null, 2));
+
+      // Extract opportunity ID from the response (try multiple possible locations)
+      const opportunityId = result.id || result._id || result.opportunity?.id || result.opportunity?._id || result.data?.id || result.data?._id;
+      
+      console.log('Extracted opportunity ID:', opportunityId);
+      console.log('Using contact ID from parameter:', contactId);
+
+      // Create a note with the quiz answers since we can't include description in opportunity
+      if (opportunityId) {
+        console.log('📝 Attempting to create note for opportunity:', opportunityId);
+        await this.createOpportunityNote(opportunityId, leadData);
+      } else {
+        console.log('❌ No opportunity ID found in response');
+        console.log('Available keys in response:', Object.keys(result));
+      }
+      
+      // Always try to create a contact note since we have the contact ID
+      console.log('📝 Creating contact note for backup:', contactId);
+      await this.createContactNote(contactId, leadData);
 
     } catch (error) {
       console.error('Error creating opportunity:', error);
+      // Re-throw the error so it's visible in the calling method
+      throw error;
+    }
+  }
+
+  private async createOpportunityNote(opportunityId: string, leadData: LeadData): Promise<void> {
+    try {
+      const noteContent = `🏠 Smart Home Lead - Quiz Results
+
+📋 QUIZ RESPONSES:
+Services: ${leadData.services.join(', ')}
+Monthly Projects: ${leadData.monthlyProjects}
+Avg Project Value: ${leadData.avgProjectValue}
+Marketing Spend: ${leadData.marketingSpend}
+Lead Score: ${this.calculateLeadScore(leadData)}/100
+Source: WattLeads Funnel
+
+${leadData.utm_source ? `UTM Source: ${leadData.utm_source}` : ''}
+${leadData.utm_medium ? `UTM Medium: ${leadData.utm_medium}` : ''}
+${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
+
+      const authHeader = this.config.usePrivateIntegration 
+        ? `Bearer ${this.config.privateIntegrationKey}`
+        : `Bearer ${this.config.apiKey}`;
+
+      const headers: Record<string, string> = {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json'
+      };
+
+      if (!import.meta.env.DEV) {
+        headers['Version'] = '2021-07-28';
+      }
+
+      console.log('📝 Creating opportunity note...');
+
+      // Try different note creation approaches
+      const notePayloads = [
+        // Standard note payload
+        { body: noteContent },
+        // Alternative with location
+        { body: noteContent, locationId: this.config.locationId },
+        // Simple text format
+        { content: noteContent },
+        { note: noteContent }
+      ];
+
+      for (let i = 0; i < notePayloads.length; i++) {
+        const payload = notePayloads[i];
+        console.log(`📝 Trying note payload ${i + 1}:`, payload);
+
+        const response = await fetch(`${this.baseUrl}/opportunities/${opportunityId}/notes`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          const noteResult = await response.json();
+          console.log('✅ Opportunity note created successfully:', noteResult);
+          return;
+        } else {
+          const errorData = await response.json().catch(() => ({}));
+          console.log(`❌ Note payload ${i + 1} failed:`, response.status, errorData);
+        }
+      }
+
+      console.warn('💡 All opportunity note attempts failed');
+
+    } catch (error) {
+      console.error('❌ Error creating opportunity note:', error);
+    }
+  }
+
+  private async createContactNote(contactId: string, leadData: LeadData): Promise<void> {
+    try {
+      const noteContent = `🏠 Smart Home Lead - Quiz Results
+
+📋 QUIZ RESPONSES:
+Services: ${leadData.services.join(', ')}
+Monthly Projects: ${leadData.monthlyProjects}
+Avg Project Value: ${leadData.avgProjectValue}
+Marketing Spend: ${leadData.marketingSpend}
+Lead Score: ${this.calculateLeadScore(leadData)}/100
+Source: WattLeads Funnel
+
+${leadData.utm_source ? `UTM Source: ${leadData.utm_source}` : ''}
+${leadData.utm_medium ? `UTM Medium: ${leadData.utm_medium}` : ''}
+${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
+
+      const authHeader = this.config.usePrivateIntegration 
+        ? `Bearer ${this.config.privateIntegrationKey}`
+        : `Bearer ${this.config.apiKey}`;
+
+      const headers: Record<string, string> = {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json'
+      };
+
+      if (!import.meta.env.DEV) {
+        headers['Version'] = '2021-07-28';
+      }
+
+      console.log('📝 Creating contact note...');
+
+      // Try different note creation approaches
+      const notePayloads = [
+        // Standard note payload
+        { body: noteContent },
+        // Alternative with location
+        { body: noteContent, locationId: this.config.locationId },
+        // Simple text format
+        { content: noteContent },
+        { note: noteContent }
+      ];
+
+      for (let i = 0; i < notePayloads.length; i++) {
+        const payload = notePayloads[i];
+        console.log(`📝 Trying contact note payload ${i + 1}:`, payload);
+
+        const response = await fetch(`${this.baseUrl}/contacts/${contactId}/notes`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          const noteResult = await response.json();
+          console.log('✅ Contact note created successfully:', noteResult);
+          return;
+        } else {
+          const errorData = await response.json().catch(() => ({}));
+          console.log(`❌ Contact note payload ${i + 1} failed:`, response.status, errorData);
+        }
+      }
+
+      console.warn('💡 All contact note attempts failed');
+
+    } catch (error) {
+      console.error('❌ Error creating contact note:', error);
     }
   }
 
@@ -328,7 +565,10 @@ const goHighLevelService = new GoHighLevelService({
   // Direct API settings (fallback)
   locationId: import.meta.env.VITE_GHL_LOCATION_ID,
   apiKey: import.meta.env.VITE_GHL_API_KEY,
-  baseUrl: import.meta.env.VITE_GHL_BASE_URL
+  baseUrl: import.meta.env.VITE_GHL_BASE_URL,
+  // Pipeline settings
+  pipelineId: import.meta.env.VITE_GHL_PIPELINE_ID,
+  stageId: import.meta.env.VITE_GHL_STAGE_ID
 });
 
 export default goHighLevelService;

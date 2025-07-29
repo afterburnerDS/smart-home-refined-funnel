@@ -8,6 +8,110 @@ const QuizResults = () => {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const hasFired = useRef(false);
 
+  // Extract personal data from URL parameters
+  const userName = searchParams.get('name') || '';
+  const email = searchParams.get('email') || '';
+  const phone = searchParams.get('phone') || '';
+
+  // Split name into first and last name
+  const nameParts = userName.split(' ');
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.slice(1).join(' ') || '';
+
+  // Create pre-filled booking widget URL
+  const createBookingUrl = () => {
+    const baseUrl = 'https://link.wattleads.com/widget/booking/ZvHsKSU1VayvObZkyBHA';
+    const params = new URLSearchParams();
+    
+    // Try multiple parameter name variations to ensure compatibility
+    if (firstName) {
+      params.append('first_name', firstName);
+      params.append('firstName', firstName);
+      params.append('fname', firstName);
+      params.append('contact_first_name', firstName);
+    }
+    if (lastName) {
+      params.append('last_name', lastName);
+      params.append('lastName', lastName);
+      params.append('lname', lastName);
+      params.append('contact_last_name', lastName);
+    }
+    if (email) {
+      params.append('email', email);
+      params.append('email_address', email);
+      params.append('contact_email', email);
+      params.append('emailAddress', email);
+    }
+    if (phone) {
+      // Format phone number properly (remove any existing formatting)
+      const cleanPhone = phone.replace(/\D/g, '');
+      const formattedPhone = cleanPhone.length === 10 ? `+1${cleanPhone}` : cleanPhone.length === 11 ? `+${cleanPhone}` : phone;
+      
+      // Try many phone parameter variations
+      params.append('phone', phone);
+      params.append('phone_number', phone);
+      params.append('contact_phone', phone);
+      params.append('phoneNumber', phone);
+      params.append('mobile', phone);
+      params.append('cell', phone);
+      params.append('telephone', phone);
+      
+      // Also try formatted versions
+      params.append('phone_formatted', formattedPhone);
+      params.append('contact_phone_formatted', formattedPhone);
+      
+      // Try clean version
+      params.append('phone_clean', cleanPhone);
+      params.append('contact_phone_clean', cleanPhone);
+    }
+    
+    // Add the full name as well
+    if (userName) {
+      params.append('name', userName);
+      params.append('full_name', userName);
+      params.append('contact_name', userName);
+      params.append('fullName', userName);
+    }
+    
+    // Add quiz data as additional info
+    const services = searchParams.get('services') || '';
+    const monthlyProjects = searchParams.get('monthlyProjects') || '';
+    const avgProjectValue = searchParams.get('avgProjectValue') || '';
+    
+    if (services || monthlyProjects || avgProjectValue) {
+      const additionalInfo = `Quiz Results: Services: ${services.replace(/,/g, ', ')}, Monthly Projects: ${monthlyProjects}, Avg Project Value: ${avgProjectValue}`;
+      params.append('additional_info', additionalInfo);
+      params.append('notes', additionalInfo);
+      params.append('message', additionalInfo);
+      params.append('comments', additionalInfo);
+    }
+    
+    const finalUrl = params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl;
+    
+    // Some calendar widgets prefer hash parameters
+    const hashParams = new URLSearchParams();
+    if (firstName) hashParams.append('fname', firstName);
+    if (lastName) hashParams.append('lname', lastName);
+    if (email) hashParams.append('email', email);
+    if (phone) hashParams.append('phone', phone);
+    
+    const finalUrlWithHash = hashParams.toString() 
+      ? `${finalUrl}#${hashParams.toString()}`
+      : finalUrl;
+    
+    console.log('📅 Pre-filled booking URL:', finalUrl);
+    console.log('📅 Alternative with hash:', finalUrlWithHash);
+    console.log('📋 User data:', { firstName, lastName, email, phone, userName });
+    console.log('📞 Phone formatting attempts:', { 
+      original: phone, 
+      clean: phone.replace(/\D/g, ''), 
+      formatted: phone.replace(/\D/g, '').length === 10 ? `+1${phone.replace(/\D/g, '')}` : phone 
+    });
+    
+    // Try the main URL first, but log the hash version for manual testing
+    return finalUrl;
+  };
+
   useEffect(() => {
     const services = searchParams.get('services')?.split(',') || [];
     const avgProjectValue = searchParams.get('avgProjectValue') || '';
@@ -64,7 +168,7 @@ const QuizResults = () => {
     ]
   };
 
-  const name = searchParams.get('name') || '';
+  // Get quiz data for display
   const monthlyProjects = searchParams.get('monthlyProjects') || '';
   const avgProjectValue = searchParams.get('avgProjectValue') || '';
   const marketingSpend = searchParams.get('marketingSpend') || '';
@@ -89,7 +193,7 @@ const QuizResults = () => {
           </div>
 
           <h1 className="text-3xl md:text-4xl font-heading font-semibold mb-4 text-rich-black">
-            Great News, {name}!
+            Great News, {userName}!
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-4">
             {isQualified 
@@ -117,15 +221,16 @@ const QuizResults = () => {
             <h3 className="text-xl font-heading font-semibold mb-6 text-center">
               Choose Your Preferred Time
             </h3>
-            {/* Calendly Embed - Smaller */}
-            <div className="min-h-[500px]">
+            {/* GoHighLevel Booking Widget */}
+            <div className="min-h-[600px] w-full">
               <iframe
-                src="https://calendly.com/sagebyte/15minphone"
+                src={createBookingUrl()}
                 width="100%"
-                height="500"
+                height="600"
                 frameBorder="0"
                 title="Schedule a meeting"
-                className="rounded-lg"
+                className="rounded-lg w-full"
+                style={{ minHeight: '600px' }}
               />
             </div>
           </div>
