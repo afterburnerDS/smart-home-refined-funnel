@@ -1,4 +1,4 @@
-// GoHighLevel CRM Integration Service - Updated for Private Integrations
+// GoHighLevel CRM Integration Service
 interface LeadData {
   name: string;
   email: string;
@@ -17,10 +17,6 @@ interface GoHighLevelConfig {
   locationId: string;
   apiKey: string;
   baseUrl?: string;
-  // New Private Integration settings
-  usePrivateIntegration?: boolean;
-  privateIntegrationUrl?: string;
-  privateIntegrationKey?: string;
 }
 
 class GoHighLevelService {
@@ -33,102 +29,6 @@ class GoHighLevelService {
   }
 
   async submitLead(leadData: LeadData): Promise<{ success: boolean; contactId?: string; error?: string }> {
-    try {
-      if (this.config.usePrivateIntegration && this.config.privateIntegrationUrl) {
-        return await this.submitViaPrivateIntegration(leadData);
-      } else {
-        return await this.submitViaDirectAPI(leadData);
-      }
-    } catch (error) {
-      console.error('GoHighLevel submission error:', error);
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error occurred'
-      };
-    }
-  }
-
-  private async submitViaPrivateIntegration(leadData: LeadData): Promise<{ success: boolean; contactId?: string; error?: string }> {
-    try {
-      const formattedPhone = this.formatPhoneNumber(leadData.phone);
-      
-      const payload = {
-        event: 'lead_submitted',
-        data: {
-          contact: {
-            email: leadData.email,
-            firstName: this.getFirstName(leadData.name),
-            lastName: this.getLastName(leadData.name),
-            phone: formattedPhone,
-            customField: {
-              c_services: leadData.services.join(', '),
-              c_monthly_projects: leadData.monthlyProjects,
-              c_avg_project_value: leadData.avgProjectValue,
-              c_marketing_spend: leadData.marketingSpend,
-              c_source: leadData.source || 'WattLeads Funnel',
-              c_utm_source: leadData.utm_source || '',
-              c_utm_medium: leadData.utm_medium || '',
-              c_utm_campaign: leadData.utm_campaign || '',
-              c_lead_qualification: this.calculateLeadScore(leadData),
-              c_company_type: 'Smart Home / Electrical',
-              c_funnel_stage: 'Quiz Completed'
-            },
-            tags: ['Smart Home Lead', 'Quiz Completed', 'WattLeads']
-          },
-          opportunity: {
-            name: `${leadData.name} - Smart Home Lead Generation`,
-            status: 'Lead In',
-            value: this.calculateOpportunityValue(leadData.avgProjectValue),
-            source: 'WattLeads Funnel',
-            description: `Smart Home Lead Generation Opportunity
-            
-Services: ${leadData.services.join(', ')}
-Monthly Projects: ${leadData.monthlyProjects}
-Average Project Value: ${leadData.avgProjectValue}
-Marketing Spend: ${leadData.marketingSpend}
-
-Lead Score: ${this.calculateLeadScore(leadData)}/100`
-          }
-        },
-        timestamp: new Date().toISOString(),
-        integrationKey: this.config.privateIntegrationKey
-      };
-
-      const response = await fetch(this.config.privateIntegrationUrl!, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.config.privateIntegrationKey}`,
-        },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('Private Integration Error:', errorData);
-        return {
-          success: false,
-          error: `Private Integration Error: ${response.status} - ${errorData.message || 'Unknown error'}`
-        };
-      }
-
-      const result = await response.json();
-      
-      return {
-        success: true,
-        contactId: result.contactId || result.id
-      };
-
-    } catch (error) {
-      console.error('Private Integration submission error:', error);
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Private Integration error occurred'
-      };
-    }
-  }
-
-  private async submitViaDirectAPI(leadData: LeadData): Promise<{ success: boolean; contactId?: string; error?: string }> {
     try {
       const formattedPhone = this.formatPhoneNumber(leadData.phone);
       
@@ -185,10 +85,10 @@ Lead Score: ${this.calculateLeadScore(leadData)}/100`
       };
 
     } catch (error) {
-      console.error('Direct API submission error:', error);
+      console.error('GoHighLevel submission error:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Direct API error occurred'
+        error: error instanceof Error ? error.message : 'Unknown error occurred'
       };
     }
   }
@@ -305,15 +205,10 @@ Lead Score: ${this.calculateLeadScore(leadData)}/100`,
   }
 }
 
-// Initialize with environment variables
 const goHighLevelService = new GoHighLevelService({
   locationId: import.meta.env.VITE_GHL_LOCATION_ID || '',
   apiKey: import.meta.env.VITE_GHL_API_KEY || '',
-  baseUrl: import.meta.env.VITE_GHL_BASE_URL,
-  // Private Integration settings
-  usePrivateIntegration: import.meta.env.VITE_GHL_USE_PRIVATE_INTEGRATION === 'true',
-  privateIntegrationUrl: import.meta.env.VITE_GHL_PRIVATE_INTEGRATION_URL,
-  privateIntegrationKey: import.meta.env.VITE_GHL_PRIVATE_INTEGRATION_KEY
+  baseUrl: import.meta.env.VITE_GHL_BASE_URL
 });
 
 export default goHighLevelService;
