@@ -26,13 +26,12 @@ export default async function handler(req: any, res: any) {
     const { path } = req.query;
     const targetPath = Array.isArray(path) ? path.join('/') : (path || '');
     
-    // Construct the target URL
-    const targetUrl = `https://services.leadconnectorhq.com/${targetPath}`;
+    // Construct the target URL - Use the correct GoHighLevel API base URL
+    const targetUrl = `https://rest.gohighlevel.com/v1/${targetPath}`;
     
     // Prepare headers - forward all relevant headers
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      'Version': '2021-07-28'
+      'Content-Type': 'application/json'
     };
 
     // Add authorization header if present
@@ -40,10 +39,7 @@ export default async function handler(req: any, res: any) {
       headers['Authorization'] = req.headers.authorization;
     }
 
-    // Add any other GoHighLevel specific headers
-    if (req.headers.version) {
-      headers['Version'] = req.headers.version;
-    }
+    // No need for Version header in v1 API
 
     console.log('=== GoHighLevel Proxy Debug ===');
     console.log('Original URL:', req.url);

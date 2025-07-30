@@ -33,6 +33,7 @@ class GoHighLevelService {
   constructor(config: GoHighLevelConfig) {
     this.config = config;
     // Use proxy in development and production to avoid CORS issues
+    // The proxy will forward to rest.gohighlevel.com/v1
     this.baseUrl = '/api/ghl';
     console.log('GoHighLevel Service initialized with config:', {
       usePrivateIntegration: config.usePrivateIntegration,
@@ -93,11 +94,6 @@ class GoHighLevelService {
         'Authorization': `Bearer ${this.config.privateIntegrationKey}`,
         'Content-Type': 'application/json'
       };
-
-      // Only add Version header when not using proxy (proxy adds it automatically)
-      if (!import.meta.env.DEV) {
-        headers['Version'] = '2021-07-28';
-      }
 
       const response = await fetch(`${this.baseUrl}/contacts/`, {
         method: 'POST',
@@ -189,11 +185,6 @@ class GoHighLevelService {
         'Authorization': `Bearer ${this.config.apiKey}`,
         'Content-Type': 'application/json'
       };
-
-      // Only add Version header when not using proxy (proxy adds it automatically)
-      if (!import.meta.env.DEV) {
-        headers['Version'] = '2021-07-28';
-      }
 
       const response = await fetch(`${this.baseUrl}/contacts/`, {
         method: 'POST',
@@ -291,8 +282,7 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`
 
       const headers: Record<string, string> = {
         'Authorization': authHeader,
-        'Content-Type': 'application/json',
-        'Version': '2021-07-28'
+        'Content-Type': 'application/json'
       };
 
       // Try the deals endpoint first (most GoHighLevel instances use deals)
@@ -395,8 +385,7 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
 
       const headers: Record<string, string> = {
         'Authorization': authHeader,
-        'Content-Type': 'application/json',
-        'Version': '2021-07-28'
+        'Content-Type': 'application/json'
       };
 
       console.log('📝 Creating opportunity note...');
@@ -481,8 +470,7 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
 
       const headers: Record<string, string> = {
         'Authorization': authHeader,
-        'Content-Type': 'application/json',
-        'Version': '2021-07-28'
+        'Content-Type': 'application/json'
       };
 
       console.log('📝 Creating contact note...');
