@@ -33,7 +33,7 @@ class GoHighLevelService {
   constructor(config: GoHighLevelConfig) {
     this.config = config;
     // Use proxy in development and production to avoid CORS issues
-    // The proxy will forward to rest.gohighlevel.com/v1
+    // The proxy will forward to services.leadconnectorhq.com (v2 API for Private Integrations)
     this.baseUrl = '/api/ghl';
     console.log('GoHighLevel Service initialized with config:', {
       usePrivateIntegration: config.usePrivateIntegration,
@@ -92,7 +92,8 @@ class GoHighLevelService {
 
       const headers: Record<string, string> = {
         'Authorization': `Bearer ${this.config.privateIntegrationKey}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Version': '2021-07-28'
       };
 
       const response = await fetch(`${this.baseUrl}/contacts/`, {
@@ -183,7 +184,8 @@ class GoHighLevelService {
 
       const headers: Record<string, string> = {
         'Authorization': `Bearer ${this.config.apiKey}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Version': '2021-07-28'
       };
 
       const response = await fetch(`${this.baseUrl}/contacts/`, {
@@ -282,7 +284,8 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`
 
       const headers: Record<string, string> = {
         'Authorization': authHeader,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Version': '2021-07-28'
       };
 
       // Try the deals endpoint first (most GoHighLevel instances use deals)
@@ -385,7 +388,8 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
 
       const headers: Record<string, string> = {
         'Authorization': authHeader,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Version': '2021-07-28'
       };
 
       console.log('📝 Creating opportunity note...');
@@ -470,7 +474,8 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
 
       const headers: Record<string, string> = {
         'Authorization': authHeader,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Version': '2021-07-28'
       };
 
       console.log('📝 Creating contact note...');
