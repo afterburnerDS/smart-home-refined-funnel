@@ -71,35 +71,33 @@ export default async function handler(req: any, res: any) {
       body: req.method !== 'GET' && parsedBody ? JSON.stringify(parsedBody) : undefined
     });
 
+    const responseText = await response.text();
     let responseData;
+    
     try {
-      responseData = await response.json();
+      responseData = JSON.parse(responseText);
     } catch (e) {
-      // If response is not JSON, return text
-      responseData = await response.text();
+      responseData = responseText;
     }
     
     console.log('=== GoHighLevel Response ===');
     console.log('Response status:', response.status);
-    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
     console.log('Response data:', responseData);
     console.log('===========================');
 
-    // Return the response with proper status
-    res.status(response.status);
+    // Set CORS headers
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Version');
     
-    // Set response headers
-    response.headers.forEach((value, key) => {
-      if (!key.toLowerCase().includes('content-encoding') && 
-          !key.toLowerCase().includes('transfer-encoding')) {
-        res.setHeader(key, value);
-      }
-    });
-
-    if (typeof responseData === 'string') {
-      res.send(responseData);
-    } else {
+    // Return the response with proper status and content type
+    res.status(response.status);
+    res.setHeader('Content-Type', 'application/json');
+    
+    if (typeof responseData === 'object') {
       res.json(responseData);
+    } else {
+      res.json({ message: responseData });
     }
 
   } catch (error) {
@@ -108,12 +106,21 @@ export default async function handler(req: any, res: any) {
     console.error('Request URL:', req.url);
     console.error('Request method:', req.method);
     console.error('Request body:', req.body);
+    console.error('Target path:', req.query.path);
     console.error('==================');
+    
+    // Set CORS headers even for errors
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Version');
+    res.setHeader('Content-Type', 'application/json');
+    
     res.status(500).json({ 
-      error: 'Internal server error', 
-      details: error.message,
+      error: 'Proxy server error', 
+      details: error instanceof Error ? error.message : 'Unknown error',
       url: req.url,
-      method: req.method
+      method: req.method,
+      path: req.query.path
     });
   }
 } 
