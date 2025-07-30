@@ -255,12 +255,14 @@ class GoHighLevelService {
       }
 
       // Use the correct opportunity payload structure for GoHighLevel v2 API
+      // Based on official API documentation
       const opportunityData = {
         contactId: contactId,
         locationId: this.config.locationId,
         pipelineId: this.config.pipelineId,
-        stageId: this.config.stageId,
-        title: `${leadData.name} - Smart Home Lead Generation`,
+        pipelineStageId: this.config.stageId,  // Use pipelineStageId, not stageId
+        name: `${leadData.name} - Smart Home Lead Generation`,  // Use name, not title
+        status: "open",  // Required field with specific values
         monetaryValue: 0
       };
 
