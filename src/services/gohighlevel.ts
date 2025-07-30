@@ -46,7 +46,13 @@ class GoHighLevelService {
   }
 
   async submitLead(leadData: LeadData): Promise<{ success: boolean; contactId?: string; error?: string }> {
-    console.log('Submitting lead to GoHighLevel:', leadData);
+    console.log('=== LEAD SUBMISSION START ===');
+    console.log('Full leadData received:', JSON.stringify(leadData, null, 2));
+    console.log('Services:', leadData.services);
+    console.log('Monthly Projects:', leadData.monthlyProjects);
+    console.log('Avg Project Value:', leadData.avgProjectValue);
+    console.log('Marketing Spend:', leadData.marketingSpend);
+    console.log('============================');
     
     try {
       if (this.config.usePrivateIntegration && this.config.privateIntegrationKey) {

@@ -1,7 +1,6 @@
 {
   "buildCommand": "npm run build && mv dist/index.html dist/vsl.html",
   "rewrites": [
-    { "source": "/api/ghl/(.*)", "destination": "/api/ghl" },
     { "source": "/quiz", "destination": "/vsl.html" },
     { "source": "/results", "destination": "/vsl.html" },
     { "source": "/booking", "destination": "/vsl.html" },
