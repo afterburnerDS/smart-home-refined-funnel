@@ -34,8 +34,8 @@ class GoHighLevelService {
     this.config = config;
     // Use different approaches for development vs production
     if (import.meta.env.DEV) {
-      // Use proxy in development
-      this.baseUrl = '/api/ghl-proxy?path=';
+      // Use proxy in development  
+      this.baseUrl = '/api/ghl/';
     } else {
       // Use direct API in production with CORS headers
       this.baseUrl = 'https://services.leadconnectorhq.com/';
@@ -101,7 +101,7 @@ class GoHighLevelService {
         'Version': '2021-07-28'
       };
 
-      const url = import.meta.env.DEV ? `${this.baseUrl}contacts` : `${this.baseUrl}contacts/`;
+      const url = `${this.baseUrl}contacts/`;
       const response = await fetch(url, {
         method: 'POST',
         headers,
@@ -194,7 +194,7 @@ class GoHighLevelService {
         'Version': '2021-07-28'
       };
 
-      const url = import.meta.env.DEV ? `${this.baseUrl}contacts` : `${this.baseUrl}contacts/`;
+      const url = `${this.baseUrl}contacts/`;
       const response = await fetch(url, {
         method: 'POST',
         headers,
@@ -289,7 +289,7 @@ class GoHighLevelService {
       
       console.log('Opportunities headers:', headers);
       
-      const url = import.meta.env.DEV ? `${this.baseUrl}opportunities` : `${this.baseUrl}opportunities/`;
+      const url = `${this.baseUrl}opportunities/`;
       const response = await fetch(url, {
         method: 'POST',
         headers,
@@ -375,7 +375,7 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
 
       console.log('Note payload:', JSON.stringify(notePayload, null, 2));
       
-      const url = import.meta.env.DEV ? `${this.baseUrl}opportunities/${opportunityId}/notes` : `${this.baseUrl}opportunities/${opportunityId}/notes`;
+      const url = `${this.baseUrl}opportunities/${opportunityId}/notes`;
       const response = await fetch(url, {
         method: 'POST',
         headers,
@@ -438,7 +438,7 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
 
       console.log('Contact note payload:', JSON.stringify(notePayload, null, 2));
       
-      const url = import.meta.env.DEV ? `${this.baseUrl}contacts/${contactId}/notes` : `${this.baseUrl}contacts/${contactId}/notes`;
+      const url = `${this.baseUrl}contacts/${contactId}/notes`;
       const response = await fetch(url, {
         method: 'POST',
         headers,
