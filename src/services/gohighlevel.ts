@@ -32,10 +32,8 @@ class GoHighLevelService {
 
   constructor(config: GoHighLevelConfig) {
     this.config = config;
-    // Use proxy in development to avoid CORS issues
-    this.baseUrl = import.meta.env.DEV 
-      ? '/api/ghl' 
-      : config.baseUrl || 'https://services.leadconnectorhq.com';
+    // Use proxy in development and production to avoid CORS issues
+    this.baseUrl = '/api/ghl';
     console.log('GoHighLevel Service initialized with config:', {
       usePrivateIntegration: config.usePrivateIntegration,
       hasPrivateKey: !!config.privateIntegrationKey,
@@ -79,17 +77,7 @@ class GoHighLevelService {
         phone: formattedPhone,
         locationId: this.config.locationId,
         source: 'WattLeads Funnel',
-        tags: ['Smart Home Lead', 'Quiz Completed', 'WattLeads'],
-        customField: {
-          c_services: leadData.services.join(', '),
-          c_monthly_projects: leadData.monthlyProjects,
-          c_avg_project_value: leadData.avgProjectValue,
-          c_marketing_spend: leadData.marketingSpend,
-          c_lead_score: this.calculateLeadScore(leadData).toString(),
-          c_utm_source: leadData.utm_source || '',
-          c_utm_medium: leadData.utm_medium || '',
-          c_utm_campaign: leadData.utm_campaign || ''
-        }
+        tags: ['Smart Home Lead', 'Quiz Completed', 'WattLeads']
       };
 
       console.log('Private Integration payload:', payload);
@@ -137,9 +125,7 @@ class GoHighLevelService {
           await this.createOpportunity(contactId, leadData);
           console.log('✅ Opportunity creation completed');
           
-          // Also try to update the contact with quiz data as a backup
-          await this.updateContactWithQuizData(contactId, leadData);
-          console.log('✅ Contact update with quiz data completed');
+
         } catch (opportunityError) {
           console.error('❌ Failed to create opportunity:', opportunityError);
           // Still return success for contact creation, but log the opportunity error
@@ -270,7 +256,7 @@ class GoHighLevelService {
         locationId: this.config.locationId,
         pipelineId: this.config.pipelineId,
         contactId: contactId,
-        name: `${leadData.name} - Smart Home Lead (${leadData.services.join(', ')})`,
+        name: `${leadData.name} - Smart Home Lead Generation`,
         status: 'open',
         description: `🏠 Smart Home Lead - Quiz Results
 
@@ -448,50 +434,7 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
     }
   }
 
-  private async updateContactWithQuizData(contactId: string, leadData: LeadData): Promise<void> {
-    try {
-      console.log('📝 Updating contact with quiz data...');
-      
-      const updatePayload = {
-        customField: {
-          c_services: leadData.services.join(', '),
-          c_monthly_projects: leadData.monthlyProjects,
-          c_avg_project_value: leadData.avgProjectValue,
-          c_marketing_spend: leadData.marketingSpend,
-          c_lead_score: this.calculateLeadScore(leadData).toString(),
-          c_utm_source: leadData.utm_source || '',
-          c_utm_medium: leadData.utm_medium || '',
-          c_utm_campaign: leadData.utm_campaign || ''
-        }
-      };
 
-      const authHeader = this.config.usePrivateIntegration 
-        ? `Bearer ${this.config.privateIntegrationKey}`
-        : `Bearer ${this.config.apiKey}`;
-
-      const headers: Record<string, string> = {
-        'Authorization': authHeader,
-        'Content-Type': 'application/json',
-        'Version': '2021-07-28'
-      };
-
-      const response = await fetch(`${this.baseUrl}/contacts/${contactId}`, {
-        method: 'PUT',
-        headers,
-        body: JSON.stringify(updatePayload)
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log('✅ Contact updated with quiz data successfully:', result);
-      } else {
-        const errorData = await response.json().catch(() => ({}));
-        console.log('❌ Contact update failed:', response.status, errorData);
-      }
-    } catch (error) {
-      console.error('❌ Error updating contact with quiz data:', error);
-    }
-  }
 
   private async createContactNote(contactId: string, leadData: LeadData): Promise<void> {
     try {
