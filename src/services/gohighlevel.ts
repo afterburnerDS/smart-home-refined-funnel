@@ -32,9 +32,14 @@ class GoHighLevelService {
 
   constructor(config: GoHighLevelConfig) {
     this.config = config;
-    // Use proxy in development and production to avoid CORS issues
-    // The proxy will forward to services.leadconnectorhq.com (v2 API for Private Integrations)
-    this.baseUrl = '/api/ghl-proxy?path=';
+    // Use different approaches for development vs production
+    if (import.meta.env.DEV) {
+      // Use proxy in development
+      this.baseUrl = '/api/ghl-proxy?path=';
+    } else {
+      // Use direct API in production with CORS headers
+      this.baseUrl = 'https://services.leadconnectorhq.com/';
+    }
     console.log('GoHighLevel Service initialized with config:', {
       usePrivateIntegration: config.usePrivateIntegration,
       hasPrivateKey: !!config.privateIntegrationKey,
@@ -96,7 +101,8 @@ class GoHighLevelService {
         'Version': '2021-07-28'
       };
 
-      const response = await fetch(`${this.baseUrl}contacts`, {
+      const url = import.meta.env.DEV ? `${this.baseUrl}contacts` : `${this.baseUrl}contacts/`;
+      const response = await fetch(url, {
         method: 'POST',
         headers,
         body: JSON.stringify(payload)
@@ -188,7 +194,8 @@ class GoHighLevelService {
         'Version': '2021-07-28'
       };
 
-      const response = await fetch(`${this.baseUrl}contacts`, {
+      const url = import.meta.env.DEV ? `${this.baseUrl}contacts` : `${this.baseUrl}contacts/`;
+      const response = await fetch(url, {
         method: 'POST',
         headers,
         body: JSON.stringify(contactData)
@@ -282,7 +289,8 @@ class GoHighLevelService {
       
       console.log('Opportunities headers:', headers);
       
-      const response = await fetch(`${this.baseUrl}opportunities`, {
+      const url = import.meta.env.DEV ? `${this.baseUrl}opportunities` : `${this.baseUrl}opportunities/`;
+      const response = await fetch(url, {
         method: 'POST',
         headers,
         body: JSON.stringify(opportunityData)
@@ -367,7 +375,8 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
 
       console.log('Note payload:', JSON.stringify(notePayload, null, 2));
       
-      const response = await fetch(`${this.baseUrl}opportunities/${opportunityId}/notes`, {
+      const url = import.meta.env.DEV ? `${this.baseUrl}opportunities/${opportunityId}/notes` : `${this.baseUrl}opportunities/${opportunityId}/notes`;
+      const response = await fetch(url, {
         method: 'POST',
         headers,
         body: JSON.stringify(notePayload)
@@ -429,7 +438,8 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
 
       console.log('Contact note payload:', JSON.stringify(notePayload, null, 2));
       
-      const response = await fetch(`${this.baseUrl}contacts/${contactId}/notes`, {
+      const url = import.meta.env.DEV ? `${this.baseUrl}contacts/${contactId}/notes` : `${this.baseUrl}contacts/${contactId}/notes`;
+      const response = await fetch(url, {
         method: 'POST',
         headers,
         body: JSON.stringify(notePayload)
