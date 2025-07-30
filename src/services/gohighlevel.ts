@@ -249,9 +249,12 @@ class GoHighLevelService {
 
   private async createOpportunity(contactId: string, leadData: LeadData): Promise<void> {
     try {
-      console.log('Creating opportunity for contact:', contactId);
+      console.log('=== OPPORTUNITY CREATION START ===');
+      console.log('Contact ID:', contactId);
       console.log('Pipeline ID:', this.config.pipelineId);
       console.log('Stage ID:', this.config.stageId);
+      console.log('Base URL:', this.baseUrl);
+      console.log('Lead Data for opportunity:', JSON.stringify(leadData, null, 2));
       
       if (!this.config.pipelineId || !this.config.stageId) {
         console.error('Missing pipeline or stage ID for opportunity creation');
@@ -293,21 +296,33 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`
       };
 
       // Try the deals endpoint first (most GoHighLevel instances use deals)
+      const dealsPayload = {
+        locationId: this.config.locationId,
+        pipelineId: this.config.pipelineId,
+        contactId: contactId,
+        title: `${leadData.name} - Smart Home Lead Generation`,
+        status: 'open'
+      };
+      
+      console.log('=== DEALS ENDPOINT ATTEMPT ===');
+      console.log('Deals payload:', JSON.stringify(dealsPayload, null, 2));
+      console.log('Deals URL:', `${this.baseUrl}/deals/`);
+      console.log('Deals headers:', headers);
+      
       let response = await fetch(`${this.baseUrl}/deals/`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({
-          locationId: this.config.locationId,
-          pipelineId: this.config.pipelineId,
-          contactId: contactId,
-          title: `${leadData.name} - Smart Home Lead Generation`,
-          status: 'open'
-        })
+        body: JSON.stringify(dealsPayload)
       });
 
       // If deals endpoint fails, try opportunities endpoint as fallback
       if (!response.ok) {
-        console.log('Deals endpoint failed, trying opportunities endpoint...');
+        console.log('=== OPPORTUNITIES ENDPOINT ATTEMPT ===');
+        console.log('Deals endpoint failed with status:', response.status);
+        console.log('Opportunities payload:', JSON.stringify(opportunityData, null, 2));
+        console.log('Opportunities URL:', `${this.baseUrl}/opportunities/`);
+        console.log('Opportunities headers:', headers);
+        
         response = await fetch(`${this.baseUrl}/opportunities/`, {
           method: 'POST',
           headers,
@@ -315,14 +330,16 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`
         });
       }
 
-      console.log('Opportunity creation response status:', response.status);
-      console.log('Opportunity creation response headers:', Object.fromEntries(response.headers.entries()));
+      console.log('=== OPPORTUNITY CREATION RESPONSE ===');
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error('Opportunity creation error:', errorData);
+        console.error('❌ Opportunity creation failed!');
+        console.error('Error status:', response.status);
+        console.error('Error data:', JSON.stringify(errorData, null, 2));
         console.error('Full error response:', response);
-        console.error('Error details:', JSON.stringify(errorData, null, 2));
         throw new Error(`Opportunity creation failed: ${response.status} - ${errorData.message || 'Unknown error'}`);
       }
 
