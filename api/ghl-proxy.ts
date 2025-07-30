@@ -47,7 +47,7 @@ export default async function handler(req: any, res: any) {
     console.log('=== GoHighLevel Proxy Debug ===');
     console.log('Original URL:', req.url);
     console.log('Query params:', req.query);
-    console.log('Path param:', path);
+    console.log('Path param:', req.query.path);
     console.log('Extracted path:', targetPath);
     console.log('Target URL:', targetUrl);
     console.log('Method:', req.method);
