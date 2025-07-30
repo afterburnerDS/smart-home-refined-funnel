@@ -43,8 +43,11 @@ const Booking = () => {
       // Format phone number properly (remove any existing formatting)
       const cleanPhone = phone.replace(/\D/g, '');
       const formattedPhone = cleanPhone.length === 10 ? `+1${cleanPhone}` : cleanPhone.length === 11 ? `+${cleanPhone}` : phone;
+      const dashedPhone = cleanPhone.length === 10 ? `${cleanPhone.slice(0,3)}-${cleanPhone.slice(3,6)}-${cleanPhone.slice(6)}` : phone;
+      const dottedPhone = cleanPhone.length === 10 ? `${cleanPhone.slice(0,3)}.${cleanPhone.slice(3,6)}.${cleanPhone.slice(6)}` : phone;
+      const parenPhone = cleanPhone.length === 10 ? `(${cleanPhone.slice(0,3)}) ${cleanPhone.slice(3,6)}-${cleanPhone.slice(6)}` : phone;
       
-      // Try many phone parameter variations
+      // Try all possible phone parameter variations
       params.append('phone', phone);
       params.append('phone_number', phone);
       params.append('contact_phone', phone);
@@ -52,14 +55,28 @@ const Booking = () => {
       params.append('mobile', phone);
       params.append('cell', phone);
       params.append('telephone', phone);
+      params.append('tel', phone);
       
-      // Also try formatted versions
+      // GoHighLevel specific variations
+      params.append('Phone', phone); // Capital P
+      params.append('PHONE', phone); // All caps
+      params.append('contact[phone]', phone); // Array notation
+      params.append('fields[phone]', phone); // Fields notation
+      params.append('lead_phone', phone); // Lead specific
+      params.append('customer_phone', phone); // Customer specific
+      
+      // Try formatted versions
       params.append('phone_formatted', formattedPhone);
       params.append('contact_phone_formatted', formattedPhone);
-      
-      // Try clean version
       params.append('phone_clean', cleanPhone);
       params.append('contact_phone_clean', cleanPhone);
+      params.append('phone_dashed', dashedPhone);
+      params.append('phone_dotted', dottedPhone);
+      params.append('phone_paren', parenPhone);
+      
+      // International format
+      params.append('phone_international', formattedPhone);
+      params.append('intl_phone', formattedPhone);
     }
     
     // Add the full name as well

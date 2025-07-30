@@ -46,8 +46,11 @@ const QuizResults = () => {
       // Format phone number properly (remove any existing formatting)
       const cleanPhone = phone.replace(/\D/g, '');
       const formattedPhone = cleanPhone.length === 10 ? `+1${cleanPhone}` : cleanPhone.length === 11 ? `+${cleanPhone}` : phone;
+      const dashedPhone = cleanPhone.length === 10 ? `${cleanPhone.slice(0,3)}-${cleanPhone.slice(3,6)}-${cleanPhone.slice(6)}` : phone;
+      const dottedPhone = cleanPhone.length === 10 ? `${cleanPhone.slice(0,3)}.${cleanPhone.slice(3,6)}.${cleanPhone.slice(6)}` : phone;
+      const parenPhone = cleanPhone.length === 10 ? `(${cleanPhone.slice(0,3)}) ${cleanPhone.slice(3,6)}-${cleanPhone.slice(6)}` : phone;
       
-      // Try many phone parameter variations
+      // Try all possible phone parameter variations
       params.append('phone', phone);
       params.append('phone_number', phone);
       params.append('contact_phone', phone);
@@ -55,14 +58,28 @@ const QuizResults = () => {
       params.append('mobile', phone);
       params.append('cell', phone);
       params.append('telephone', phone);
+      params.append('tel', phone);
       
-      // Also try formatted versions
+      // GoHighLevel specific variations
+      params.append('Phone', phone); // Capital P
+      params.append('PHONE', phone); // All caps
+      params.append('contact[phone]', phone); // Array notation
+      params.append('fields[phone]', phone); // Fields notation
+      params.append('lead_phone', phone); // Lead specific
+      params.append('customer_phone', phone); // Customer specific
+      
+      // Try formatted versions
       params.append('phone_formatted', formattedPhone);
       params.append('contact_phone_formatted', formattedPhone);
-      
-      // Try clean version
       params.append('phone_clean', cleanPhone);
       params.append('contact_phone_clean', cleanPhone);
+      params.append('phone_dashed', dashedPhone);
+      params.append('phone_dotted', dottedPhone);
+      params.append('phone_paren', parenPhone);
+      
+      // International format
+      params.append('phone_international', formattedPhone);
+      params.append('intl_phone', formattedPhone);
     }
     
     // Add the full name as well
@@ -90,10 +107,29 @@ const QuizResults = () => {
     
     // Some calendar widgets prefer hash parameters
     const hashParams = new URLSearchParams();
-    if (firstName) hashParams.append('fname', firstName);
-    if (lastName) hashParams.append('lname', lastName);
-    if (email) hashParams.append('email', email);
-    if (phone) hashParams.append('phone', phone);
+    if (firstName) {
+      hashParams.append('fname', firstName);
+      hashParams.append('first_name', firstName);
+    }
+    if (lastName) {
+      hashParams.append('lname', lastName);
+      hashParams.append('last_name', lastName);
+    }
+    if (email) {
+      hashParams.append('email', email);
+      hashParams.append('contact_email', email);
+    }
+    if (phone) {
+      const cleanPhone = phone.replace(/\D/g, '');
+      const formattedPhone = cleanPhone.length === 10 ? `+1${cleanPhone}` : cleanPhone.length === 11 ? `+${cleanPhone}` : phone;
+      
+      hashParams.append('phone', phone);
+      hashParams.append('phone_number', phone);
+      hashParams.append('contact_phone', phone);
+      hashParams.append('Phone', phone);
+      hashParams.append('phone_clean', cleanPhone);
+      hashParams.append('phone_formatted', formattedPhone);
+    }
     
     const finalUrlWithHash = hashParams.toString() 
       ? `${finalUrl}#${hashParams.toString()}`
@@ -105,8 +141,19 @@ const QuizResults = () => {
     console.log('📞 Phone formatting attempts:', { 
       original: phone, 
       clean: phone.replace(/\D/g, ''), 
-      formatted: phone.replace(/\D/g, '').length === 10 ? `+1${phone.replace(/\D/g, '')}` : phone 
+      formatted: phone.replace(/\D/g, '').length === 10 ? `+1${phone.replace(/\D/g, '')}` : phone,
+      dashed: phone.replace(/\D/g, '').length === 10 ? `${phone.replace(/\D/g, '').slice(0,3)}-${phone.replace(/\D/g, '').slice(3,6)}-${phone.replace(/\D/g, '').slice(6)}` : phone,
+      dotted: phone.replace(/\D/g, '').length === 10 ? `${phone.replace(/\D/g, '').slice(0,3)}.${phone.replace(/\D/g, '').slice(3,6)}.${phone.replace(/\D/g, '').slice(6)}` : phone,
+      paren: phone.replace(/\D/g, '').length === 10 ? `(${phone.replace(/\D/g, '').slice(0,3)}) ${phone.replace(/\D/g, '').slice(3,6)}-${phone.replace(/\D/g, '').slice(6)}` : phone
     });
+    
+    console.log('🔗 URL parameters being passed:');
+    console.log('Query string length:', params.toString().length);
+    console.log('Hash string length:', hashParams.toString().length);
+    
+    // Log all phone parameters being passed
+    const phoneParams = Array.from(params.entries()).filter(([key]) => key.toLowerCase().includes('phone') || key.toLowerCase().includes('tel') || key.toLowerCase().includes('mobile') || key.toLowerCase().includes('cell'));
+    console.log('📞 Phone parameters in URL:', phoneParams);
     
     // Try the main URL first, but log the hash version for manual testing
     return finalUrl;
