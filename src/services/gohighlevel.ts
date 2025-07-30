@@ -257,7 +257,20 @@ class GoHighLevelService {
         pipelineId: this.config.pipelineId,
         contactId: contactId,
         name: `${leadData.name} - Smart Home Lead Generation`,
-        status: 'open'
+        status: 'open',
+        description: `🏠 Smart Home Lead - Quiz Results
+
+📋 QUIZ RESPONSES:
+Services: ${leadData.services.join(', ')}
+Monthly Projects: ${leadData.monthlyProjects}
+Avg Project Value: ${leadData.avgProjectValue}
+Marketing Spend: ${leadData.marketingSpend}
+Lead Score: ${this.calculateLeadScore(leadData)}/100
+Source: WattLeads Funnel
+
+${leadData.utm_source ? `UTM Source: ${leadData.utm_source}` : ''}
+${leadData.utm_medium ? `UTM Medium: ${leadData.utm_medium}` : ''}
+${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`
       };
 
       const authHeader = this.config.usePrivateIntegration 
@@ -365,7 +378,7 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
 
       console.log('📝 Creating opportunity note...');
 
-      // Try different note creation approaches
+      // Try different note creation approaches with multiple endpoints
       const notePayloads = [
         // Standard note payload
         { body: noteContent },
@@ -373,29 +386,44 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
         { body: noteContent, locationId: this.config.locationId },
         // Simple text format
         { content: noteContent },
-        { note: noteContent }
+        { note: noteContent },
+        // Try with title field
+        { title: 'Quiz Results', body: noteContent },
+        // Try with description field
+        { description: noteContent }
       ];
 
-      for (let i = 0; i < notePayloads.length; i++) {
-        const payload = notePayloads[i];
-        console.log(`📝 Trying note payload ${i + 1}:`, payload);
+      const endpoints = [
+        `/opportunities/${opportunityId}/notes`,
+        `/deals/${opportunityId}/notes`,
+        `/opportunities/${opportunityId}/comments`,
+        `/deals/${opportunityId}/comments`
+      ];
 
-        const response = await fetch(`${this.baseUrl}/opportunities/${opportunityId}/notes`, {
-          method: 'POST',
-          headers,
-          body: JSON.stringify(payload)
-        });
+      for (const endpoint of endpoints) {
+        for (let i = 0; i < notePayloads.length; i++) {
+          const payload = notePayloads[i];
+          console.log(`📝 Trying ${endpoint} with payload ${i + 1}:`, payload);
 
-        if (response.ok) {
-          const noteResult = await response.json();
-          console.log('✅ Opportunity note created successfully:', noteResult);
-          return;
-        } else {
-          const errorData = await response.json().catch(() => ({}));
-          console.log(`❌ Note payload ${i + 1} failed:`, response.status, errorData);
-          console.log(`❌ Full response headers:`, Object.fromEntries(response.headers.entries()));
-          console.log(`❌ Request URL:`, `${this.baseUrl}/opportunities/${opportunityId}/notes`);
-          console.log(`❌ Request payload:`, payload);
+          const response = await fetch(`${this.baseUrl}${endpoint}`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(payload)
+          });
+
+          if (response.ok) {
+            const noteResult = await response.json();
+            console.log('✅ Opportunity note created successfully:', noteResult);
+            console.log('✅ Used endpoint:', endpoint);
+            console.log('✅ Used payload:', payload);
+            return;
+          } else {
+            const errorData = await response.json().catch(() => ({}));
+            console.log(`❌ ${endpoint} payload ${i + 1} failed:`, response.status, errorData);
+            console.log(`❌ Full response headers:`, Object.fromEntries(response.headers.entries()));
+            console.log(`❌ Request URL:`, `${this.baseUrl}${endpoint}`);
+            console.log(`❌ Request payload:`, payload);
+          }
         }
       }
 
@@ -434,7 +462,7 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
 
       console.log('📝 Creating contact note...');
 
-      // Try different note creation approaches
+      // Try different note creation approaches with multiple endpoints
       const notePayloads = [
         // Standard note payload
         { body: noteContent },
@@ -442,29 +470,42 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
         { body: noteContent, locationId: this.config.locationId },
         // Simple text format
         { content: noteContent },
-        { note: noteContent }
+        { note: noteContent },
+        // Try with title field
+        { title: 'Quiz Results', body: noteContent },
+        // Try with description field
+        { description: noteContent }
       ];
 
-      for (let i = 0; i < notePayloads.length; i++) {
-        const payload = notePayloads[i];
-        console.log(`📝 Trying contact note payload ${i + 1}:`, payload);
+      const endpoints = [
+        `/contacts/${contactId}/notes`,
+        `/contacts/${contactId}/comments`
+      ];
 
-        const response = await fetch(`${this.baseUrl}/contacts/${contactId}/notes`, {
-          method: 'POST',
-          headers,
-          body: JSON.stringify(payload)
-        });
+      for (const endpoint of endpoints) {
+        for (let i = 0; i < notePayloads.length; i++) {
+          const payload = notePayloads[i];
+          console.log(`📝 Trying ${endpoint} with payload ${i + 1}:`, payload);
 
-        if (response.ok) {
-          const noteResult = await response.json();
-          console.log('✅ Contact note created successfully:', noteResult);
-          return;
-        } else {
-          const errorData = await response.json().catch(() => ({}));
-          console.log(`❌ Contact note payload ${i + 1} failed:`, response.status, errorData);
-          console.log(`❌ Full response headers:`, Object.fromEntries(response.headers.entries()));
-          console.log(`❌ Request URL:`, `${this.baseUrl}/contacts/${contactId}/notes`);
-          console.log(`❌ Request payload:`, payload);
+          const response = await fetch(`${this.baseUrl}${endpoint}`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(payload)
+          });
+
+          if (response.ok) {
+            const noteResult = await response.json();
+            console.log('✅ Contact note created successfully:', noteResult);
+            console.log('✅ Used endpoint:', endpoint);
+            console.log('✅ Used payload:', payload);
+            return;
+          } else {
+            const errorData = await response.json().catch(() => ({}));
+            console.log(`❌ ${endpoint} payload ${i + 1} failed:`, response.status, errorData);
+            console.log(`❌ Full response headers:`, Object.fromEntries(response.headers.entries()));
+            console.log(`❌ Request URL:`, `${this.baseUrl}${endpoint}`);
+            console.log(`❌ Request payload:`, payload);
+          }
         }
       }
 
