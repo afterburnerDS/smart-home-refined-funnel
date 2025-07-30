@@ -269,13 +269,9 @@ class GoHighLevelService {
 
       const headers: Record<string, string> = {
         'Authorization': authHeader,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Version': '2021-07-28'
       };
-
-      // Only add Version header when not using proxy (proxy adds it automatically)
-      if (!import.meta.env.DEV) {
-        headers['Version'] = '2021-07-28';
-      }
 
       // Try the deals endpoint first (most GoHighLevel instances use deals)
       let response = await fetch(`${this.baseUrl}/deals/`, {
@@ -363,12 +359,9 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
 
       const headers: Record<string, string> = {
         'Authorization': authHeader,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Version': '2021-07-28'
       };
-
-      if (!import.meta.env.DEV) {
-        headers['Version'] = '2021-07-28';
-      }
 
       console.log('📝 Creating opportunity note...');
 
@@ -400,6 +393,9 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
         } else {
           const errorData = await response.json().catch(() => ({}));
           console.log(`❌ Note payload ${i + 1} failed:`, response.status, errorData);
+          console.log(`❌ Full response headers:`, Object.fromEntries(response.headers.entries()));
+          console.log(`❌ Request URL:`, `${this.baseUrl}/opportunities/${opportunityId}/notes`);
+          console.log(`❌ Request payload:`, payload);
         }
       }
 
@@ -432,12 +428,9 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
 
       const headers: Record<string, string> = {
         'Authorization': authHeader,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Version': '2021-07-28'
       };
-
-      if (!import.meta.env.DEV) {
-        headers['Version'] = '2021-07-28';
-      }
 
       console.log('📝 Creating contact note...');
 
@@ -469,6 +462,9 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
         } else {
           const errorData = await response.json().catch(() => ({}));
           console.log(`❌ Contact note payload ${i + 1} failed:`, response.status, errorData);
+          console.log(`❌ Full response headers:`, Object.fromEntries(response.headers.entries()));
+          console.log(`❌ Request URL:`, `${this.baseUrl}/contacts/${contactId}/notes`);
+          console.log(`❌ Request payload:`, payload);
         }
       }
 
