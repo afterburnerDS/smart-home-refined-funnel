@@ -9,6 +9,7 @@ const QuizResults = () => {
   const hasFired = useRef(false);
   const [bookingUrl, setBookingUrl] = useState<string>('');
 
+
   // Extract personal data from URL parameters
   const userName = searchParams.get('name') || '';
   const email = searchParams.get('email') || '';
@@ -38,8 +39,11 @@ const QuizResults = () => {
     if (email) {
       params.append('email', email);
     }
-    // Note: GoHighLevel booking widget doesn't support phone pre-filling
-    // Only name and email are supported for security reasons
+    if (phone) {
+      // Include phone parameter (GoHighLevel booking widget ignores it but we keep trying)
+      const cleanPhone = phone.replace(/\D/g, ''); // Remove all non-digits
+      params.append('phone', cleanPhone);
+    }
     
     // Keep it minimal - only add name if needed
     if (userName) {
@@ -56,6 +60,8 @@ const QuizResults = () => {
     
     return finalUrl;
   };
+
+
 
   useEffect(() => {
     const services = searchParams.get('services')?.split(',') || [];
@@ -176,7 +182,7 @@ const QuizResults = () => {
             </h3>
             {/* GoHighLevel Booking Widget */}
             <div className="min-h-[600px] w-full">
-              {bookingUrl ? (
+                                   {bookingUrl ? (
                 <iframe
                   key={`booking-${phone}-${email}-${firstName}-${lastName}`} // Force remount when data changes
                   src={bookingUrl}
@@ -187,7 +193,8 @@ const QuizResults = () => {
                   className="rounded-lg w-full"
                   style={{ minHeight: '600px' }}
                   onLoad={() => {
-                    // Iframe loaded successfully
+                    // Iframe loaded successfully with pre-filled name and email
+                    // Note: Phone pre-filling is not supported by GoHighLevel booking widgets
                   }}
                 />
               ) : (
@@ -198,20 +205,32 @@ const QuizResults = () => {
             </div>
           </div>
           
-          {/* Help Text */}
-          <div className="text-center mt-4 space-y-3">
-            {phone && (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                <p className="text-sm text-green-800">
-                  ✅ <strong>Great news!</strong> Your name and email are pre-filled above. Just enter your phone number to complete booking.
+                  {/* Help Text */}
+        <div className="text-center mt-4 space-y-3">
+          {phone && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h4 className="font-bold text-blue-800 mb-2">📋 Quick Setup</h4>
+              <p className="text-sm text-blue-700 mb-3">
+                Your <strong>name and email are pre-filled</strong> above. For fastest booking:
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center justify-center gap-2">
+                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
+                    📞 Your Phone: {phone}
+                  </span>
+                </div>
+                <p className="text-xs text-blue-600">
+                  Just enter this number in the phone field above to complete your booking
                 </p>
               </div>
-            )}
-            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-              <Mail className="w-4 h-4" />
-              <span>Need another time? Email info@wattleads.com</span>
             </div>
+          )}
+          
+          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+            <Mail className="w-4 h-4" />
+            <span>Need another time? Email info@wattleads.com</span>
           </div>
+        </div>
         </div>
         
         {/* Call Value Points - Compact Three Columns */}
