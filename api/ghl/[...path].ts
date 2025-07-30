@@ -26,7 +26,7 @@ export default async function handler(req: any, res: any) {
     const { path } = req.query;
     const targetPath = Array.isArray(path) ? path.join('/') : (path || '');
     
-    // Construct the target URL - Use the correct GoHighLevel v2 API base URL for Private Integrations
+    // Construct the target URL - Use the correct GoHighLevel Private Integration API base URL
     const targetUrl = `https://services.leadconnectorhq.com/${targetPath}`;
     
     // Prepare headers - forward all relevant headers for v2 API
