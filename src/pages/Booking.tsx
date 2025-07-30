@@ -21,7 +21,7 @@ const Booking = () => {
     const params = new URLSearchParams();
     
     // Try multiple parameter name variations to ensure compatibility
-    // Use ONLY the parameters that work with GoHighLevel booking widget
+    // GoHighLevel booking widget only supports name and email pre-filling
     if (firstName) {
       params.append('first_name', firstName);
     }
@@ -31,9 +31,7 @@ const Booking = () => {
     if (email) {
       params.append('email', email);
     }
-    if (phone) {
-      params.append('phone', phone);
-    }
+    // Note: Phone pre-filling is not supported by GoHighLevel booking widgets
     
     // Add the full name as well
     if (name) {

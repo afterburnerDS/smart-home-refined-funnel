@@ -38,10 +38,8 @@ const QuizResults = () => {
     if (email) {
       params.append('email', email);
     }
-    if (phone) {
-      // Test ONE phone parameter at a time to find what works
-      params.append('phone', phone);  // Start with the most basic
-    }
+    // Note: GoHighLevel booking widget doesn't support phone pre-filling
+    // Only name and email are supported for security reasons
     
     // Keep it minimal - only add name if needed
     if (userName) {
@@ -203,18 +201,10 @@ const QuizResults = () => {
           {/* Help Text */}
           <div className="text-center mt-4 space-y-3">
             {phone && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                <p className="text-sm text-blue-800 mb-2">
-                  💡 <strong>Tip:</strong> For fastest booking with phone pre-filled
+              <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                <p className="text-sm text-green-800">
+                  ✅ <strong>Great news!</strong> Your name and email are pre-filled above. Just enter your phone number to complete booking.
                 </p>
-                <a 
-                  href={bookingUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors"
-                >
-                  📅 Open Calendar in New Tab
-                </a>
               </div>
             )}
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
