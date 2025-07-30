@@ -254,74 +254,36 @@ class GoHighLevelService {
         return;
       }
 
+      // Use the correct opportunity payload structure for GoHighLevel v2 API
       const opportunityData = {
-        locationId: this.config.locationId,
-        pipelineId: this.config.pipelineId,
         contactId: contactId,
-        name: `${leadData.name} - Smart Home Lead Generation`,
-        status: 'open',
-        description: `🏠 Smart Home Lead - Quiz Results
-
-📋 QUIZ RESPONSES:
-Services: ${leadData.services.join(', ')}
-Monthly Projects: ${leadData.monthlyProjects}
-Avg Project Value: ${leadData.avgProjectValue}
-Marketing Spend: ${leadData.marketingSpend}
-Lead Score: ${this.calculateLeadScore(leadData)}/100
-Source: WattLeads Funnel
-
-${leadData.utm_source ? `UTM Source: ${leadData.utm_source}` : ''}
-${leadData.utm_medium ? `UTM Medium: ${leadData.utm_medium}` : ''}
-${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`
+        pipelineId: this.config.pipelineId,
+        stageId: this.config.stageId,
+        title: `${leadData.name} - Smart Home Lead Generation`,
+        monetaryValue: 0
       };
 
       const authHeader = this.config.usePrivateIntegration 
         ? `Bearer ${this.config.privateIntegrationKey}`
         : `Bearer ${this.config.apiKey}`;
 
-      console.log('Opportunity creation payload:', opportunityData);
-      console.log('Using endpoint:', `${this.baseUrl}/deals/`);
+      console.log('=== OPPORTUNITY CREATION ===');
+      console.log('Opportunity payload:', JSON.stringify(opportunityData, null, 2));
+      console.log('Opportunities URL:', `${this.baseUrl}/opportunities/`);
 
       const headers: Record<string, string> = {
         'Authorization': authHeader,
         'Content-Type': 'application/json',
         'Version': '2021-07-28'
       };
-
-      // Try the deals endpoint first (most GoHighLevel instances use deals)
-      const dealsPayload = {
-        locationId: this.config.locationId,
-        pipelineId: this.config.pipelineId,
-        contactId: contactId,
-        title: `${leadData.name} - Smart Home Lead Generation`,
-        status: 'open'
-      };
       
-      console.log('=== DEALS ENDPOINT ATTEMPT ===');
-      console.log('Deals payload:', JSON.stringify(dealsPayload, null, 2));
-      console.log('Deals URL:', `${this.baseUrl}/deals/`);
-      console.log('Deals headers:', headers);
+      console.log('Opportunities headers:', headers);
       
-      let response = await fetch(`${this.baseUrl}/deals/`, {
+      const response = await fetch(`${this.baseUrl}/opportunities/`, {
         method: 'POST',
         headers,
-        body: JSON.stringify(dealsPayload)
+        body: JSON.stringify(opportunityData)
       });
-
-      // If deals endpoint fails, try opportunities endpoint as fallback
-      if (!response.ok) {
-        console.log('=== OPPORTUNITIES ENDPOINT ATTEMPT ===');
-        console.log('Deals endpoint failed with status:', response.status);
-        console.log('Opportunities payload:', JSON.stringify(opportunityData, null, 2));
-        console.log('Opportunities URL:', `${this.baseUrl}/opportunities/`);
-        console.log('Opportunities headers:', headers);
-        
-        response = await fetch(`${this.baseUrl}/opportunities/`, {
-          method: 'POST',
-          headers,
-          body: JSON.stringify(opportunityData)
-        });
-      }
 
       console.log('=== OPPORTUNITY CREATION RESPONSE ===');
       console.log('Response status:', response.status);
@@ -392,58 +354,34 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
         'Version': '2021-07-28'
       };
 
-      console.log('📝 Creating opportunity note...');
+      console.log('📝 Creating opportunity note for ID:', opportunityId);
 
-      // Try different note creation approaches with multiple endpoints
-      const notePayloads = [
-        // Standard note payload
-        { body: noteContent },
-        // Alternative with location
-        { body: noteContent, locationId: this.config.locationId },
-        // Simple text format
-        { content: noteContent },
-        { note: noteContent },
-        // Try with title field
-        { title: 'Quiz Results', body: noteContent },
-        // Try with description field
-        { description: noteContent }
-      ];
+      // Simple note payload that works with GoHighLevel v2 API
+      const notePayload = {
+        body: noteContent,
+        userId: 'system'
+      };
 
-      const endpoints = [
-        `/opportunities/${opportunityId}/notes`,
-        `/deals/${opportunityId}/notes`,
-        `/opportunities/${opportunityId}/comments`,
-        `/deals/${opportunityId}/comments`
-      ];
+      console.log('Note payload:', JSON.stringify(notePayload, null, 2));
+      
+      const response = await fetch(`${this.baseUrl}/opportunities/${opportunityId}/notes`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(notePayload)
+      });
 
-      for (const endpoint of endpoints) {
-        for (let i = 0; i < notePayloads.length; i++) {
-          const payload = notePayloads[i];
-          console.log(`📝 Trying ${endpoint} with payload ${i + 1}:`, payload);
-
-          const response = await fetch(`${this.baseUrl}${endpoint}`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(payload)
-          });
-
-          if (response.ok) {
-            const noteResult = await response.json();
-            console.log('✅ Opportunity note created successfully:', noteResult);
-            console.log('✅ Used endpoint:', endpoint);
-            console.log('✅ Used payload:', payload);
-            return;
-          } else {
-            const errorData = await response.json().catch(() => ({}));
-            console.log(`❌ ${endpoint} payload ${i + 1} failed:`, response.status, errorData);
-            console.log(`❌ Full response headers:`, Object.fromEntries(response.headers.entries()));
-            console.log(`❌ Request URL:`, `${this.baseUrl}${endpoint}`);
-            console.log(`❌ Request payload:`, payload);
-          }
-        }
+      if (response.ok) {
+        const noteResult = await response.json();
+        console.log('✅ Opportunity note created successfully:', noteResult);
+        return;
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.log(`❌ Note creation failed:`, response.status, errorData);
+        console.log(`❌ Note URL:`, `${this.baseUrl}/opportunities/${opportunityId}/notes`);
+        console.log(`❌ Note payload:`, notePayload);
       }
 
-      console.warn('💡 All opportunity note attempts failed');
+      console.warn('💡 Opportunity note creation failed, quiz data will be saved to contact notes only');
 
     } catch (error) {
       console.error('❌ Error creating opportunity note:', error);
@@ -478,56 +416,34 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
         'Version': '2021-07-28'
       };
 
-      console.log('📝 Creating contact note...');
+      console.log('📝 Creating contact note for ID:', contactId);
 
-      // Try different note creation approaches with multiple endpoints
-      const notePayloads = [
-        // Standard note payload
-        { body: noteContent },
-        // Alternative with location
-        { body: noteContent, locationId: this.config.locationId },
-        // Simple text format
-        { content: noteContent },
-        { note: noteContent },
-        // Try with title field
-        { title: 'Quiz Results', body: noteContent },
-        // Try with description field
-        { description: noteContent }
-      ];
+      // Simple note payload that works with GoHighLevel v2 API
+      const notePayload = {
+        body: noteContent,
+        userId: 'system'
+      };
 
-      const endpoints = [
-        `/contacts/${contactId}/notes`,
-        `/contacts/${contactId}/comments`
-      ];
+      console.log('Contact note payload:', JSON.stringify(notePayload, null, 2));
+      
+      const response = await fetch(`${this.baseUrl}/contacts/${contactId}/notes`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(notePayload)
+      });
 
-      for (const endpoint of endpoints) {
-        for (let i = 0; i < notePayloads.length; i++) {
-          const payload = notePayloads[i];
-          console.log(`📝 Trying ${endpoint} with payload ${i + 1}:`, payload);
-
-          const response = await fetch(`${this.baseUrl}${endpoint}`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(payload)
-          });
-
-          if (response.ok) {
-            const noteResult = await response.json();
-            console.log('✅ Contact note created successfully:', noteResult);
-            console.log('✅ Used endpoint:', endpoint);
-            console.log('✅ Used payload:', payload);
-            return;
-          } else {
-            const errorData = await response.json().catch(() => ({}));
-            console.log(`❌ ${endpoint} payload ${i + 1} failed:`, response.status, errorData);
-            console.log(`❌ Full response headers:`, Object.fromEntries(response.headers.entries()));
-            console.log(`❌ Request URL:`, `${this.baseUrl}${endpoint}`);
-            console.log(`❌ Request payload:`, payload);
-          }
-        }
+      if (response.ok) {
+        const noteResult = await response.json();
+        console.log('✅ Contact note created successfully:', noteResult);
+        return;
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.log(`❌ Contact note creation failed:`, response.status, errorData);
+        console.log(`❌ Contact note URL:`, `${this.baseUrl}/contacts/${contactId}/notes`);
+        console.log(`❌ Contact note payload:`, notePayload);
       }
 
-      console.warn('💡 All contact note attempts failed');
+      console.warn('💡 Contact note creation failed');
 
     } catch (error) {
       console.error('❌ Error creating contact note:', error);
