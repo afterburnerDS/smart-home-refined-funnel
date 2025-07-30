@@ -34,7 +34,7 @@ class GoHighLevelService {
     this.config = config;
     // Use proxy in development and production to avoid CORS issues
     // The proxy will forward to services.leadconnectorhq.com (v2 API for Private Integrations)
-    this.baseUrl = '/api/ghl';
+    this.baseUrl = '/api/ghl-proxy?path=';
     console.log('GoHighLevel Service initialized with config:', {
       usePrivateIntegration: config.usePrivateIntegration,
       hasPrivateKey: !!config.privateIntegrationKey,
@@ -96,7 +96,7 @@ class GoHighLevelService {
         'Version': '2021-07-28'
       };
 
-      const response = await fetch(`${this.baseUrl}/contacts/`, {
+      const response = await fetch(`${this.baseUrl}contacts`, {
         method: 'POST',
         headers,
         body: JSON.stringify(payload)
@@ -188,7 +188,7 @@ class GoHighLevelService {
         'Version': '2021-07-28'
       };
 
-      const response = await fetch(`${this.baseUrl}/contacts/`, {
+      const response = await fetch(`${this.baseUrl}contacts`, {
         method: 'POST',
         headers,
         body: JSON.stringify(contactData)
@@ -272,7 +272,7 @@ class GoHighLevelService {
 
       console.log('=== OPPORTUNITY CREATION ===');
       console.log('Opportunity payload:', JSON.stringify(opportunityData, null, 2));
-      console.log('Opportunities URL:', `${this.baseUrl}/opportunities/`);
+      console.log('Opportunities URL:', `${this.baseUrl}opportunities`);
 
       const headers: Record<string, string> = {
         'Authorization': authHeader,
@@ -282,7 +282,7 @@ class GoHighLevelService {
       
       console.log('Opportunities headers:', headers);
       
-      const response = await fetch(`${this.baseUrl}/opportunities/`, {
+      const response = await fetch(`${this.baseUrl}opportunities`, {
         method: 'POST',
         headers,
         body: JSON.stringify(opportunityData)
@@ -367,7 +367,7 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
 
       console.log('Note payload:', JSON.stringify(notePayload, null, 2));
       
-      const response = await fetch(`${this.baseUrl}/opportunities/${opportunityId}/notes`, {
+      const response = await fetch(`${this.baseUrl}opportunities/${opportunityId}/notes`, {
         method: 'POST',
         headers,
         body: JSON.stringify(notePayload)
@@ -380,7 +380,7 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
       } else {
         const errorData = await response.json().catch(() => ({}));
         console.log(`❌ Note creation failed:`, response.status, errorData);
-        console.log(`❌ Note URL:`, `${this.baseUrl}/opportunities/${opportunityId}/notes`);
+        console.log(`❌ Note URL:`, `${this.baseUrl}opportunities/${opportunityId}/notes`);
         console.log(`❌ Note payload:`, notePayload);
       }
 
@@ -429,7 +429,7 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
 
       console.log('Contact note payload:', JSON.stringify(notePayload, null, 2));
       
-      const response = await fetch(`${this.baseUrl}/contacts/${contactId}/notes`, {
+      const response = await fetch(`${this.baseUrl}contacts/${contactId}/notes`, {
         method: 'POST',
         headers,
         body: JSON.stringify(notePayload)
@@ -442,7 +442,7 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
       } else {
         const errorData = await response.json().catch(() => ({}));
         console.log(`❌ Contact note creation failed:`, response.status, errorData);
-        console.log(`❌ Contact note URL:`, `${this.baseUrl}/contacts/${contactId}/notes`);
+        console.log(`❌ Contact note URL:`, `${this.baseUrl}contacts/${contactId}/notes`);
         console.log(`❌ Contact note payload:`, notePayload);
       }
 

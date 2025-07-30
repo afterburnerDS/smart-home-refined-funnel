@@ -1,5 +1,10 @@
 {
   "buildCommand": "npm run build && mv dist/index.html dist/vsl.html",
+  "functions": {
+    "api/ghl-proxy.ts": {
+      "maxDuration": 10
+    }
+  },
   "rewrites": [
     { "source": "/quiz", "destination": "/vsl.html" },
     { "source": "/results", "destination": "/vsl.html" },

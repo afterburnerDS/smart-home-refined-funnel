@@ -22,9 +22,8 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    // Get the path from Vercel's catch-all parameter
-    const { path } = req.query;
-    const targetPath = Array.isArray(path) ? path.join('/') : (path || '');
+    // Get the path from the 'path' query parameter
+    const targetPath = req.query.path || '';
     
     // Construct the target URL - Use the correct GoHighLevel Private Integration API base URL
     const targetUrl = `https://services.leadconnectorhq.com/${targetPath}`;
