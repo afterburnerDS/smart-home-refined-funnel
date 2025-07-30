@@ -10,6 +10,17 @@ export default async function handler(req: any, res: any) {
     return;
   }
 
+  // Parse body for POST/PUT requests if it's a string
+  let parsedBody = req.body;
+  if (req.method !== 'GET' && typeof req.body === 'string') {
+    try {
+      parsedBody = JSON.parse(req.body);
+    } catch (e) {
+      console.error('Failed to parse body as JSON:', e);
+      parsedBody = req.body;
+    }
+  }
+
   try {
     // Get the path from Vercel's catch-all parameter
     const { path } = req.query;
@@ -42,14 +53,23 @@ export default async function handler(req: any, res: any) {
     console.log('Target URL:', targetUrl);
     console.log('Method:', req.method);
     console.log('Headers:', headers);
-    console.log('Body:', req.body);
+    console.log('Original body type:', typeof req.body);
+    console.log('Original body:', req.body);
+    console.log('Parsed body:', parsedBody);
     console.log('==============================');
 
     // Make the request to GoHighLevel
+    console.log('Making fetch request to:', targetUrl);
+    console.log('Fetch options:', {
+      method: req.method,
+      headers,
+      body: req.method !== 'GET' && parsedBody ? JSON.stringify(parsedBody) : undefined
+    });
+    
     const response = await fetch(targetUrl, {
       method: req.method,
       headers,
-      body: req.method !== 'GET' && req.body ? JSON.stringify(req.body) : undefined
+      body: req.method !== 'GET' && parsedBody ? JSON.stringify(parsedBody) : undefined
     });
 
     let responseData;
