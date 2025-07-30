@@ -7,6 +7,7 @@ const QuizResults = () => {
   const [isQualified, setIsQualified] = useState(false);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const hasFired = useRef(false);
+  const [bookingUrl, setBookingUrl] = useState<string>('');
 
   // Extract personal data from URL parameters
   const userName = searchParams.get('name') || '';
@@ -25,42 +26,33 @@ const QuizResults = () => {
     
 
     
-    // Use ONLY the parameters that work in the direct test
+    // Try different parameter name variations for GoHighLevel
     if (firstName) {
       params.append('first_name', firstName);
+      params.append('fname', firstName);
     }
     if (lastName) {
       params.append('last_name', lastName);
+      params.append('lname', lastName);
     }
     if (email) {
       params.append('email', email);
     }
     if (phone) {
-      params.append('phone', phone);
+      // Test ONE phone parameter at a time to find what works
+      params.append('phone', phone);  // Start with the most basic
     }
     
-    // Add the full name as well
+    // Keep it minimal - only add name if needed
     if (userName) {
       params.append('name', userName);
-      params.append('full_name', userName);
-      params.append('contact_name', userName);
-      params.append('fullName', userName);
     }
     
-    // Add quiz data as additional info
-    const services = searchParams.get('services') || '';
-    const monthlyProjects = searchParams.get('monthlyProjects') || '';
-    const avgProjectValue = searchParams.get('avgProjectValue') || '';
+    // Try both query params and hash params
+    const queryUrl = params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl;
     
-    if (services || monthlyProjects || avgProjectValue) {
-      const additionalInfo = `Quiz Results: Services: ${services.replace(/,/g, ', ')}, Monthly Projects: ${monthlyProjects}, Avg Project Value: ${avgProjectValue}`;
-      params.append('additional_info', additionalInfo);
-      params.append('notes', additionalInfo);
-      params.append('message', additionalInfo);
-      params.append('comments', additionalInfo);
-    }
-    
-    const finalUrl = params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl;
+    // Skip hash parameters for now, keep it simple
+    const finalUrl = queryUrl;
     
 
     
@@ -78,6 +70,12 @@ const QuizResults = () => {
     const qualifies = (avgProjectValue === '$25k-$50k' || avgProjectValue === '$50k+') && 
                      (marketingSpend === '$2k-$5k' || marketingSpend === '$5k-$10k' || marketingSpend === '$10k+');
     setIsQualified(qualifies);
+
+    // Set booking URL after we have all the data
+    if (phone || email || userName) {
+      const url = createBookingUrl();
+      setBookingUrl(url);
+    }
 
     // Track Lead event only once when user lands on results page
     if (!hasFired.current && typeof window !== 'undefined' && (window as any).fbq) {
@@ -180,20 +178,45 @@ const QuizResults = () => {
             </h3>
             {/* GoHighLevel Booking Widget */}
             <div className="min-h-[600px] w-full">
-              <iframe
-                src={createBookingUrl()}
-                width="100%"
-                height="600"
-                frameBorder="0"
-                title="Schedule a meeting"
-                className="rounded-lg w-full"
-                style={{ minHeight: '600px' }}
-              />
+              {bookingUrl ? (
+                <iframe
+                  key={`booking-${phone}-${email}-${firstName}-${lastName}`} // Force remount when data changes
+                  src={bookingUrl}
+                  width="100%"
+                  height="600"
+                  frameBorder="0"
+                  title="Schedule a meeting"
+                  className="rounded-lg w-full"
+                  style={{ minHeight: '600px' }}
+                  onLoad={() => {
+                    // Iframe loaded successfully
+                  }}
+                />
+              ) : (
+                <div className="flex items-center justify-center h-[600px] bg-gray-100 rounded-lg">
+                  <div className="text-gray-500">Loading booking calendar...</div>
+                </div>
+              )}
             </div>
           </div>
           
           {/* Help Text */}
-          <div className="text-center mt-4">
+          <div className="text-center mt-4 space-y-3">
+            {phone && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <p className="text-sm text-blue-800 mb-2">
+                  💡 <strong>Tip:</strong> For fastest booking with phone pre-filled
+                </p>
+                <a 
+                  href={bookingUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors"
+                >
+                  📅 Open Calendar in New Tab
+                </a>
+              </div>
+            )}
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
               <Mail className="w-4 h-4" />
               <span>Need another time? Email info@wattleads.com</span>
