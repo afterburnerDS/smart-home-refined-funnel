@@ -133,7 +133,6 @@ class GoHighLevelService {
           console.log('✅ Opportunity creation completed');
           
           // Update contact with custom fields (for GHL automations)
-          console.log('🔧 About to update custom fields for contactId:', contactId);
           await this.updateContactCustomFields(contactId, leadData);
           console.log('✅ Custom fields update completed');
 
@@ -442,25 +441,24 @@ ${leadData.fbclid ? `Facebook Click ID: ${leadData.fbclid}` : ''}`;
     try {
       console.log('🔧 Updating contact custom fields...');
       
-      // Use lowercase field names matching the GoHighLevel placeholders
-      const customFields = [
-        {
-          key: "c_ad_id",
-          field_value: leadData.ad_id || ''
-        },
-        {
-          key: "c_adset_id", 
-          field_value: leadData.adset_id || ''
-        },
-        {
-          key: "c_campaign_id",
-          field_value: leadData.campaign_id || ''
-        },
-        {
-          key: "c_fbclid",
-          field_value: leadData.fbclid || ''
-        }
-      ];
+      const customFields = {
+        c_services: leadData.services.join(', '),
+        c_monthly_projects: leadData.monthlyProjects,
+        c_avg_project_value: leadData.avgProjectValue,
+        c_marketing_spend: leadData.marketingSpend,
+        c_source: leadData.source || 'WattLeads Funnel',
+        c_utm_source: leadData.utm_source || '',
+        c_utm_medium: leadData.utm_medium || '',
+        c_utm_campaign: leadData.utm_campaign || '',
+        // Facebook Ad Tracking
+        c_ad_id: leadData.ad_id || '',
+        c_adset_id: leadData.adset_id || '',
+        c_campaign_id: leadData.campaign_id || '',
+        c_fbclid: leadData.fbclid || '',
+        c_lead_qualification: this.calculateLeadScore(leadData),
+        c_company_type: 'Smart Home / Electrical',
+        c_funnel_stage: 'Quiz Completed'
+      };
 
       console.log('📋 Custom fields to update:', customFields);
 
@@ -475,24 +473,16 @@ ${leadData.fbclid ? `Facebook Click ID: ${leadData.fbclid}` : ''}`;
       const response = await fetch(url, {
         method: 'PUT',
         headers,
-        body: JSON.stringify({ customFields: customFields })
+        body: JSON.stringify({ customField: customFields })
       });
 
-      console.log('🌐 Custom fields API URL:', url);
-      console.log('📤 Custom fields payload sent:', JSON.stringify({ customFields: customFields }, null, 2));
-      console.log('🔑 Authorization header:', authHeader.substring(0, 20) + '...');
-      console.log('📋 Custom fields update response status:', response.status);
+      console.log('Custom fields update response status:', response.status);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error('❌ Custom fields update failed:', response.status);
-        console.error('❌ Full error response:', JSON.stringify(errorData, null, 2));
-        console.error('❌ Response headers:', Object.fromEntries(response.headers.entries()));
+        console.error('❌ Custom fields update failed:', response.status, errorData);
       } else {
-        const successData = await response.json().catch(() => ({}));
         console.log('✅ Custom fields updated successfully');
-        console.log('✅ Success response:', JSON.stringify(successData, null, 2));
-        console.log('🎯 Contact should now have these custom fields populated in GoHighLevel');
       }
 
     } catch (error) {
