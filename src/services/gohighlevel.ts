@@ -581,7 +581,7 @@ ${leadData.fbclid ? `Facebook Click ID: ${leadData.fbclid}` : ''}`;
     if (typeof window === 'undefined') return {};
     
     const urlParams = new URLSearchParams(window.location.search);
-    return {
+    const params = {
       utm_source: urlParams.get('utm_source') || undefined,
       utm_medium: urlParams.get('utm_medium') || undefined,
       utm_campaign: urlParams.get('utm_campaign') || undefined,
@@ -591,6 +591,11 @@ ${leadData.fbclid ? `Facebook Click ID: ${leadData.fbclid}` : ''}`;
       campaign_id: urlParams.get('campaign_id') || undefined,
       fbclid: urlParams.get('fbclid') || undefined
     };
+    
+    console.log('🔍 URL Parameters captured:', params);
+    console.log('📍 Current URL:', window.location.href);
+    
+    return params;
   }
 }
 
