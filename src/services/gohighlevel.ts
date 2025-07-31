@@ -11,6 +11,11 @@ interface LeadData {
   utm_source?: string;
   utm_medium?: string;
   utm_campaign?: string;
+  // Facebook Ad Tracking Parameters
+  ad_id?: string;
+  adset_id?: string;
+  campaign_id?: string;
+  fbclid?: string;
 }
 
 interface GoHighLevelConfig {
@@ -177,6 +182,11 @@ class GoHighLevelService {
           c_utm_source: leadData.utm_source || '',
           c_utm_medium: leadData.utm_medium || '',
           c_utm_campaign: leadData.utm_campaign || '',
+          // Facebook Ad Tracking
+          c_ad_id: leadData.ad_id || '',
+          c_adset_id: leadData.adset_id || '',
+          c_campaign_id: leadData.campaign_id || '',
+          c_fbclid: leadData.fbclid || '',
           c_lead_qualification: this.calculateLeadScore(leadData),
           c_company_type: 'Smart Home / Electrical',
           c_funnel_stage: 'Quiz Completed'
@@ -353,7 +363,13 @@ Source: WattLeads Funnel
 
 ${leadData.utm_source ? `UTM Source: ${leadData.utm_source}` : ''}
 ${leadData.utm_medium ? `UTM Medium: ${leadData.utm_medium}` : ''}
-${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
+${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}
+
+📱 FACEBOOK AD TRACKING:
+${leadData.ad_id ? `Ad ID: ${leadData.ad_id}` : ''}
+${leadData.adset_id ? `AdSet ID: ${leadData.adset_id}` : ''}
+${leadData.campaign_id ? `Campaign ID: ${leadData.campaign_id}` : ''}
+${leadData.fbclid ? `Facebook Click ID: ${leadData.fbclid}` : ''}`;
 
       const authHeader = this.config.usePrivateIntegration 
         ? `Bearer ${this.config.privateIntegrationKey}`
@@ -416,7 +432,13 @@ Source: WattLeads Funnel
 
 ${leadData.utm_source ? `UTM Source: ${leadData.utm_source}` : ''}
 ${leadData.utm_medium ? `UTM Medium: ${leadData.utm_medium}` : ''}
-${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
+${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}
+
+📱 FACEBOOK AD TRACKING:
+${leadData.ad_id ? `Ad ID: ${leadData.ad_id}` : ''}
+${leadData.adset_id ? `AdSet ID: ${leadData.adset_id}` : ''}
+${leadData.campaign_id ? `Campaign ID: ${leadData.campaign_id}` : ''}
+${leadData.fbclid ? `Facebook Click ID: ${leadData.fbclid}` : ''}`;
 
       const authHeader = this.config.usePrivateIntegration 
         ? `Bearer ${this.config.privateIntegrationKey}`
@@ -529,14 +551,27 @@ ${leadData.utm_campaign ? `UTM Campaign: ${leadData.utm_campaign}` : ''}`;
     return parts.length > 1 ? parts.slice(1).join(' ') : '';
   }
 
-  getUTMParams(): { utm_source?: string; utm_medium?: string; utm_campaign?: string } {
+  getUTMParams(): { 
+    utm_source?: string; 
+    utm_medium?: string; 
+    utm_campaign?: string;
+    ad_id?: string;
+    adset_id?: string;
+    campaign_id?: string;
+    fbclid?: string;
+  } {
     if (typeof window === 'undefined') return {};
     
     const urlParams = new URLSearchParams(window.location.search);
     return {
       utm_source: urlParams.get('utm_source') || undefined,
       utm_medium: urlParams.get('utm_medium') || undefined,
-      utm_campaign: urlParams.get('utm_campaign') || undefined
+      utm_campaign: urlParams.get('utm_campaign') || undefined,
+      // Facebook Ad Tracking Parameters
+      ad_id: urlParams.get('ad_id') || undefined,
+      adset_id: urlParams.get('adset_id') || undefined,
+      campaign_id: urlParams.get('campaign_id') || undefined,
+      fbclid: urlParams.get('fbclid') || undefined
     };
   }
 }
