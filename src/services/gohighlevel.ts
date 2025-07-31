@@ -92,24 +92,6 @@ class GoHighLevelService {
         firstName: this.getFirstName(leadData.name),
         lastName: this.getLastName(leadData.name),
         phone: formattedPhone,
-        customField: {
-          c_services: leadData.services.join(', '),
-          c_monthly_projects: leadData.monthlyProjects,
-          c_avg_project_value: leadData.avgProjectValue,
-          c_marketing_spend: leadData.marketingSpend,
-          c_source: leadData.source || 'WattLeads Funnel',
-          c_utm_source: leadData.utm_source || '',
-          c_utm_medium: leadData.utm_medium || '',
-          c_utm_campaign: leadData.utm_campaign || '',
-          // Facebook Ad Tracking
-          c_ad_id: leadData.ad_id || '',
-          c_adset_id: leadData.adset_id || '',
-          c_campaign_id: leadData.campaign_id || '',
-          c_fbclid: leadData.fbclid || '',
-          c_lead_qualification: this.calculateLeadScore(leadData),
-          c_company_type: 'Smart Home / Electrical',
-          c_funnel_stage: 'Quiz Completed'
-        },
         locationId: this.config.locationId,
         source: 'WattLeads Funnel',
         tags: ['Smart Home Lead', 'Quiz Completed', 'WattLeads']
