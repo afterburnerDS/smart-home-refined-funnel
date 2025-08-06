@@ -26,6 +26,7 @@ const Quiz = () => {
     email: "",
     phone: ""
   });
+  const [showAdvanceMessage, setShowAdvanceMessage] = useState(false);
 
   const questions = [
     {
@@ -62,23 +63,36 @@ const Quiz = () => {
   ];
 
   const handleOptionSelect = (questionId: number, option: string) => {
+    console.log(`🎯 Option selected: Question ${questionId}, Option: ${option}`);
+    
     // Update quiz data based on question
     if (questionId === 1) {
       setQuizData({ ...quizData, services: [option] }); // Single select for services
+      console.log(`📝 Updated services to: [${option}]`);
     } else if (questionId === 2) {
       setQuizData({ ...quizData, monthlyProjects: option });
+      console.log(`📝 Updated monthlyProjects to: ${option}`);
     } else if (questionId === 3) {
       setQuizData({ ...quizData, avgProjectValue: option });
+      console.log(`📝 Updated avgProjectValue to: ${option}`);
     } else if (questionId === 4) {
       setQuizData({ ...quizData, marketingSpend: option });
+      console.log(`📝 Updated marketingSpend to: ${option}`);
     }
 
-    // Automatically advance to next question after a short delay
+    // Show advance message and immediately advance to next question
+    setShowAdvanceMessage(true);
+    console.log(`🚀 Immediately advancing from question ${questionId} to ${questionId + 1}`);
+    
     setTimeout(() => {
       if (questionId < 4) {
         setCurrentQuestion(questionId + 1);
+        setShowAdvanceMessage(false);
+      } else {
+        console.log(`✅ Last question reached, no auto-advance needed`);
+        setShowAdvanceMessage(false);
       }
-    }, 300); // 300ms delay for visual feedback
+    }, 500);
   };
 
   const handleInputChange = (field: keyof QuizData, value: string) => {
@@ -172,6 +186,12 @@ const Quiz = () => {
               </div>
 
               <div className="space-y-4 mb-8">
+                {showAdvanceMessage && (
+                  <div className="text-center p-4 bg-green-100 border border-green-300 rounded-lg text-green-700 font-medium">
+                    🚀 Advancing to next question...
+                  </div>
+                )}
+                
                 {currentQ.options.map((option, index) => {
                   const isSelected = currentQuestion === 1 
                     ? quizData.services.includes(option)
@@ -258,6 +278,11 @@ const Quiz = () => {
               <ArrowLeft className="w-4 h-4" />
               Back
             </button>
+
+            {/* Debug info */}
+            <div className="text-xs text-gray-500">
+              Current Question: {currentQuestion} | Should show Next: {currentQuestion === 5 ? 'YES' : 'NO'}
+            </div>
 
             {currentQuestion === 5 && (
               <button

@@ -79,17 +79,20 @@ const VSLLanding = () => {
   };
 
   const handleOptionSelect = (questionId: number, option: string) => {
+    // Update quiz data based on question
     if (questionId === 1) {
-      const newServices = quizData.services.includes(option)
-        ? quizData.services.filter(s => s !== option)
-        : [...quizData.services, option];
-      setQuizData({ ...quizData, services: newServices });
+      setQuizData({ ...quizData, services: [option] }); // Single select for services
     } else if (questionId === 2) {
       setQuizData({ ...quizData, monthlyProjects: option });
     } else if (questionId === 3) {
       setQuizData({ ...quizData, avgProjectValue: option });
     } else if (questionId === 4) {
       setQuizData({ ...quizData, marketingSpend: option });
+    }
+
+    // Automatically advance to next question
+    if (questionId < 5) {
+      setCurrentQuestion(questionId + 1);
     }
   };
 
@@ -217,35 +220,41 @@ const VSLLanding = () => {
           </div>
         </div>
 
-        {/* Stars Rating */}
-        <div className="fade-up text-center mb-6 md:mb-8">
-          <div className="flex items-center justify-center gap-1 mb-2">
+        {/* 1. Trust Indicators */}
+        <div className="fade-up text-center mb-4 md:mb-6">
+          <div className="flex justify-center items-center gap-1 mb-2">
             <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
             <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
             <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
             <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
             <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
           </div>
-          <p className="text-white text-sm md:text-base font-medium">
+          <p className="text-white text-sm md:text-base font-medium mb-2">
             Rated 4.8/5 by 100+ Clients
+          </p>
+          <p className="text-white text-lg md:text-2xl opacity-80">
+            <span className="text-red-500">! US Electrical and Smart Home Companies !</span>
           </p>
         </div>
 
         {/* 2. Main Headline */}
         <div className="fade-up text-center mb-4 md:mb-8">
           <h2 className="text-2xl md:text-5xl font-heading font-bold text-white text-center">
-            <span className="text-red-500">US Electrical and Smart Home Companies</span>
+            <span className="text-red-500">Tired of Paying for Leads That Can't Afford Your High End Installations?</span>
           </h2>
         </div>
 
         {/* 3. Subheadline */}
         <div className="fade-up text-center mb-6 md:mb-12">
-          <h3 className="text-lg md:text-3xl font-heading font-bold mb-3 md:mb-6 text-white">
-            <span className="text-primary">Get 45 Pre-Qualified Leads in 90 Days or Don't Pay!</span>
-          </h3>
-          
-          <p className="text-base md:text-2xl text-white">
+          <p className="text-lg md:text-3xl text-white">
             Start with a 30-day test drive today and start receiving <span className="font-semibold text-primary">pre-qualified, high income leads</span> within 72 hours...
+          </p>
+        </div>
+
+        {/* Video instruction */}
+        <div className="fade-up text-center mb-4">
+          <p className="text-white text-lg md:text-xl font-medium">
+            Watch the video to see how it works
           </p>
         </div>
 
@@ -573,18 +582,20 @@ const VSLLanding = () => {
                   Back
                 </button>
 
-                <button
-                  onClick={handleNext}
-                  disabled={!canProceed()}
-                  className={`inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold transition-all duration-300 ${
-                    canProceed()
-                      ? 'btn-red'
-                      : 'bg-muted text-muted-foreground cursor-not-allowed'
-                  }`}
-                >
-                  {currentQuestion === 5 ? 'Get My Results' : 'Next'}
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+                {currentQuestion === 5 && (
+                  <button
+                    onClick={handleNext}
+                    disabled={!canProceed()}
+                    className={`inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold transition-all duration-300 ${
+                      canProceed()
+                        ? 'btn-red'
+                        : 'bg-muted text-muted-foreground cursor-not-allowed'
+                    }`}
+                  >
+                    Get My Results
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             </div>
           </div>
