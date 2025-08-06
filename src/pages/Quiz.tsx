@@ -2,7 +2,7 @@ import goHighLevelService from "../services/gohighlevel";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProgressBar } from "@/components/ProgressBar";
-import { ArrowRight, ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft, Check } from "lucide-react";
 
 interface QuizData {
   services: string[];
@@ -31,8 +31,8 @@ const Quiz = () => {
     {
       id: 1,
       title: "What type of smart home company are you?",
-      subtitle: "Select all that apply",
-      type: "multiselect",
+      subtitle: "Select the option that best describes your business",
+      type: "single",
       options: [
         "Whole-Home Automation & Voice Control",
         "Lighting & Shading Scenes", 
@@ -62,11 +62,9 @@ const Quiz = () => {
   ];
 
   const handleOptionSelect = (questionId: number, option: string) => {
+    // Update quiz data based on question
     if (questionId === 1) {
-      const newServices = quizData.services.includes(option)
-        ? quizData.services.filter(s => s !== option)
-        : [...quizData.services, option];
-      setQuizData({ ...quizData, services: newServices });
+      setQuizData({ ...quizData, services: [option] }); // Single select for services
     } else if (questionId === 2) {
       setQuizData({ ...quizData, monthlyProjects: option });
     } else if (questionId === 3) {
@@ -74,6 +72,13 @@ const Quiz = () => {
     } else if (questionId === 4) {
       setQuizData({ ...quizData, marketingSpend: option });
     }
+
+    // Automatically advance to next question after a short delay
+    setTimeout(() => {
+      if (questionId < 4) {
+        setCurrentQuestion(questionId + 1);
+      }
+    }, 300); // 300ms delay for visual feedback
   };
 
   const handleInputChange = (field: keyof QuizData, value: string) => {
@@ -81,18 +86,12 @@ const Quiz = () => {
   };
 
   const canProceed = () => {
-    if (currentQuestion === 1) return quizData.services.length > 0;
-    if (currentQuestion === 2) return quizData.monthlyProjects !== "";
-    if (currentQuestion === 3) return quizData.avgProjectValue !== "";
-    if (currentQuestion === 4) return quizData.marketingSpend !== "";
     if (currentQuestion === 5) return quizData.name && quizData.email && quizData.phone;
     return false;
   };
 
   const handleNext = async () => {
-    if (currentQuestion < 5) {
-      setCurrentQuestion(currentQuestion + 1);
-    } else {
+    if (currentQuestion === 5) {
       // Submit to GoHighLevel CRM
       try {
         const utmParams = goHighLevelService.getUTMParams();
@@ -260,18 +259,19 @@ const Quiz = () => {
               Back
             </button>
 
-            <button
-              onClick={handleNext}
-              disabled={!canProceed()}
-              className={`inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold transition-all duration-300 ${
-                canProceed()
-                  ? 'btn-red'
-                  : 'bg-muted text-muted-foreground cursor-not-allowed'
-              }`}
-            >
-              {currentQuestion === 5 ? 'Get My Results' : 'Next'}
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            {currentQuestion === 5 && (
+              <button
+                onClick={handleNext}
+                disabled={!canProceed()}
+                className={`inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold transition-all duration-300 ${
+                  canProceed()
+                    ? 'btn-red'
+                    : 'bg-muted text-muted-foreground cursor-not-allowed'
+                }`}
+              >
+                Get My Results
+              </button>
+            )}
           </div>
         </div>
       </div>
