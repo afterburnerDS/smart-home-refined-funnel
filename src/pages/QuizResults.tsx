@@ -150,7 +150,7 @@ const QuizResults = () => {
           </div>
 
           <h1 className="text-3xl md:text-4xl font-heading font-semibold mb-4 text-rich-black">
-            Excellent, {userName}!
+            Schedule Your Consultation, {userName}
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-4">
             {isQualified 
