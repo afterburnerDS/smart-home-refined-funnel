@@ -150,12 +150,12 @@ const QuizResults = () => {
           </div>
 
           <h1 className="text-3xl md:text-4xl font-heading font-semibold mb-4 text-rich-black">
-            Great News, {userName}!
+            Excellent, {userName}!
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-4">
             {isQualified 
               ? "Your company is perfect for our premium lead generation system. Let's get you set up with qualified $25k+ prospects immediately."
-              : "We can definitely help grow your smart home business. Here's what our lead generation system can do for your company."
+              : ""
             }
           </p>
         </div>
@@ -165,10 +165,10 @@ const QuizResults = () => {
       <div className="w-full py-8 px-8 bg-white">
         <div className="text-center mb-8">
           <h2 className="text-2xl md:text-3xl font-heading font-semibold mb-4 text-rich-black">
-            Book Your Free Strategy Call
+            Schedule Your Consultation
           </h2>
           <p className="text-base md:text-lg text-muted-foreground">
-            Get a custom lead generation blueprint designed specifically for your smart home company.
+            Let's discuss how we can scale your smart home business with qualified leads.
           </p>
         </div>
         
