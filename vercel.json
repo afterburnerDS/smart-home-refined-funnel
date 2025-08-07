@@ -18,7 +18,6 @@
     { "source": "/vsl/booking", "destination": "/vsl.html" },
     { "source": "/vsl/confirmation", "destination": "/vsl.html" },
     { "source": "/vsl/privacy-policy", "destination": "/vsl.html" },
-    { "source": "/vsl/terms-conditions", "destination": "/vsl.html" },
-    { "source": "/", "destination": "https://humble-posterity-757556.framer.app/" }
+    { "source": "/vsl/terms-conditions", "destination": "/vsl.html" }
   ]
 }
