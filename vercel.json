@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build && mv dist/index.html dist/vsl.html",
+  "buildCommand": "npm run build && mv dist/index.html dist/vsl.html && echo 'Build timestamp: $(date)' > dist/build-info.txt",
   "functions": {
     "api/ghl-proxy.ts": {
       "maxDuration": 10
