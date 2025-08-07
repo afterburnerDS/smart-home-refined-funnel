@@ -264,7 +264,7 @@ const VSLLanding = () => {
             <div
               className="aspect-video w-full h-full"
               dangerouslySetInnerHTML={{
-                __html: `<wistia-player media-id="jejvjuy9v9" aspect="1.7777777777777777" style="display: block; width: 100%; height: 100%"></wistia-player>`
+                __html: `<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/lrllcsxo0v.js" async type="module"></script><style>wistia-player[media-id='lrllcsxo0v']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/lrllcsxo0v/swatch'); display: block; filter: blur(5px); padding-top:56.25%; }</style> <wistia-player media-id="lrllcsxo0v" aspect="1.7777777777777777"></wistia-player>`
               }}
             />
           </div>
