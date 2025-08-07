@@ -163,6 +163,17 @@ const QuizResults = () => {
 
       {/* Calendar Booking Section - Compact Above the Fold */}
       <div className="w-full py-8 px-8 bg-white">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl md:text-3xl font-heading font-semibold mb-4 text-rich-black">
+            Book Your Free Strategy Call
+          </h2>
+          <p className="text-base md:text-lg text-muted-foreground">
+            Get a custom lead generation blueprint designed specifically for your smart home company.
+          </p>
+        </div>
+        
+
+
         {/* Calendar Embed - Compact */}
         <div className="mb-8">
           <div className="bg-white rounded-xl shadow-lg p-4">
