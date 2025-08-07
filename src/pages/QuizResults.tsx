@@ -164,9 +164,6 @@ const QuizResults = () => {
       {/* Calendar Booking Section - Compact Above the Fold */}
       <div className="w-full py-8 px-8 bg-white">
         <div className="text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-heading font-semibold mb-4 text-rich-black">
-            Schedule Your Consultation
-          </h2>
           <p className="text-base md:text-lg text-muted-foreground">
             Let's discuss how we can scale your smart home business with qualified leads.
           </p>
