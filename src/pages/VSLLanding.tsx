@@ -240,7 +240,7 @@ const VSLLanding = () => {
         {/* 2. Main Headline */}
         <div className="fade-up text-center mb-4 md:mb-8">
           <h2 className="text-2xl md:text-5xl font-heading font-bold text-white text-center">
-            <span className="text-red-500">Tired of Paying for Leads That Can't Afford Your High End Installations?</span>
+            <span className="text-red-500">Tired of Paying for Leads That Can't Afford Your High End Installations?</span> {/* Updated headline */}
           </h2>
         </div>
 
