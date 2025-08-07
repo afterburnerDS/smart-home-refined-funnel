@@ -204,33 +204,6 @@ const QuizResults = () => {
               )}
             </div>
           </div>
-          
-                  {/* Help Text */}
-        <div className="text-center mt-4 space-y-3">
-          {phone && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="font-bold text-blue-800 mb-2">📋 Quick Setup</h4>
-              <p className="text-sm text-blue-700 mb-3">
-                Your <strong>name and email are pre-filled</strong> above. For fastest booking:
-              </p>
-              <div className="space-y-2">
-                <div className="flex items-center justify-center gap-2">
-                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
-                    📞 Your Phone: {phone}
-                  </span>
-                </div>
-                <p className="text-xs text-blue-600">
-                  Just enter this number in the phone field above to complete your booking
-                </p>
-              </div>
-            </div>
-          )}
-          
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Mail className="w-4 h-4" />
-            <span>Need another time? Email info@wattleads.com</span>
-          </div>
-        </div>
         </div>
       </div>
     </div>
