@@ -34,9 +34,11 @@ export default async function handler(req: any, res: any) {
       'Version': '2021-07-28'
     };
 
-    // Add authorization header if present, otherwise use env var (server-side secret)
-    if (req.headers.authorization) {
-      headers['Authorization'] = req.headers.authorization;
+    // Add authorization header if present AND valid, otherwise use env var (server-side secret)
+    const incomingAuth = (req.headers.authorization || '').toString();
+    const looksInvalid = !incomingAuth || incomingAuth.includes('undefined') || incomingAuth.includes('null') || /^Bearer\s*$/i.test(incomingAuth);
+    if (incomingAuth && !looksInvalid) {
+      headers['Authorization'] = incomingAuth;
     } else {
       const envToken = process.env.GHL_PRIVATE_INTEGRATION_KEY || process.env.GHL_API_KEY;
       if (envToken) {
@@ -50,6 +52,11 @@ export default async function handler(req: any, res: any) {
         });
         return;
       }
+    }
+
+    // If locationId missing from body, inject server value to satisfy GHL requirement
+    if (parsedBody && typeof parsedBody === 'object' && !parsedBody.locationId && process.env.GHL_LOCATION_ID) {
+      parsedBody.locationId = process.env.GHL_LOCATION_ID;
     }
 
     // Add any other GoHighLevel specific headers for v2 API
