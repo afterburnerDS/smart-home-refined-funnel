@@ -34,6 +34,11 @@ interface GoHighLevelConfig {
 class GoHighLevelService {
   private config: GoHighLevelConfig;
   private baseUrl: string;
+  
+  private getAuthHeader(): string {
+    const token = this.config.apiKey || this.config.privateIntegrationKey || '';
+    return `Bearer ${token}`;
+  }
 
   constructor(config: GoHighLevelConfig) {
     this.config = config;
@@ -252,9 +257,7 @@ class GoHighLevelService {
         monetaryValue: 0
       };
 
-      const authHeader = this.config.usePrivateIntegration 
-        ? `Bearer ${this.config.privateIntegrationKey}`
-        : `Bearer ${this.config.apiKey}`;
+      const authHeader = this.getAuthHeader();
 
       console.log('=== OPPORTUNITY CREATION ===');
       console.log('Opportunity payload:', JSON.stringify(opportunityData, null, 2));
@@ -325,9 +328,7 @@ ${leadData.adset_id ? `AdSet ID: ${leadData.adset_id}` : ''}
 ${leadData.campaign_id ? `Campaign ID: ${leadData.campaign_id}` : ''}
 ${leadData.fbclid ? `Facebook Click ID: ${leadData.fbclid}` : ''}`;
 
-      const authHeader = this.config.usePrivateIntegration 
-        ? `Bearer ${this.config.privateIntegrationKey}`
-        : `Bearer ${this.config.apiKey}`;
+      const authHeader = this.getAuthHeader();
 
       const notePayload = {
         body: noteContent,
@@ -383,9 +384,7 @@ ${leadData.adset_id ? `AdSet ID: ${leadData.adset_id}` : ''}
 ${leadData.campaign_id ? `Campaign ID: ${leadData.campaign_id}` : ''}
 ${leadData.fbclid ? `Facebook Click ID: ${leadData.fbclid}` : ''}`;
 
-      const authHeader = this.config.usePrivateIntegration 
-        ? `Bearer ${this.config.privateIntegrationKey}`
-        : `Bearer ${this.config.apiKey}`;
+      const authHeader = this.getAuthHeader();
 
       const notePayload = {
         body: noteContent,
