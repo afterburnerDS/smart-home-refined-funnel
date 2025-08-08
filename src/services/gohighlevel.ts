@@ -466,7 +466,8 @@ ${leadData.fbclid ? `Facebook Click ID: ${leadData.fbclid}` : ''}`;
 
       console.log('📋 Custom fields to update:', customFields);
 
-      const authHeader = `Bearer ${this.config.privateIntegrationKey}`;
+      const token = this.config.privateIntegrationKey || this.config.apiKey || '';
+      const authHeader = `Bearer ${token}`;
       const headers: Record<string, string> = {
         'Authorization': authHeader,
         'Content-Type': 'application/json',

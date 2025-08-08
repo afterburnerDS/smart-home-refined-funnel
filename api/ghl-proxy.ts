@@ -34,9 +34,14 @@ export default async function handler(req: any, res: any) {
       'Version': '2021-07-28'
     };
 
-    // Add authorization header if present
+    // Add authorization header if present, otherwise use env var (server-side secret)
     if (req.headers.authorization) {
       headers['Authorization'] = req.headers.authorization;
+    } else {
+      const envToken = process.env.GHL_PRIVATE_INTEGRATION_KEY || process.env.GHL_API_KEY;
+      if (envToken) {
+        headers['Authorization'] = `Bearer ${envToken}`;
+      }
     }
 
     // Add any other GoHighLevel specific headers for v2 API
