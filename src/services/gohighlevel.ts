@@ -37,14 +37,9 @@ class GoHighLevelService {
 
   constructor(config: GoHighLevelConfig) {
     this.config = config;
-    // Use different approaches for development vs production
-    if (import.meta.env.DEV) {
-      // Use proxy in development  
-      this.baseUrl = '/api/ghl/';
-    } else {
-      // Use direct API in production with CORS headers
-      this.baseUrl = 'https://services.leadconnectorhq.com/';
-    }
+    // Route all requests through our proxy so we never expose tokens client-side
+    // The proxy injects the server-side token and forwards the required Version header
+    this.baseUrl = '/api/ghl?path=';
     console.log('GoHighLevel Service initialized with config:', {
       usePrivateIntegration: config.usePrivateIntegration,
       hasPrivateKey: !!config.privateIntegrationKey,
