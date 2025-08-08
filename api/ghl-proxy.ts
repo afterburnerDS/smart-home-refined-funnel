@@ -41,6 +41,14 @@ export default async function handler(req: any, res: any) {
       const envToken = process.env.GHL_PRIVATE_INTEGRATION_KEY || process.env.GHL_API_KEY;
       if (envToken) {
         headers['Authorization'] = `Bearer ${envToken}`;
+      } else {
+        // Fail early with a clear message instead of forwarding an unauthenticated request
+        res.status(401).json({
+          error: 'Missing server authorization token',
+          hint: 'Set GHL_PRIVATE_INTEGRATION_KEY (preferred) or GHL_API_KEY in Vercel project Environment Variables',
+          targetPath
+        });
+        return;
       }
     }
 
@@ -70,11 +78,18 @@ export default async function handler(req: any, res: any) {
       body: req.method !== 'GET' && parsedBody ? JSON.stringify(parsedBody) : undefined
     });
     
-    const response = await fetch(targetUrl, {
-      method: req.method,
-      headers,
-      body: req.method !== 'GET' && parsedBody ? JSON.stringify(parsedBody) : undefined
-    });
+    let response;
+    try {
+      response = await fetch(targetUrl, {
+        method: req.method,
+        headers,
+        body: req.method !== 'GET' && parsedBody ? JSON.stringify(parsedBody) : undefined
+      });
+    } catch (fetchErr) {
+      console.error('Fetch to GoHighLevel failed:', fetchErr);
+      res.status(502).json({ error: 'Failed to reach GoHighLevel', details: String(fetchErr) });
+      return;
+    }
 
     const responseText = await response.text();
     let responseData;
