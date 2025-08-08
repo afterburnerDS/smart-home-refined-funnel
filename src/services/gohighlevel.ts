@@ -39,7 +39,7 @@ class GoHighLevelService {
     this.config = config;
     // Route all requests through our proxy so we never expose tokens client-side
     // The proxy injects the server-side token and forwards the required Version header
-    this.baseUrl = '/api/ghl?path=';
+    this.baseUrl = '/api/ghl-proxy?path=';
     console.log('GoHighLevel Service initialized with config:', {
       usePrivateIntegration: config.usePrivateIntegration,
       hasPrivateKey: !!config.privateIntegrationKey,
