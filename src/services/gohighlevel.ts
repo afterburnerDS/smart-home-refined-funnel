@@ -70,7 +70,20 @@ class GoHighLevelService {
         return await this.submitViaPrivateIntegration(leadData);
       } else {
         console.log('Using Direct API method');
-        return await this.submitViaDirectAPI(leadData);
+        const directResult = await this.submitViaDirectAPI(leadData);
+        // Fallback: if Direct API fails with auth error and private key exists, retry with Private Integration
+        if (!directResult.success && this.config.privateIntegrationKey) {
+          const errorMessage = directResult.error || '';
+          if (errorMessage.includes('401') || errorMessage.toLowerCase().includes('jwt')) {
+            console.warn('Direct API failed with auth error. Falling back to Private Integration...');
+            try {
+              return await this.submitViaPrivateIntegration(leadData);
+            } catch (fallbackError) {
+              console.error('Fallback to Private Integration also failed:', fallbackError);
+            }
+          }
+        }
+        return directResult;
       }
     } catch (error) {
       console.error('GoHighLevel submission error:', error);
