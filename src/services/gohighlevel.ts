@@ -37,13 +37,9 @@ class GoHighLevelService {
 
   constructor(config: GoHighLevelConfig) {
     this.config = config;
-    // Prefer direct API if a client API key is present; otherwise use the proxy
-    // Direct: https://services.leadconnectorhq.com/
-    // Proxy:  /api/ghl-proxy?path=
-    const hasClientApiKey = !!config.apiKey;
-    this.baseUrl = hasClientApiKey
-      ? 'https://services.leadconnectorhq.com/'
-      : '/api/ghl-proxy?path=';
+    // Always use the official direct API endpoint unless explicitly opting into proxy-based Private Integration
+    // Official base URL per GoHighLevel docs
+    this.baseUrl = 'https://services.leadconnectorhq.com/';
     console.log('GoHighLevel Service initialized with config:', {
       usePrivateIntegration: config.usePrivateIntegration,
       hasPrivateKey: !!config.privateIntegrationKey,
@@ -58,11 +54,8 @@ class GoHighLevelService {
     console.log('Lead data received:', leadData);
     
     try {
-      // Prefer Private Integration when available in production, even if the flag is misconfigured
-      const shouldUsePrivateIntegration = (
-        (this.config.usePrivateIntegration === true) ||
-        (!import.meta.env.DEV && !!this.config.privateIntegrationKey)
-      ) && !!this.config.privateIntegrationKey;
+      // Only use the Private Integration flow if explicitly enabled
+      const shouldUsePrivateIntegration = this.config.usePrivateIntegration === true && !!this.config.privateIntegrationKey;
 
       if (shouldUsePrivateIntegration) {
         console.log('Using Private Integration method');
@@ -70,18 +63,6 @@ class GoHighLevelService {
       } else {
         console.log('Using Direct API method');
         const directResult = await this.submitViaDirectAPI(leadData);
-        // Fallback: if Direct API fails with auth error and private key exists, retry with Private Integration
-        if (!directResult.success && this.config.privateIntegrationKey) {
-          const errorMessage = directResult.error || '';
-          if (errorMessage.includes('401') || errorMessage.toLowerCase().includes('jwt')) {
-            console.warn('Direct API failed with auth error. Falling back to Private Integration...');
-            try {
-              return await this.submitViaPrivateIntegration(leadData);
-            } catch (fallbackError) {
-              console.error('Fallback to Private Integration also failed:', fallbackError);
-            }
-          }
-        }
         return directResult;
       }
     } catch (error) {
@@ -195,8 +176,9 @@ class GoHighLevelService {
 
       console.log('Direct API payload:', contactData);
 
+      const token = this.config.apiKey || this.config.privateIntegrationKey || '';
       const headers: Record<string, string> = {
-        'Authorization': `Bearer ${this.config.apiKey}`,
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
         'Version': '2021-07-28'
       };
