@@ -1,8 +1,8 @@
 import goHighLevelService from "../services/gohighlevel";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Star, ArrowRight, Calendar, Clock, Mail, CheckCircle, Play, ArrowLeft, Check, Badge } from "lucide-react";
-import { ProgressBar } from "@/components/ProgressBar";
+import { ArrowRight, Play, X, CheckCircle } from "lucide-react";
+
 
 interface QuizData {
   name: string;
@@ -12,7 +12,7 @@ interface QuizData {
 
 const VSLLanding = () => {
   const navigate = useNavigate();
-  const [showQuiz, setShowQuiz] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [quizData, setQuizData] = useState<QuizData>({
     name: "",
     email: "",
@@ -20,15 +20,21 @@ const VSLLanding = () => {
   });
 
   const handleStartQuiz = () => {
-    setShowQuiz(true);
-    
-    // Smooth scroll to quiz section
-    setTimeout(() => {
-      const quizElement = document.getElementById('quiz-section');
-      if (quizElement) {
-        quizElement.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 100);
+    setShowPopup(true);
+  };
+
+  const handleImageClick = () => {
+    setShowPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    // Reset form data when closing popup
+    setQuizData({
+      name: "",
+      email: "",
+      phone: ""
+    });
   };
 
   const handleInputChange = (field: keyof QuizData, value: string) => {
@@ -80,6 +86,9 @@ const VSLLanding = () => {
       console.log("Meta Pixel not found on quiz completion");
     }
     
+    // Close popup and redirect to results page
+    setShowPopup(false);
+    
     // Navigate to results page with quiz data
     const params = new URLSearchParams({
       services: "Smart Home Services",
@@ -93,9 +102,7 @@ const VSLLanding = () => {
     navigate(`/results?${params.toString()}`);
   };
 
-  const handleBack = () => {
-    setShowQuiz(false);
-  };
+
 
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
@@ -114,286 +121,84 @@ const VSLLanding = () => {
 
   return (
     <div className="min-h-screen bg-rich-black">
-      {/* Progress Bar - only show during quiz */}
-      {showQuiz && (
-        <ProgressBar 
-          currentStep={1} 
-          totalSteps={1} 
-          stepLabel="Contact Info"
-        />
-      )}
+
       
       <div className="container mx-auto px-4 max-w-4xl py-8 md:py-20">
         {/* 1. WattLeads Logo */}
-        <div className="fade-up text-center mb-3 md:mb-6">
+        <div className="text-center mb-6 md:mb-8">
           <div className="inline-block">
-            <h1 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
+            <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
               WattLeads
             </h1>
           </div>
         </div>
 
-        {/* 1. Trust Indicators */}
-        <div className="fade-up text-center mb-4 md:mb-6">
-          <div className="flex justify-center items-center gap-1 mb-2">
-            <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
-            <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
-            <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
-            <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
-            <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
-          </div>
-          <p className="text-white text-sm md:text-base font-medium mb-2">
-            Rated 4.8/5 by 100+ Clients
-          </p>
-          <p className="text-white text-lg md:text-2xl opacity-80">
-            <span className="text-red-500">! US Electrical and Smart Home Companies !</span>
+        {/* Call out - Below logo */}
+        <div className="text-center mb-6 md:mb-8">
+          <p className="text-lg md:text-2xl text-red-500 font-bold">
+            ! US Electrical and Smart Home Companies !
           </p>
         </div>
 
-        {/* 2. Main Headline */}
-        <div className="fade-up text-center mb-4 md:mb-8">
-          <h2 className="text-2xl md:text-4xl font-heading font-bold text-white text-center">
-            <span className="text-red-500 font-bold text-3xl md:text-5xl">Tired of Paying for Leads<br />That Can't Afford Your Services?</span> {/* Updated headline */}
-          </h2>
+        {/* 2. Main Headline - Inside Red Container */}
+        <div className="text-center mb-6 md:mb-8">
+          <div className="bg-red-600 rounded-full px-6 py-3 inline-flex items-center gap-3">
+            <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+            <h2 className="text-lg md:text-xl font-bold text-white">
+              Tired of Paying for Leads That Can't Afford Your Services?
+            </h2>
+          </div>
         </div>
 
         {/* 3. Subheadline */}
-        <div className="fade-up text-center mb-6 md:mb-12">
-          <p className="text-lg md:text-3xl text-white">
-            Start with a 30-day test drive today and start receiving <span className="font-semibold text-primary">pre-qualified, high income leads</span> within 72 hours...
+        <div className="text-center mb-8 md:mb-12">
+          <p className="text-xl md:text-3xl text-white max-w-3xl mx-auto">
+            Watch how our system generates highly qualified premium electrical installations with ready to buy customers without lifting a finger
           </p>
         </div>
 
-        {/* Video instruction */}
-        <div className="fade-up text-center mb-4">
-          <p className="text-white text-lg md:text-xl font-medium">
-            Watch the video to see how it works
-          </p>
-        </div>
-
-        {/* 4. VSL Video */}
-        <div className="fade-up mb-6 md:mb-12">
-          <div className="relative bg-black rounded-lg overflow-hidden shadow-2xl max-w-4xl mx-auto">
-            <div
-              className="aspect-video w-full h-full"
-              dangerouslySetInnerHTML={{
-                __html: `<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/lrllcsxo0v.js" async type="module"></script><style>wistia-player[media-id='lrllcsxo0v']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/lrllcsxo0v/swatch'); display: block; filter: blur(5px); padding-top:56.25%; }</style> <wistia-player media-id="lrllcsxo0v" aspect="1.7777777777777777"></wistia-player>`
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Benefits Bar */}
-        <div className="fade-up mb-8 md:mb-12">
-          <div className="flex flex-row items-center justify-center gap-2 md:gap-8 text-center">
-            <div className="flex items-center gap-1 md:gap-2">
-              <div className="w-4 h-4 md:w-6 md:h-6 bg-orange-500 rounded-full flex items-center justify-center">
-                <CheckCircle className="w-2.5 h-2.5 md:w-4 md:h-4 text-white" />
+        {/* 4. Screenshot Image */}
+        <div className="mb-8 md:mb-12">
+          <div className="relative bg-black rounded-lg overflow-hidden shadow-2xl max-w-4xl mx-auto cursor-pointer" onClick={handleImageClick}>
+            <div className="aspect-video w-full h-full relative">
+              {/* Your screenshot image */}
+              <img 
+                src="/screenshot.png" 
+                alt="Video screenshot with play button overlay" 
+                className="w-full h-full object-cover"
+              />
+              
+              {/* Play button overlay */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-32 h-32 bg-orange-500/90 rounded-full flex items-center justify-center shadow-2xl hover:bg-orange-400 transition-all duration-300 transform hover:scale-110">
+                  <Play className="w-16 h-16 text-white ml-2" />
+                </div>
               </div>
-              <span className="text-white font-bold text-[10px] md:text-base whitespace-nowrap">Qualified leads only</span>
-            </div>
-            <div className="flex items-center gap-1 md:gap-2">
-              <div className="w-4 h-4 md:w-6 md:h-6 bg-orange-500 rounded-full flex items-center justify-center">
-                <CheckCircle className="w-2.5 h-2.5 md:w-4 md:h-4 text-white" />
-              </div>
-              <span className="text-white font-bold text-[10px] md:text-base whitespace-nowrap">Zero setup fees</span>
-            </div>
-            <div className="flex items-center gap-1 md:gap-2">
-              <div className="w-4 h-4 md:w-6 md:h-6 bg-orange-500 rounded-full flex items-center justify-center">
-                <CheckCircle className="w-2.5 h-2.5 md:w-4 md:h-4 text-white" />
-              </div>
-              <span className="text-white font-bold text-[10px] md:text-base whitespace-nowrap">30 day test drive</span>
             </div>
           </div>
         </div>
 
         {/* 5. Call-to-Action Button */}
-        <div className="fade-up text-center mb-8 md:mb-16">
-          <p className="text-white mb-3 md:mb-6 italic text-sm md:text-base">
-            Get started in 30 seconds...
-          </p>
-          
+        <div className="text-center mb-8 md:mb-16">
           <button 
             onClick={handleStartQuiz}
-            className="btn-red inline-flex items-center gap-2 text-sm md:text-xl px-6 py-3 md:px-8 md:py-4 shadow-lg whitespace-nowrap"
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-lg inline-flex items-center gap-3 text-lg md:text-xl shadow-lg transition-all duration-300 transform hover:scale-105"
           >
-            👉 START YOUR 30-DAY TEST DRIVE!
-            <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+            Get Instant Access
+            <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
           </button>
-          
-          <p className="text-white mt-3 md:mt-4 text-sm md:text-base">
-            Receive 20+ test leads before you commit...
-          </p>
-          
-          <p className="text-white mt-2 md:mt-3 text-xs md:text-sm italic">
-            (We have generated over 10,000 qualified leads to electrical companies in the last 12 months)
-          </p>
         </div>
 
-        {/* Value Proposition */}
-        <div className="fade-up mb-16">
-          <p className="text-xl text-white mb-8 text-center">
-            Add an <span className="font-semibold text-primary">extra $50-100,000</span> per month to your electrical or smart home business by targeting <span className="font-semibold text-primary">high-end luxury clients</span>...
-          </p>
-          
-          <p className="text-lg text-white mb-8">
-            Most electrical and smart home companies struggle with cash flow, low margins & difficult clients because they focus TOO much on basic installations.
-          </p>
-          
-          <p className="text-lg text-white mb-8">
-            Here at WattLeads we target luxury homeowners within your area, with targeted META ads, and proven offers.
-          </p>
-          
-          <p className="text-lg text-white mb-8">
-            We also pre-qualify every lead before it lands in your in-box, so that you aren't wasting time trying to call and schedule leads who never answer the phone.
-          </p>
-          
-          <p className="text-lg text-white mb-8">
-            Oh! And you can also try risk free for 30 days...
-          </p>
-        </div>
 
-        {/* Benefits List */}
-        <div className="fade-up mb-16">
-          <ul className="space-y-4 text-lg text-white mb-8">
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>Leads within 72-hours</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>No long-term commitment.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>Everything full custom branded.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>Trained A.I. assistant custom to your company.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>Easy to use lead tracker.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>+ much more!</span>
-            </li>
-          </ul>
-          
-          <p className="text-lg text-white mb-8">
-            All you need to do to get started, is schedule in a FREE 15-minute intro call with us today.
-          </p>
-          
-          <p className="text-lg text-white mb-8">
-            It's 100% free, no strings attached, book in by clicking the link below...
-          </p>
-          
-          <div className="text-center mb-8">
-            <button 
-              onClick={handleStartQuiz}
-              className="btn-red inline-flex items-center gap-2 text-sm md:text-xl px-8 py-4 whitespace-nowrap"
-            >
-              👉 START YOUR 30-DAY TEST DRIVE!
-              <ArrowRight className="w-5 h-5" />
-            </button>
-          </div>
-          
-          <p className="text-lg text-white text-center">
-            Receive 20+ test leads before you commit...
-          </p>
-        </div>
 
-        {/* Comparison Section */}
-        <div className="fade-up mb-16">
-          <h3 className="text-3xl font-heading font-black mb-8 text-center text-white">
-            Why switch to WattLeads?
-          </h3>
-          
-          <h4 className="text-2xl font-heading font-extrabold mb-6 text-center text-white">
-            Us vs Other Marketing Agencies...
-          </h4>
-          
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
-            <div className="card-rounded border-gray-600 bg-gray-800/50 p-6">
-              <h5 className="text-xl font-bold mb-4 text-white">Most agencies</h5>
-              <ul className="space-y-3 text-white">
-                <li>• 6 month contracts</li>
-                <li>• Zero guarantees</li>
-                <li>• Up front fees</li>
-                <li>• Poor quality leads</li>
-                <li>• 14-30 day setup</li>
-                <li>• Non-responsive leads</li>
-                <li>• Zero lead qualification</li>
-              </ul>
-            </div>
-            
-            <div className="card-rounded border-primary/30 bg-primary/10 p-6">
-              <h5 className="text-xl font-semibold mb-4 text-primary">WattLeads</h5>
-              <ul className="space-y-3 text-white">
-                <li>• Zero long term contract</li>
-                <li>• Guaranteed leads or you don't pay</li>
-                <li>• Zero setup fees</li>
-                <li>• High quality, pre-verified leads</li>
-                <li>• 0-3 day setup</li>
-                <li>• Leads confirm at 90%</li>
-                <li>• All leads pre-qualified</li>
-              </ul>
-            </div>
-          </div>
-        </div>
 
-        {/* How We Work Section */}
-        <div className="fade-up mb-16">
-          <h3 className="text-2xl font-heading font-black mb-6 text-center text-white">
-            How we are able to HYPER TARGET the best luxury deals for your electrical or smart home company...
-          </h3>
-          
-          <ul className="space-y-4 text-lg text-white mb-8">
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>We use proven META strategies to target <strong>luxury homeowners</strong> within your <strong>target radius</strong>.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>We implement <strong>consultation offers</strong> that guarantees your first meeting with these clients.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>We use our <strong>pre-trained A.I. assistant</strong> to ensure that EVERY SINGLE lead that gets in touch is <strong>immediately followed up with</strong> and has all their questions answered.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>We <strong>schedule phone appointments</strong> with potential clients, so that you know when and what time you will be speaking to them (no time wasted).</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>We deliver a <strong>guaranteed volume of leads</strong> which will at a MINIMUM cover initial investment</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-              <span>We offer a <strong>30 day test drive</strong> so that you can try it for yourself without committing long term.</span>
-            </li>
-          </ul>
-          
-          <div className="text-center mb-8">
-            <button 
-              onClick={handleStartQuiz}
-              className="btn-red inline-flex items-center gap-2 text-sm md:text-xl px-8 py-4 whitespace-nowrap"
-            >
-              👉 START YOUR 30-DAY TEST DRIVE!
-              <ArrowRight className="w-5 h-5" />
-            </button>
-          </div>
-          
-          <p className="text-lg text-white text-center">
-            Receive 20+ test leads before you commit...
-          </p>
-        </div>
 
-        {/* Quiz Section */}
-        {showQuiz && (
+
+
+
+
+        {/* Quiz Section - HIDDEN */}
+        {/* {showQuiz && (
           <div id="quiz-section" className="mb-16">
             <div className="bg-white rounded-lg p-8 shadow-2xl max-w-2xl mx-auto">
               <div className="mb-8">
@@ -464,18 +269,82 @@ const VSLLanding = () => {
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
-        {/* Footer */}
-        <div className="fade-up text-center py-8 border-t border-border">
-          <p className="text-lg font-semibold text-white mb-2">WattLeads © 2025</p>
-          <div className="flex justify-center gap-4 text-sm text-white">
-            <a href="/privacy-policy" className="hover:text-primary">Privacy Policy</a>
-            <span>|</span>
-            <a href="/terms-conditions" className="hover:text-primary">Terms & Conditions</a>
+
+      </div>
+
+      {/* Popup Modal Form */}
+      {showPopup && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-8 shadow-2xl max-w-md w-full mx-4 relative">
+            {/* Close button */}
+            <button
+              onClick={handleClosePopup}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            
+            <div className="mb-8">
+              <h2 className="text-3xl font-heading font-semibold mb-2 text-rich-black">
+                Let's Get Your Results
+              </h2>
+              <p className="text-gray-600">
+                Enter your details to see your personalized smart home plan
+              </p>
+            </div>
+
+            <div className="space-y-6 mb-8">
+              <div>
+                <label className="block text-sm font-medium mb-2">Full Name *</label>
+                <input
+                  type="text"
+                  value={quizData.name}
+                  onChange={(e) => handleInputChange('name', e.target.value)}
+                  className="w-full p-3 border border-input rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Enter your full name"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">Email Address *</label>
+                <input
+                  type="email"
+                  value={quizData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  className="w-full p-3 border border-input rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Enter your email"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">Mobile Number *</label>
+                <input
+                  type="tel"
+                  value={quizData.phone}
+                  onChange={(e) => handleInputChange('phone', e.target.value)}
+                  className="w-full p-3 border border-input rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Enter your mobile number"
+                />
+              </div>
+            </div>
+
+            <button
+              onClick={handleSubmit}
+              disabled={!canProceed()}
+              className={`w-full inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold transition-all duration-300 ${
+                canProceed()
+                  ? 'btn-red'
+                  : 'bg-muted text-muted-foreground cursor-not-allowed'
+              }`}
+            >
+              Get My Results
+              <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
