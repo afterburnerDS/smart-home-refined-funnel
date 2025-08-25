@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build && mv dist/index.html dist/vsl.html",
+  "buildCommand": "npm run build && cp dist/index.html dist/vsl.html",
   "functions": {
     "api/ghl-proxy.ts": {
       "maxDuration": 10
@@ -19,6 +19,13 @@
     { "source": "/vsl/confirmation", "destination": "/vsl.html" },
     { "source": "/vsl/privacy-policy", "destination": "/vsl.html" },
     { "source": "/vsl/terms-conditions", "destination": "/vsl.html" },
+    { "source": "/dsl", "destination": "/vsl.html" },
+    { "source": "/dsl/quiz", "destination": "/vsl.html" },
+    { "source": "/dsl/results", "destination": "/vsl.html" },
+    { "source": "/dsl/booking", "destination": "/vsl.html" },
+    { "source": "/dsl/confirmation", "destination": "/vsl.html" },
+    { "source": "/dsl/privacy-policy", "destination": "/vsl.html" },
+    { "source": "/dsl/terms-conditions", "destination": "/vsl.html" },
     { "source": "/", "destination": "https://humble-posterity-757556.framer.app/" }
   ]
 }
