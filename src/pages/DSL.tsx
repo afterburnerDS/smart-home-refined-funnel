@@ -76,16 +76,15 @@ const DSL = () => {
         <div className="mb-8 md:mb-12">
           <div className="relative bg-black rounded-lg overflow-hidden shadow-2xl max-w-4xl mx-auto">
             <div className="aspect-video w-full h-full">
-              <iframe 
-                src="https://docs.google.com/presentation/d/e/2PACX-1vQLMwVz_E2HRG3q1qwQLms4lY1kzVKJ0u7pG2ruNAFFvW8os4dEuylMtBx-l_A5H4SPWYC1R-ddz-ro/pubembed?start=false&loop=false&delayms=3000" 
-                frameBorder="0" 
-                width="100%" 
-                height="100%" 
-                allowFullScreen={true}
-                title="WattLeads Presentation"
-                className="rounded-lg"
-                style={{ minHeight: '569px' }}
-              ></iframe>
+              <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+                <iframe 
+                  src="https://docs.google.com/presentation/d/e/2PACX-1vQLMwVz_E2HRG3q1qwQLms4lY1kzVKJ0u7pG2ruNAFFvW8os4dEuylMtBx-l_A5H4SPWYC1R-ddz-ro/embed?start=false&loop=false&delayms=3000&showControls=true" 
+                  frameBorder="0" 
+                  allowFullScreen={true}
+                  title="WattLeads Presentation"
+                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                ></iframe>
+              </div>
             </div>
           </div>
         </div>
