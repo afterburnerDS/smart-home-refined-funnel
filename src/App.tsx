@@ -15,14 +15,8 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-// Determine if we're running under /vsl or /dsl path
-const pathname = window.location.pathname;
-let basename = '';
-if (pathname.startsWith('/vsl')) {
-  basename = '/vsl';
-} else if (pathname.startsWith('/dsl')) {
-  basename = '/dsl';
-}
+// Determine if we're running under /vsl path
+const basename = window.location.pathname.startsWith('/vsl') ? '/vsl' : '';
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -31,7 +25,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter basename={basename}>
         <Routes>
-          <Route path="/" element={pathname.startsWith('/dsl') ? <DSL /> : <VSLLanding />} />
+          <Route path="/" element={<VSLLanding />} />
+          <Route path="/dsl" element={<DSL />} />
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/results" element={<QuizResults />} />
           <Route path="/booking" element={<Booking />} />
