@@ -24,6 +24,11 @@ if (pathname.startsWith('/vsl')) {
   basename = '/dsl';
 }
 
+// Redirect root to Framer site
+if (pathname === '/' || pathname === '') {
+  window.location.href = 'https://humble-posterity-757556.framer.app/';
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
