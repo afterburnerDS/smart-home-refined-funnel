@@ -29,12 +29,6 @@ const VSLLanding = () => {
 
   const handleClosePopup = () => {
     setShowPopup(false);
-    // Reset form data when closing popup
-    setQuizData({
-      name: "",
-      email: "",
-      phone: ""
-    });
   };
 
   const handleInputChange = (field: keyof QuizData, value: string) => {
@@ -86,25 +80,17 @@ const VSLLanding = () => {
       console.log("Meta Pixel not found on quiz completion");
     }
     
-    // Close popup and redirect to results page
+    // Close popup
     setShowPopup(false);
     
-    // Navigate to results page with quiz data
-    const params = new URLSearchParams({
-      services: "Smart Home Services",
-      monthlyProjects: "Not specified",
-      avgProjectValue: "Not specified",
-      marketingSpend: "Not specified",
-      name: quizData.name,
-      email: quizData.email,
-      phone: quizData.phone
-    });
-    navigate(`/results?${params.toString()}`);
+    // Navigate directly to results page
+    window.location.href = '/results';
   };
 
 
 
   useEffect(() => {
+    // Animation observer
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -116,7 +102,56 @@ const VSLLanding = () => {
     });
     const elements = document.querySelectorAll('.fade-up');
     elements.forEach(el => observer.observe(el));
-    return () => observer.disconnect();
+    
+    // Load GHL form script
+    const script = document.createElement('script');
+    script.src = 'https://link.wattleads.com/js/form_embed.js';
+    script.async = true;
+    document.body.appendChild(script);
+    
+    // Listen for form submission events
+    const handleFormSubmit = (event: MessageEvent) => {
+      if (event.data && typeof event.data === 'object') {
+        // Check for GHL form submission events
+        if (
+          (event.data.type === 'form_submit' || 
+           event.data.type === 'form_submitted' ||
+           event.data.event === 'form_submitted') && 
+          (event.data.formId === '6b3KeOaT4WGpaHWtXfLH' || 
+           event.data.id === '6b3KeOaT4WGpaHWtXfLH')
+        ) {
+          console.log('Form submission detected:', event.data);
+          
+          // Close the popup
+          setShowPopup(false);
+          
+          // Track conversion
+          if (typeof window !== "undefined" && (window as any).fbq) {
+            (window as any).fbq("track", "Lead", {
+              content_name: "Form Submission",
+              content_category: "Lead Generation",
+              value: 1
+            });
+          }
+          
+          // Force redirect to results page
+          setTimeout(() => {
+            window.location.href = '/results';
+          }, 500);
+        }
+      }
+    };
+    
+    window.addEventListener('message', handleFormSubmit);
+    
+    return () => {
+      observer.disconnect();
+      // Remove script and event listener when component unmounts
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+      window.removeEventListener('message', handleFormSubmit);
+    };
   }, []);
 
   return (
@@ -274,77 +309,28 @@ const VSLLanding = () => {
 
       </div>
 
-      {/* Popup Modal Form */}
-      {showPopup && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-8 shadow-2xl max-w-md w-full mx-4 relative">
+      {/* GHL Form with custom redirect */}
+      <div className={`fixed inset-0 z-50 ${showPopup ? 'block' : 'hidden'}`}>
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+        <div className="relative h-full flex items-center justify-center">
+          <div className="relative bg-white rounded-lg shadow-2xl max-w-lg w-full mx-4 overflow-hidden">
             {/* Close button */}
             <button
               onClick={handleClosePopup}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+              className="absolute top-4 right-4 z-10 text-gray-400 hover:text-gray-600 transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
-            
-            <div className="mb-8">
-              <h2 className="text-3xl font-heading font-semibold mb-2 text-rich-black">
-                Let's Get Your Results
-              </h2>
-              <p className="text-gray-600">
-                Enter your details to see your personalized smart home plan
-              </p>
-            </div>
-
-            <div className="space-y-6 mb-8">
-              <div>
-                <label className="block text-sm font-medium mb-2">Full Name *</label>
-                <input
-                  type="text"
-                  value={quizData.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  className="w-full p-3 border border-input rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Enter your full name"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-2">Email Address *</label>
-                <input
-                  type="email"
-                  value={quizData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  className="w-full p-3 border border-input rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Enter your email"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-2">Mobile Number *</label>
-                <input
-                  type="tel"
-                  value={quizData.phone}
-                  onChange={(e) => handleInputChange('phone', e.target.value)}
-                  className="w-full p-3 border border-input rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Enter your mobile number"
-                />
-              </div>
-            </div>
-
-            <button
-              onClick={handleSubmit}
-              disabled={!canProceed()}
-              className={`w-full inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold transition-all duration-300 ${
-                canProceed()
-                  ? 'btn-red'
-                  : 'bg-muted text-muted-foreground cursor-not-allowed'
-              }`}
-            >
-              Get My Results
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            <iframe
+              src="https://link.wattleads.com/widget/form/6b3KeOaT4WGpaHWtXfLH"
+              style={{ width: '100%', height: '500px', border: 'none' }}
+              id="popup-6b3KeOaT4WGpaHWtXfLH" 
+              data-form-id="6b3KeOaT4WGpaHWtXfLH"
+              title="VSL Wattleads Form"
+            ></iframe>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
