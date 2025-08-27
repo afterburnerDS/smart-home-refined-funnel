@@ -21,43 +21,40 @@ const QuizResults = () => {
 
   // Create pre-filled booking widget URL
   const createBookingUrl = () => {
-    const baseUrl = 'https://link.wattleads.com/widget/booking/ZvHsKSU1VayvObZkyBHA';
-    const params = new URLSearchParams();
-    
-    // Try different parameter name variations for GoHighLevel
-    if (firstName) {
-      params.append('first_name', firstName);
-      params.append('fname', firstName);
-    }
-    if (lastName) {
-      params.append('last_name', lastName);
-      params.append('lname', lastName);
-    }
-    if (email) {
-      params.append('email', email);
-    }
-    if (phone) {
-      const cleanPhone = phone.replace(/\D/g, '');
-      params.append('phone', cleanPhone);
-    }
-    
-    if (userName) {
-      params.append('name', userName);
-    }
-    
-    const queryUrl = params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl;
-    return queryUrl;
+    // Use the same calendar URL format as in DSL.tsx which is known to work
+    return 'https://link.wattleads.com/widget/booking/ZvHsKSU1VayvObZkyBHA';
   };
 
   useEffect(() => {
     console.log('QuizResults useEffect running');
+    
+    // Load GoHighLevel widget script
+    const script = document.createElement('script');
+    script.src = 'https://link.wattleads.com/js/form_embed.js';
+    script.type = 'text/javascript';
+    document.head.appendChild(script);
+    
+    console.log('GoHighLevel widget script added to head');
     
     // Set booking URL after we have all the data
     if (phone || email || userName) {
       const url = createBookingUrl();
       setBookingUrl(url);
       console.log('Booking URL set:', url);
+      
+      // Add console log to verify iframe loading
+      setTimeout(() => {
+        console.log('Checking if iframe is loaded:', document.querySelector('iframe')?.contentWindow);
+        console.log('Booking calendar iframe element:', document.querySelector('iframe'));
+      }, 2000);
     }
+    
+    return () => {
+      // Cleanup script when component unmounts
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
 
     // Track Lead event only once when user lands on results page
     if (!hasFired.current && typeof window !== 'undefined' && (window as any).fbq) {
@@ -352,24 +349,18 @@ const QuizResults = () => {
               </div>
             </div>
             
-            {/* GoHighLevel Booking Widget */}
+            {/* GoHighLevel Booking Widget - 15 Minute Intro Call */}
             <div className="min-h-[600px] w-full">
-              {bookingUrl ? (
-                <iframe
-                  key={`booking-${phone}-${email}-${firstName}-${lastName}`}
-                  src={bookingUrl}
-                  width="100%"
-                  height="600"
-                  frameBorder="0"
-                  title="Schedule a meeting"
-                  className="rounded-lg w-full"
-                  style={{ minHeight: '600px' }}
-                />
-              ) : (
-                <div className="flex items-center justify-center h-[600px] bg-gray-100 rounded-lg">
-                  <div className="text-gray-500">Loading booking calendar...</div>
-                </div>
-              )}
+              <iframe
+                src="https://link.wattleads.com/widget/booking/ZvHsKSU1VayvObZkyBHA"
+                width="100%"
+                height="600"
+                frameBorder="0"
+                title="Schedule a 15-minute intro call"
+                className="rounded-lg w-full"
+                style={{ minHeight: '600px' }}
+                allow="camera; microphone; autoplay; encrypted-media;"
+              ></iframe>
             </div>
           </div>
         </div>

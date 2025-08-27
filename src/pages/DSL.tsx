@@ -116,7 +116,17 @@ const DSL = () => {
         {/* 5. Call-to-Action Button */}
         <div className="text-center mb-8 md:mb-16">
           <button 
-            onClick={() => document.getElementById('calendar-section')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => {
+              const calendarSection = document.getElementById('calendar-section');
+              if (calendarSection) {
+                // Scroll to show the "30-Minute Free Call" badge and calendar interface
+                const offset = calendarSection.offsetTop + 100; 
+                window.scrollTo({
+                  top: offset,
+                  behavior: 'smooth'
+                });
+              }
+            }}
             className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg inline-flex items-center gap-2 text-sm md:text-xl shadow-lg"
           >
             👉 START YOUR 30-DAY TEST DRIVE!
@@ -125,36 +135,35 @@ const DSL = () => {
         </div>
 
         {/* Calendar Section - Right below the slides */}
-        <div id="calendar-section" className="mb-16">
-          <div className="bg-white rounded-xl shadow-2xl p-8">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-semibold mb-4 text-black">
+        <div id="calendar-section" className="mb-8">
+          <div className="bg-white rounded-xl shadow-2xl p-6">
+            <div className="text-center mb-4">
+              <h3 className="text-2xl font-semibold mb-2 text-black">
                 Schedule A Call With Us Here!
               </h3>
-              <p className="text-lg text-gray-600 mb-6">
+              <p className="text-base text-gray-600 mb-2">
                 Let's discuss how we can scale your electrical business with qualified leads.
               </p>
-              <div className="text-center mb-6">
-                <p className="text-lg text-gray-700 mb-4">
-                  We'll deploy our custom-built Electrical AI system into your business and guarantee you 45 new estimates in the first 90 days.
-                </p>
-                <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-6 py-2 rounded-full mb-4">
-                  <CheckCircle className="w-5 h-5" />
-                  <span className="font-semibold">30-Minute Free Call</span>
-                </div>
+              <p className="text-base text-gray-700 mb-3">
+                We'll deploy our custom-built Electrical AI system into your business and guarantee you 45 new estimates in the first 90 days.
+              </p>
+              <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-6 py-2 rounded-full mb-3">
+                <CheckCircle className="w-5 h-5" />
+                <span className="font-semibold">30-Minute Free Call</span>
               </div>
             </div>
             
             {/* GoHighLevel Booking Widget - 30 Minute Discovery */}
-            <div className="min-h-[600px] w-full">
+            <div className="min-h-[750px] w-full">
               <iframe
                 src="https://link.wattleads.com/widget/otl/V8vnftjM8?slug=company123/discovery-05e8dcf4-611c-4619-aba2-ea0549d65643"
                 width="100%"
-                height="600"
+                height="750"
                 frameBorder="0"
-                title="Schedule a meeting"
+                title="Schedule a 30-minute demo call"
                 className="rounded-lg w-full"
-                style={{ minHeight: '600px' }}
+                style={{ minHeight: '750px' }}
+                allow="camera; microphone; autoplay; encrypted-media;"
               ></iframe>
             </div>
           </div>
