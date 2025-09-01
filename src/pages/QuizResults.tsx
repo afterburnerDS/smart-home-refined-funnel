@@ -78,37 +78,52 @@ const QuizResults = () => {
         {/* 1. WattLeads Logo */}
         <div className="text-center mb-3 md:mb-6">
           <div className="inline-block">
-            <h1 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
+            <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
               WattLeads
             </h1>
           </div>
         </div>
 
-        {/* Stars and Rating - Below logo */}
+        {/* Headline */}
         <div className="text-center mb-6 md:mb-8">
-          <div className="flex justify-center items-center gap-1 mb-2">
-            <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
-            <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
-            <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
-            <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
-            <span className="text-yellow-400 text-lg md:text-xl">⭐</span>
-          </div>
-          <p className="text-white text-sm md:text-base font-medium mb-4">
-            Rated 4.8/5 by 100+ Clients
-          </p>
           <h3 className="text-2xl md:text-3xl font-bold text-red-500">
             Get 15+ Pre-Qualified Electrical Premium Estimate Requests Every Month
           </h3>
+          
+          {/* Call-to-Action Button moved right below headline */}
+          <div className="mt-6 mb-4">
+            <button 
+              onClick={() => document.getElementById('calendar-section')?.scrollIntoView({ behavior: 'smooth' })}
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg inline-flex items-center gap-2 text-sm md:text-xl shadow-lg"
+            >
+              👉 SCHEDULE FREE CONSULTATION
+              <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Video instruction */}
         <div className="text-center mb-4">
           <p className="text-lg md:text-3xl text-white">
-            This Video reveals Exactly How We Do It For Over <span className="font-semibold text-orange-400">80+ Electrical and Smart Home Businesses</span> in under <span className="font-semibold text-orange-400">2 Minutes</span> With..
+            This Video reveals Exactly How We Do It For Over <span className="font-semibold text-orange-400">80+ Electrical and Smart Home Businesses</span> in under <span className="font-semibold text-orange-400">2 Minutes</span>
           </p>
         </div>
 
-        {/* Benefits Bar - After video instruction */}
+
+
+        {/* 4. VSL Video - Now visible since user completed form */}
+        <div className="mb-6 md:mb-12">
+          <div className="relative bg-black rounded-lg overflow-hidden shadow-2xl max-w-4xl mx-auto">
+            <div
+              className="aspect-video w-full h-full"
+              dangerouslySetInnerHTML={{
+                __html: `<script src="https://fast.wistia.com/embed/medias/lrllcsxo0v.jsonp" async></script><script src="https://fast.wistia.com/embed/lrllcsxo0v.js" async></script><div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;"><div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;"><div class="wistia_embed wistia_async_lrllcsxo0v videoFoam=true autoplay=true style="height:100%;position:relative;width:100%"><div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;"><img src="https://fast.wistia.com/embed/medias/lrllcsxo0v/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;" /></div></div></div></div>`
+              }}
+            />
+          </div>
+        </div>
+        
+        {/* Benefits Bar - Moved to right below the video */}
         <div className="mb-6 md:mb-8">
           <div className="flex flex-row items-center justify-center gap-2 md:gap-8 text-center">
             <div className="flex items-center gap-1 md:gap-2">
@@ -132,23 +147,7 @@ const QuizResults = () => {
           </div>
         </div>
 
-        {/* 4. VSL Video - Now visible since user completed form */}
-        <div className="mb-6 md:mb-12">
-          <div className="relative bg-black rounded-lg overflow-hidden shadow-2xl max-w-4xl mx-auto">
-            <div
-              className="aspect-video w-full h-full"
-              dangerouslySetInnerHTML={{
-                __html: `<script src="https://fast.wistia.com/embed/medias/lrllcsxo0v.jsonp" async></script><script src="https://fast.wistia.com/embed/lrllcsxo0v.js" async></script><div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;"><div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;"><div class="wistia_embed wistia_async_lrllcsxo0v videoFoam=true autoplay=true style="height:100%;position:relative;width:100%"><div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;"><img src="https://fast.wistia.com/embed/medias/lrllcsxo0v/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;" /></div></div></div></div>`
-              }}
-            />
-          </div>
-        </div>
-
-
-
-
-
-        {/* 5. Call-to-Action Button */}
+        {/* 5. Value Proposition Section */}
         <div className="text-center mb-8 md:mb-16">
           <p className="text-white mb-3 md:mb-6 italic text-sm md:text-base">
             Get started in 30 seconds...
@@ -156,9 +155,9 @@ const QuizResults = () => {
           
           <button 
             onClick={() => document.getElementById('calendar-section')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg inline-flex items-center gap-2 text-sm md:text-xl shadow-lg"
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg inline-flex items-center gap-2 text-sm md:text-xl shadow-lg my-4"
           >
-            👉 START YOUR 30-DAY TEST DRIVE!
+            👉 SCHEDULE FREE CONSULTATION
             <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
           </button>
           
@@ -236,7 +235,7 @@ const QuizResults = () => {
               onClick={() => document.getElementById('calendar-section')?.scrollIntoView({ behavior: 'smooth' })}
               className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-lg inline-flex items-center gap-2 text-sm md:text-xl shadow-lg"
             >
-              👉 START YOUR 30-DAY TEST DRIVE!
+              👉 SCHEDULE FREE CONSULTATION
               <ArrowRight className="w-5 h-5" />
             </button>
           </div>
@@ -323,7 +322,7 @@ const QuizResults = () => {
               onClick={() => document.getElementById('calendar-section')?.scrollIntoView({ behavior: 'smooth' })}
               className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-lg inline-flex items-center gap-2 text-sm md:text-xl shadow-lg"
             >
-              👉 START YOUR 30-DAY TEST DRIVE!
+              👉 SCHEDULE FREE CONSULTATION
               <ArrowRight className="w-5 h-5" />
             </button>
           </div>
