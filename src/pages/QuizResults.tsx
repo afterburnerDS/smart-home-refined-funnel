@@ -21,8 +21,23 @@ const QuizResults = () => {
 
   // Create pre-filled booking widget URL
   const createBookingUrl = () => {
-    // Use the same calendar URL format as in DSL.tsx which is known to work
-    return 'https://link.wattleads.com/widget/booking/ZvHsKSU1VayvObZkyBHA';
+    // Base URL
+    let url = 'https://link.wattleads.com/widget/booking/ZvHsKSU1VayvObZkyBHA';
+    
+    // Add query parameters for pre-filling the form
+    const params = new URLSearchParams();
+    if (firstName) params.append('first_name', firstName);
+    if (lastName) params.append('last_name', lastName);
+    if (email) params.append('email', email);
+    if (phone) params.append('phone', phone);
+    
+    // Append parameters if any exist
+    const queryString = params.toString();
+    if (queryString) {
+      url = `${url}?${queryString}`;
+    }
+    
+    return url;
   };
 
   useEffect(() => {
@@ -49,13 +64,6 @@ const QuizResults = () => {
       }, 2000);
     }
     
-    return () => {
-      // Cleanup script when component unmounts
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
-
     // Track Lead event only once when user lands on results page
     if (!hasFired.current && typeof window !== 'undefined' && (window as any).fbq) {
       console.log('Firing Lead event on results page...');
@@ -70,6 +78,13 @@ const QuizResults = () => {
 
     // Scroll to top of page when component mounts
     window.scrollTo(0, 0);
+    
+    return () => {
+      // Cleanup script when component unmounts
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
   }, [searchParams]);
 
   return (
@@ -168,7 +183,7 @@ const QuizResults = () => {
             {/* GoHighLevel Booking Widget - 15 Minute Intro Call */}
             <div className="min-h-[600px] w-full">
               <iframe
-                src="https://link.wattleads.com/widget/booking/ZvHsKSU1VayvObZkyBHA"
+                src={bookingUrl || "https://link.wattleads.com/widget/booking/ZvHsKSU1VayvObZkyBHA"}
                 width="100%"
                 height="600"
                 frameBorder="0"
