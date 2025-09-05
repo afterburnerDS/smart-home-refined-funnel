@@ -108,6 +108,27 @@ const VSLLanding = () => {
     script.src = 'https://link.wattleads.com/js/form_embed.js';
     script.async = true;
     document.body.appendChild(script);
+
+    // Add script to forward query params to GoHighLevel iframe
+    setTimeout(() => {
+      const queryParamsScript = document.createElement('script');
+      queryParamsScript.textContent = `
+        (function () {
+          // adjust the selector to match your embed if needed
+          var iframe = document.querySelector('iframe[src*="link.wattleads.com"]');
+          if (!iframe) return;
+
+          var parentQS = window.location.search;        // "?c_ad_id=TEST123&..."
+          if (!parentQS) return;
+
+          var src = new URL(iframe.src, window.location.origin);
+          // keep any existing params on the iframe and append the parent's params
+          if (src.search) iframe.src = src + '&' + parentQS.slice(1);
+          else iframe.src = src + parentQS;
+        })();
+      `;
+      document.body.appendChild(queryParamsScript);
+    }, 1000); // Wait for iframe to be mounted
     
     // Listen for form submission events
     const handleFormSubmit = (event: MessageEvent) => {

@@ -51,6 +51,28 @@ const QuizResults = () => {
     
     console.log('GoHighLevel widget script added to head');
     
+    // Add script to forward query params to GoHighLevel iframe
+    setTimeout(() => {
+      const queryParamsScript = document.createElement('script');
+      queryParamsScript.textContent = `
+        (function () {
+          // adjust the selector to match your embed if needed
+          var iframe = document.querySelector('iframe[src*="link.wattleads.com"]');
+          if (!iframe) return;
+
+          var parentQS = window.location.search;        // "?c_ad_id=TEST123&..."
+          if (!parentQS) return;
+
+          var src = new URL(iframe.src, window.location.origin);
+          // keep any existing params on the iframe and append the parent's params
+          if (src.search) iframe.src = src + '&' + parentQS.slice(1);
+          else iframe.src = src + parentQS;
+        })();
+      `;
+      document.body.appendChild(queryParamsScript);
+      console.log('Query params forwarding script added');
+    }, 1000); // Wait for iframe to be mounted
+    
     // Set booking URL after we have all the data
     if (phone || email || userName) {
       const url = createBookingUrl();
