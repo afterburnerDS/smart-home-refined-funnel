@@ -197,15 +197,15 @@ const QuizResults = () => {
 
         {/* Calendar Section */}
         <div id="calendar-section" className="mb-16">
-          <div className="bg-white rounded-xl shadow-2xl p-8">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-semibold mb-4 text-black">
+          <div className="bg-white rounded-xl shadow-2xl p-5">
+            <div className="text-center mb-4">
+              <h3 className="text-3xl font-semibold mb-2 text-black">
                 Schedule Your Free Consultation {firstName}!
               </h3>
-              <p className="text-lg text-gray-600 mb-6">
+              <p className="text-lg text-gray-600 mb-3">
                 Let's discuss how we can scale your electrical business with qualified leads.
               </p>
-              <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-6 py-2 rounded-full mb-4">
+              <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-6 py-2 rounded-full mb-2">
                 <CheckCircle className="w-5 h-5" />
                 <span className="font-semibold">100% Free Call</span>
               </div>
