@@ -203,11 +203,11 @@ const QuizResults = () => {
                 Schedule Your Free Consultation {firstName}!
               </h3>
               <p className="text-lg text-gray-600 mb-6">
-                Let's discuss how we can scale your smart home business with qualified leads.
+                Let's discuss online how we can scale your electrical business with qualified leads.
               </p>
               <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-6 py-2 rounded-full mb-4">
                 <CheckCircle className="w-5 h-5" />
-                <span className="font-semibold">15-Minute Free Call</span>
+                <span className="font-semibold">100% Free Call</span>
               </div>
             </div>
             
