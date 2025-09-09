@@ -22,7 +22,7 @@ const QuizResults = () => {
   // Create pre-filled booking widget URL
   const createBookingUrl = () => {
     // Base URL
-    let url = 'https://link.wattleads.com/widget/booking/ZvHsKSU1VayvObZkyBHA';
+    let url = 'https://link.wattleads.com/widget/booking/7B3xHxHgXVutXPXIwfwj';
     
     // Add query parameters for pre-filling the form
     const params = new URLSearchParams();
@@ -43,11 +43,17 @@ const QuizResults = () => {
   useEffect(() => {
     console.log('QuizResults useEffect running');
     
-    // Load GoHighLevel widget script
-    const script = document.createElement('script');
-    script.src = 'https://link.wattleads.com/js/form_embed.js';
-    script.type = 'text/javascript';
-    document.head.appendChild(script);
+    // Load GoHighLevel widget scripts
+    const formScript = document.createElement('script');
+    formScript.src = 'https://link.wattleads.com/js/form_embed.js';
+    formScript.type = 'text/javascript';
+    document.head.appendChild(formScript);
+    
+    // Load GoHighLevel embed script for the calendar
+    const embedScript = document.createElement('script');
+    embedScript.src = 'https://link.wattleads.com/js/embed.js';
+    embedScript.type = 'text/javascript';
+    document.head.appendChild(embedScript);
     
     console.log('GoHighLevel widget script added to head');
     
@@ -102,9 +108,12 @@ const QuizResults = () => {
     window.scrollTo(0, 0);
     
     return () => {
-      // Cleanup script when component unmounts
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
+      // Cleanup scripts when component unmounts
+      if (formScript.parentNode) {
+        formScript.parentNode.removeChild(formScript);
+      }
+      if (embedScript.parentNode) {
+        embedScript.parentNode.removeChild(embedScript);
       }
     };
   }, [searchParams]);
@@ -202,18 +211,18 @@ const QuizResults = () => {
               </div>
             </div>
             
-            {/* GoHighLevel Booking Widget - 15 Minute Intro Call */}
+            {/* GoHighLevel Booking Widget - Updated with new embed */}
             <div className="min-h-[600px] w-full">
-              <iframe
-                src={bookingUrl || "https://link.wattleads.com/widget/booking/ZvHsKSU1VayvObZkyBHA"}
-                width="100%"
-                height="600"
-                frameBorder="0"
-                title="Schedule a 15-minute intro call"
-                className="rounded-lg w-full"
-                style={{ minHeight: '600px' }}
-                allow="camera; microphone; autoplay; encrypted-media;"
-              ></iframe>
+              <div dangerouslySetInnerHTML={{ __html: `
+                <iframe 
+                  src="https://link.wattleads.com/widget/booking/7B3xHxHgXVutXPXIwfwj" 
+                  style="width: 100%; border:none; overflow: hidden; min-height: 600px;" 
+                  scrolling="no" 
+                  id="msgsndr-calendar"
+                  className="rounded-lg w-full"
+                  allow="camera; microphone; autoplay; encrypted-media;"
+                ></iframe>
+              ` }} />
             </div>
           </div>
         </div>
