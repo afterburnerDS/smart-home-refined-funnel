@@ -22,7 +22,7 @@ const QuizResults = () => {
   // Create pre-filled booking widget URL
   const createBookingUrl = () => {
     // Base URL
-    let url = 'https://link.wattleads.com/widget/booking/7B3xHxHgXVutXPXIwfwj';
+    let url = 'https://link.wattleads.com/widget/booking/ZvHsKSU1VayvObZkyBHA';
     
     // Add query parameters for pre-filling the form
     const params = new URLSearchParams();
@@ -207,7 +207,7 @@ const QuizResults = () => {
               </p>
               <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-6 py-2 rounded-full mb-2">
                 <CheckCircle className="w-5 h-5" />
-                <span className="font-semibold">100% Free Call</span>
+                <span className="font-semibold">15-Minute Free Call</span>
               </div>
             </div>
             
@@ -215,13 +215,13 @@ const QuizResults = () => {
             <div className="min-h-[600px] w-full">
               <div dangerouslySetInnerHTML={{ __html: `
                 <iframe 
-                  src="https://link.wattleads.com/widget/booking/7B3xHxHgXVutXPXIwfwj" 
+                  src="https://link.wattleads.com/widget/booking/ZvHsKSU1VayvObZkyBHA" 
                   style="width: 100%; border:none; overflow: hidden; min-height: 600px;" 
                   scrolling="no" 
                   id="msgsndr-calendar"
                   className="rounded-lg w-full"
                   allow="camera; microphone; autoplay; encrypted-media;"
-                ></iframe>
+                ></iframe><br><script src="https://link.wattleads.com/js/embed.js" type="text/javascript"></script>
               ` }} />
             </div>
           </div>
