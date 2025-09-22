@@ -200,7 +200,7 @@ const QuizResults = () => {
           <div className="bg-white rounded-xl shadow-2xl p-5">
             <div className="text-center mb-4">
               <h3 className="text-3xl font-semibold mb-2 text-black">
-                Schedule Your Free Consultation {firstName}!
+                Schedule Your Free Phone Consultation {firstName}!
               </h3>
               <p className="text-lg text-gray-600 mb-3">
                 Let's discuss how we can scale your electrical business with qualified leads.
